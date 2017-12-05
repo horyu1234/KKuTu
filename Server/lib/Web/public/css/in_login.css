@@ -16,39 +16,51 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-body{
-	background-color: #232323;
+body {
+    background-color: #232323;
 }
-button{
-	border: none;
-	margin: 8px auto;
-	width: 200px;
-	height: 30px;
-	cursor: pointer;
-	box-shadow: 0px 2px 2px #141414;
+
+button {
+    border: none;
+    margin: 8px auto;
+    width: 200px;
+    height: 30px;
+    cursor: pointer;
+    box-shadow: 0px 2px 2px #141414;
 }
-#with-google span{ display: block; }
-.login-with{
-	padding-top: 30px;
-	margin: 30px 0px;
-	text-align: center;
+
+#with-google span {
+    display: block;
 }
-.with-naver{
-	color: #FFFFFF;
-	background-color: #1EC800;
+
+.login-with {
+    padding-top: 30px;
+    margin: 30px 0px;
+    text-align: center;
 }
-.with-facebook{
-	color: #FFFFFF;
-	background-color: #235EE3;
+
+.with-naver {
+    color: #FFFFFF;
+    background-color: #1EC800;
 }
-.with-twitter{
-	color: #FFFFFF;
-	background-color: #55ACEE;
+
+.with-facebook {
+    color: #FFFFFF;
+    background-color: #235EE3;
 }
-.login-legal{
-	padding-top: 50px;
-	color: #BBBBBB;
-	font-size: 11px;
-	text-align: center;
+
+.with-twitter {
+    color: #FFFFFF;
+    background-color: #55ACEE;
 }
-.login-legal a{ color: #DDDDDD; }
+
+.login-legal {
+    padding-top: 50px;
+    color: #BBBBBB;
+    font-size: 11px;
+    text-align: center;
+}
+
+.login-legal a {
+    color: #DDDDDD;
+}
