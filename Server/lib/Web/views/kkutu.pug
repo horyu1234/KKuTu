@@ -1,17 +1,17 @@
 //-
 	Rule the words! KKuTu Online
 	Copyright (C) 2017 JJoriping(op@jjo.kr)
-	
+
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 extends layout
@@ -22,7 +22,7 @@ mixin Dialog(id, w, h, t, nocls)
 			div.dialog-title(style=`width: ${w - 20}px;`)!= t || ''
 		div.dialog-body(style='font-size: 13px;')
 			block
-	
+
 mixin GameOption(key, prefix)
 	- var name = locals.OPTIONS[key].name;
 	- var sid = name.toLowerCase();
@@ -45,7 +45,7 @@ block JS
 
 block CSS
 	link(rel='stylesheet', href='/css/in_game_kkutu_shop.css')
-	
+
 block Jungle
 	span#PUBLIC= PUBLIC ? "true" : undefined
 	// span#PORT= locals.PORT
@@ -152,7 +152,7 @@ block Middle
 	+Dialog('RoomDiag', 300, 375)
 		div.dialog-bar
 			h4= L('roomTitle')
-			input#room-title(placeholder=(nick || L('guest'))+L('roomDefault'), maxlength=20)
+			input#room-title(placeholder=(nick || L('guest')) + L('roomDefault'), maxlength=20)
 		div.dialog-bar
 			h4= L('password')
 			input#room-pw(type='password', placeholder=L('password'), maxlength=20)
@@ -430,7 +430,7 @@ block Middle
 				div.history
 		div.game-body
 		div.game-input
-			input#game-input(placeholder=L('yourTurn')+' '+L('inputChat'), readonly)
+			input#game-input(placeholder=L('yourTurn') + ' ' + L('inputChat'), readonly)
 	+Product('Me')
 		div.moremi.my-image
 		div.my-stat
