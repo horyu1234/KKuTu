@@ -629,8 +629,8 @@ $(document).ready(function () {
     });
     $stage.dialog.settingOK.on('click', function (e) {
         applyOptions({
-            mb: $("#mute-bgm").is(":checked"),
-            me: $("#mute-effect").is(":checked"),
+            vb: $("#volume-bgm").val(),
+            ve: $("#volume-effect").val(),
             di: $("#deny-invite").is(":checked"),
             dw: $("#deny-whisper").is(":checked"),
             df: $("#deny-friend").is(":checked"),
@@ -795,9 +795,12 @@ $(document).ready(function () {
     });
     $stage.dialog.dressOK.on('click', function (e) {
         $(e.currentTarget).attr('disabled', true);
-        $.post("/exordial", {data: $("#dress-exordial").val()}, function (res) {
+        $.post("/exordial", {data: $("#dress-exordial").val(), nick: $("#dress-nickname").val()}, function (res) {
             $stage.dialog.dressOK.attr('disabled', false);
             if (res.error) return fail(res.error);
+            if (($("#dress-nickname").val() != $data.users[$data.id].profile.title && $("#dress-nickname").val() != $data.users[$data.id].profile.name) || $("#dress-exordial").val() != $data.users[$data.id].exordial) {
+                alert(L['profileChanged']);
+            }
 
             $stage.dialog.dress.hide();
         });

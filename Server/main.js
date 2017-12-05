@@ -51,9 +51,9 @@ function main() {
     Menu.setApplicationMenu(Menu.buildFromTemplate(Runner.MAIN_MENU));
 
     mainWindow = new BrowserWindow({
-        title: `${PKG['name']} ${PKG['version']} - Now loading`,
-        width: 800,
-        height: 600,
+        title: `${PKG['name']} ${PKG['version']} - Preparing`,
+        width: 840,
+        height: 630,
         icon: __dirname + "/../logo.ico"
     });
     mainWindow.loadURL(__dirname + "/views/index.pug");

@@ -24,7 +24,7 @@ const SETTINGS = require("../settings.json");
 const SCRIPTS = {
     'server-on': startServer,
     'server-off': stopServer,
-    'program-info': () => {
+    'program-about': () => {
         exports.send('alert', [
             `=== ${PKG.name} ===`,
             `${PKG.description}`, "",
@@ -34,7 +34,7 @@ const SCRIPTS = {
             `Repository: ${PKG.repository}`
         ].join('\n'));
     },
-    'program-blog': () => exports.send('external', "http://blog.jjo.kr/"),
+    'program-site': () => exports.send('external', "http://blog.jjo.kr/"),
     'program-repo': () => exports.send('external', "https://github.com/JJoriping/KKuTu"),
     'exit': () => process.exit(0)
 };
@@ -58,12 +58,12 @@ exports.MAIN_MENU = [
         label: LANG['menu-program'],
         submenu: [
             {
-                label: LANG['menu-program-info'],
-                click: () => exports.run("program-info")
+                label: LANG['menu-program-about'],
+                click: () => exports.run("program-about")
             },
             {
-                label: LANG['menu-program-blog'],
-                click: () => exports.run("program-blog")
+                label: LANG['menu-program-site'],
+                click: () => exports.run("program-site")
             },
             {
                 label: LANG['menu-program-repo'],

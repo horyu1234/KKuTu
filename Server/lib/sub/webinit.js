@@ -42,7 +42,7 @@ function getLanguage(locale, page, shop) {
     for (i in L.GLOBAL) R[i] = L.GLOBAL[i];
     if (shop) for (i in L.SHOP) R[i] = L.SHOP[i];
     for (i in L[page]) R[i] = L[page][i];
-    if (R['title']) R['title'] = `[${process.env['KKT_SV_NAME']}] ${R['title']}`;
+    if (R['title']) R['title'] = `${R['title']}`;
 
     return R;
 }
@@ -64,7 +64,7 @@ function page(req, res, file, data) {
     if (!Language[data.lang]) data.lang = "ko_KR";
     // URL ...?locale=en_US will show the page in English
 
-    // if(exports.STATIC) data.static = exports.STATIC[data.lang];
+    // if (exports.STATIC) data.static = exports.STATIC[data.lang];
     data.season = GLOBAL.SEASON;
     data.season_pre = GLOBAL.SEASON_PRE;
 

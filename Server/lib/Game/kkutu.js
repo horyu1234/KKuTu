@@ -233,8 +233,8 @@ exports.Client = function (socket, profile, sid) {
         delete my.profile.birth;
         delete my.profile._age;
         */
-        delete my.profile.token;
         delete my.profile.sid;
+        delete my.profile.token;
 
         if (my.profile.title) my.profile.name = "anonymous";
     } else {
@@ -258,8 +258,11 @@ exports.Client = function (socket, profile, sid) {
     my.subPlace = 0;
     my.error = false;
     my.blocked = false;
+    my.blockedChat = false;
     my.spam = 0;
+    my.spamChat = 0;
     my._pub = new Date();
+    my._pubChat = new Date();
 
     if (Cluster.isMaster) {
         my.onOKG = function (time) {
@@ -293,7 +296,7 @@ exports.Client = function (socket, profile, sid) {
     socket.on('message', function (msg) {
         var data, room = ROOM[my.place];
 
-        JLog.log(`Chan @${channel} Msg #${my.id}: ${msg}`);
+        JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
         try {
             data = JSON.parse(msg);
         } catch (e) {
@@ -357,24 +360,50 @@ exports.Client = function (socket, profile, sid) {
     };
     my.publish = function (type, data, noBlock) {
         var i;
-        var now = new Date(), st = now - my._pub;
+        var now = new Date();
+        var $room = ROOM[my.place];
 
-        if (st <= Const.SPAM_ADD_DELAY) my.spam++;
-        else if (st >= Const.SPAM_CLEAR_DELAY) my.spam = 0;
-        if (my.spam >= Const.SPAM_LIMIT) {
-            if (!my.blocked) my.numSpam = 0;
-            my.blocked = true;
-        }
-        if (!noBlock) {
-            my._pub = now;
-            if (my.blocked) {
-                if (st < Const.BLOCKED_LENGTH) {
-                    if (++my.numSpam >= Const.KICK_BY_SPAM) {
-                        if (Cluster.isWorker) process.send({type: "kick", target: my.id});
-                        return my.socket.close();
-                    }
-                    return my.send('blocked');
-                } else my.blocked = false;
+        // 채팅 도배 차단
+        if (type == 'chat' && !my.subPlace && (!$room || !$room.gaming || $room.game.seq.indexOf(my.id) == -1)) {
+            var stChat = now - my._pubChat;
+            if (stChat <= Const.CHAT_SPAM_ADD_DELAY) my.spamChat++;
+            else if (stChat >= Const.CHAT_SPAM_CLEAR_DELAY) my.spamChat = 0;
+            if (my.spamChat >= Const.CHAT_SPAM_LIMIT) {
+                if (!my.blockedChat) my.numSpamChat = 0;
+                my.blockedChat = true;
+            }
+            if (!noBlock) {
+                my._pubChat = now;
+                if (my.blockedChat) {
+                    if (stChat < Const.CHAT_BLOCKED_LENGTH) {
+                        if (++my.numSpamChat >= Const.CHAT_KICK_BY_SPAM) {
+                            if (Cluster.isWorker) process.send({type: "kick", target: my.id});
+                            return my.socket.close();
+                        }
+                        return my.send('blocked');
+                    } else my.blockedChat = false;
+                }
+            }
+            // 패킷 도배 차단
+        } else {
+            var st = now - my._pub;
+            if (st <= Const.SPAM_ADD_DELAY) my.spam++;
+            else if (st >= Const.SPAM_CLEAR_DELAY) my.spam = 0;
+            if (my.spam >= Const.SPAM_LIMIT) {
+                if (!my.blocked) my.numSpam = 0;
+                my.blocked = true;
+            }
+            if (!noBlock) {
+                my._pub = now;
+                if (my.blocked) {
+                    if (st < Const.BLOCKED_LENGTH) {
+                        if (++my.numSpam >= Const.KICK_BY_SPAM) {
+                            if (Cluster.isWorker) process.send({type: "kick", target: my.id});
+                            return my.socket.close();
+                        }
+                        return my.send('blocked');
+                    } else my.blocked = false;
+                }
             }
         }
         data.profile = my.profile;
@@ -467,7 +496,7 @@ exports.Client = function (socket, profile, sid) {
             }
             if (black) R.go({result: 444, black: black});
             else if (Cluster.isMaster && $user.server) R.go({result: 409, black: $user.server});
-            else if (exports.NIGHT && my.isAjae === false) R.go({result: 440});
+            // else if (exports.NIGHT && my.isAjae === false) R.go({result: 440});
             else R.go({result: 200});
         });
         return R;
@@ -531,7 +560,7 @@ exports.Client = function (socket, profile, sid) {
                     return my.sendError(401);
                 }
             }
-            if ($room.players.length >= $room.limit + (spec ? Const.MAX_OBSERVER : 0)) {
+            if ($room.players.length >= $room.limit + (spec && $room.gaming ? Const.MAX_OBSERVER : 0)) {
                 return my.sendError(429);
             }
             if ($room.players.indexOf(my.id) != -1) {

@@ -22,7 +22,7 @@ var Lizard = require('../../sub/lizard');
 var DB;
 var DIC;
 
-var LIST_LENGTH = 200;
+var LIST_LENGTH = 180;
 var DOUBLE_VOWELS = [9, 10, 11, 14, 15, 16, 19];
 var DOUBLE_TAILS = [3, 5, 6, 9, 10, 11, 12, 13, 14, 15, 18];
 

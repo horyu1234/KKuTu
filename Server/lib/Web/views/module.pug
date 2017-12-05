@@ -93,8 +93,6 @@ mixin PageHead(min)
 	script(type='text/javascript', src='/js/jquery.js')
 	script(type='text/javascript', src='/language/' + locals.page.replace("/", "_") + '/' + locals.lang)
 
-	if PUBLIC && !SESSION.admin
-		script(type='text/javascript', src='/js/google.js')
 	script(type='text/javascript', src='/js/global.min.js')
 	if !min
 		script(type='text/javascript', src='/js/facebook.js')

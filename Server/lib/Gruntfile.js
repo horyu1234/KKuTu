@@ -20,7 +20,7 @@ var File = require('fs');
 
 const LIST = [
     "global",
-
+    "in_kkutu",
     "in_login",
     "in_game_kkutu",
     "in_game_kkutu_help",

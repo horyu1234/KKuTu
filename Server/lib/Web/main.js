@@ -23,15 +23,18 @@ var Redission = require("connect-redis")(Exession);
 var Redis = require("redis");
 var Parser = require("body-parser");
 var DDDoS = require("dddos");
+var https = require("https");
+var fs = require("fs");
 var Server = Express();
 var DB = require("./db");
+var Crypto = require("../sub/crypto");
 var JAuth = require("../sub/jauth");
 var JLog = require("../sub/jjlog");
 var WebInit = require("../sub/webinit");
 var GLOBAL = require("../sub/global.json");
 var Const = require("../const");
 
-var Language = {
+var language = {
     'ko_KR': require("./lang/ko_KR.json"),
     'en_US': require("./lang/en_US.json")
 };
@@ -100,12 +103,12 @@ DB.ready = function () {
     DB.kkutu_shop_desc.find().on(function ($docs) {
         var i, j;
 
-        for (i in Language) flush(i);
+        for (i in language) flush(i);
 
         function flush(lang) {
             var db;
 
-            Language[lang].SHOP = db = {};
+            language[lang].SHOP = db = {};
             for (j in $docs) {
                 db[$docs[j]._id] = [$docs[j][`name_${lang}`], $docs[j][`desc_${lang}`]];
             }
@@ -173,13 +176,18 @@ ROUTES.forEach(function (v) {
 
 Server.get("/", function (req, res) {
     const server = req.query.server;
-    if (req.query.code) { // 네이버 토큰
+
+    if (req.query.authType == "naver" && req.query.code) {
         req.session.authType = "naver";
         req.session.token = req.query.code;
         res.redirect("/register");
-    } else if (req.query.token) { // 페이스북 토큰
+    } else if (req.query.authType == "facebook" && req.query.code) {
         req.session.authType = "facebook";
-        req.session.token = req.query.token;
+        req.session.token = req.query.code;
+        res.redirect("/register");
+    } else if (req.query.authType == "google" && req.query.code) {
+        req.session.authType = "google";
+        req.session.token = req.query.code;
         res.redirect("/register");
     } else {
         DB.session.findOne(['_id', req.session.id]).on(function ($ses) {
@@ -206,6 +214,7 @@ Server.get("/", function (req, res) {
         page(req, res, Const.MAIN_PORTS[server] ? "kkutu" : "portal", {
             '_page': "kkutu",
             '_id': id,
+            '_crypted': Crypto.encrypt(id, GLOBAL.CRYPTO_KEY), // 토큰 암호화
             'PORT': Const.MAIN_PORTS[server],
             'HOST': req.hostname,
             'TEST': req.query.test,
@@ -220,11 +229,7 @@ Server.get("/", function (req, res) {
             'EN_INJEONG': Const.EN_INJEONG,
             'KO_THEME': Const.KO_THEME,
             'EN_THEME': Const.EN_THEME,
-            'IJP_EXCEPT': Const.IJP_EXCEPT,
-            'ogImage': "http://kkutu.kr/img/kkutu/logo.png",
-            'ogURL': "http://kkutu.kr/",
-            'ogTitle': "글자로 놀자! 끄투 온라인",
-            'ogDescription': "끝말잇기가 이렇게 박진감 넘치는 게임이었다니!"
+            'IJP_EXCEPT': Const.IJP_EXCEPT
         });
     }
 });
@@ -272,7 +277,7 @@ Server.get("/logout", function (req, res) {
 Server.get("/register", function (req, res) {
     if (!req.session.token) return res.sendStatus(400);
 
-    JAuth.login(req.session.authType, req.session.token, req.session.id, req.session.token2).then(function ($profile) {
+    JAuth.login(req.session.authType, req.session.token, req.session.id).then(function ($profile) {
         var now = Date.now();
 
         if ($profile.error) return res.sendStatus($profile.error);
@@ -280,22 +285,19 @@ Server.get("/register", function (req, res) {
 
         $profile.sid = req.session.id;
         req.session.admin = GLOBAL.ADMIN.includes($profile.id);
-        DB.session.upsert(['_id', req.session.id]).set({
-            'profile': $profile,
-            'createdAt': now
-        }).on();
         DB.users.findOne(['_id', $profile.id]).on(function ($body) {
-            req.session.profile = $profile;
-            res.redirect("/");
+            if ($body && $body.nickname) {
+                $profile.title = $body.nickname;
+            }
             DB.users.update(['_id', $profile.id]).set(['lastLogin', now]).on();
+            DB.session.upsert(['_id', req.session.id]).set({
+                'profile': $profile,
+                'createdAt': now
+            }).on(function ($ses) {
+                res.redirect("/");
+            });
         });
     });
-});
-Server.post("/login/google", function (req, res) {
-    req.session.authType = "google";
-    req.session.token = req.body.it;
-    req.session.token2 = req.body.at;
-    res.sendStatus(200);
 });
 Server.post("/session", function (req, res) {
     var o;
@@ -312,9 +314,6 @@ Server.post("/session", function (req, res) {
     };
     else o = {error: 404};
     res.json(o);
-});
-Server.post("/session/set", function (req, res) {
-    res.sendStatus(200);
 });
 Server.get("/legal/:page", function (req, res) {
     page(req, res, "legal/" + req.params.page);

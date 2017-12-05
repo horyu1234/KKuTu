@@ -25,6 +25,7 @@ var Server = new WebSocket.Server({
 });
 var Master = require('./master');
 var KKuTu = require('./kkutu');
+var Crypto = require("../sub/crypto");
 var Lizard = require('../sub/lizard');
 var MainDB = require('../Web/db');
 var JLog = require('../sub/jjlog');
@@ -91,8 +92,20 @@ MainDB.ready = function () {
     KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION);
 };
 Server.on('connection', function (socket) {
-    var chunk = socket.upgradeReq.url.slice(1).split('&');
-    var key = chunk[0];
+    var chunk = socket.upgradeReq.url.slice(1).split('&')
+    var key;
+    // 토큰 복호화
+    try {
+        key = Crypto.decrypt(chunk[0], GLOBAL.CRYPTO_KEY);
+    } catch (exception) {
+        key = ".";
+    }
+    // 토큰 값 검사
+    var pattern = /^[0-9a-zA-Z_-]{32}$/;
+    if (!pattern.test(key)) {
+        socket.close();
+        return;
+    }
     var reserve = RESERVED[key] || {}, room;
     var $c;
 

@@ -25,9 +25,6 @@ block CSS
 
 block JS
 	script(type='text/javascript', src='/js/in_portal.min.js')
-	if PUBLIC && false
-		script(async, src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
-		script (adsbygoogle = window.adsbygoogle || []).push({google_ad_client: "ca-pub-3784210391085906", enable_page_level_ads: true});
 
 block Middle
 	+separator(5)
@@ -42,7 +39,6 @@ block Middle
 			div.jjoDisplayBar(style='float: left; margin-top: -30px; width: 325px; height: 85px;')
 				button#game-start.jjo-display= L('gameStart')
 	div#menu-bar(style='float: left; margin: 10px 0px 10px calc(50% - 136px); width: 100%;')
-		a(target='_blank', href='//cafe.naver.com/sdbx', style='background-color: #63A95B;')= L('sandbox')
 		a(target='_blank', href='//blog.jjo.kr/', style='background-color: #4078DC;')= L('CREATOR')
 	div(style='float: left; margin-left: calc(50% - 160px);')
 		div.server-list-box
@@ -58,5 +54,6 @@ block Middle
 	+separator(10)
 
 block Bottom
-	div.bottom-legal!= L('dictionarySupport')
-	div.bottom-legal!= L('etcSupport')
+	div.bottom-legal!= L('License')
+	div.bottom-legal!= L('Dictionary')
+	div.bottom-legal!= L('Copyright')

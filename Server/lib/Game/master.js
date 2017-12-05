@@ -21,6 +21,7 @@ var File = require('fs');
 var WebSocket = require('ws');
 // var Heapdump = require("heapdump");
 var KKuTu = require('./kkutu');
+var Crypto = require("../sub/crypto");
 var GLOBAL = require("../sub/global.json");
 var Const = require("../const");
 var JLog = require('../sub/jjlog');
@@ -82,6 +83,16 @@ function processAdmin(id, value) {
             if (temp = DIC[value]) {
                 temp.socket.send('{"type":"error","code":410}');
                 temp.socket.close();
+            }
+            return null;
+        case "ip":
+            if (temp = DIC[value]) {
+                if (DIC[id]) DIC[id].send('tail', {
+                    a: "ip",
+                    rid: temp.id,
+                    id: id,
+                    msg: temp.socket._socket.remoteAddress
+                });
             }
             return null;
         case "tailroom":
@@ -285,7 +296,23 @@ exports.init = function (_SID, CHAN) {
             perMessageDeflate: false
         });
         Server.on('connection', function (socket) {
-            var key = socket.upgradeReq.url.slice(1);
+            var key;
+            // 토큰 복호화
+            if (socket.upgradeReq.headers.host.match(/^127\.0\.0\.2:/)) {
+                key = socket.upgradeReq.url.slice(1);
+            } else {
+                try {
+                    key = Crypto.decrypt(socket.upgradeReq.url.slice(1), GLOBAL.CRYPTO_KEY);
+                } catch (exception) {
+                    key = ".";
+                }
+                // 토큰 값 검사
+                var pattern = /^[0-9a-zA-Z_-]{32}$/;
+                if (!pattern.test(key)) {
+                    socket.send(`{ "type": "error", "code": "400" }`);
+                    return;
+                }
+            }
             var $c;
 
             socket.on('error', function (err) {
@@ -420,6 +447,8 @@ function processClientRequest($c, msg) {
     var stable = true;
     var temp;
     var now = (new Date()).getTime();
+
+    if (!msg) return;
 
     switch (msg.type) {
         case 'yell':

@@ -54,5 +54,5 @@ exports.warn = function (text) {
     callLog(text.black.bgYellow);
 };
 exports.error = function (text) {
-    callLog(text.bgRed);
+    callLog(text.white.bgRed);
 };

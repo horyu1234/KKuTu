@@ -156,7 +156,7 @@ exports.run = function (Server, page) {
             } else {
                 MainDB.kkutu_injeong.update(['_id', v._origin]).set(['theme', "~"]).on();
             }
-            // MainDB.kkutu_injeong.remove([ '_id', v._origin ]).on();
+            MainDB.kkutu_injeong.remove(['_id', v._origin]).on();
         });
         res.sendStatus(200);
     });

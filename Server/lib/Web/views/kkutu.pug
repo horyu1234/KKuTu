@@ -37,6 +37,9 @@ mixin SettingOption(id, text, st)
 		input(id=id, type='checkbox', style='margin-top: 5px; width: auto;')
 		label(for=id)= text
 
+mixin SettingOptionVolume(id)
+	input(id=id, type='range', min='0', max='1', step='0.01', value='1', style='width:50%;')
+
 block Subject
 	title= L('title')
 
@@ -49,7 +52,7 @@ block CSS
 block Jungle
 	span#PUBLIC= PUBLIC ? "true" : undefined
 	// span#PORT= locals.PORT
-	span#URL= `ws://${locals.HOST}:${locals.PORT}/${locals._id}`
+	span#URL= `ws://${locals.HOST}:${locals.PORT}/${locals._crypted}`
 	span#MOREMI_PART= locals.MOREMI_PART.join(',')
 	span#AVAIL_EQUIP= locals.AVAIL_EQUIP.join(',')
 	span#RULE= JSON.stringify(locals.RULE)
@@ -90,12 +93,13 @@ block Middle
 		button#ExitBtn.for-master.for-normal.for-gaming(style='display: none; background-color: #FFADAD;')= L('exit')
 		button#ReplayBtn.for-lobby(style='display: none; background-color: #D9FF82;')= L('replay')
 		button#LeaderboardBtn.for-lobby(style='display: none; background-color: #FFADD3;')!= L('leaderboard')
-		div#facebook-menu.fb-like.for-lobby.for-master.for-normal.for-gaming(data-href='http://kkutu.kr', data-width='300', data-layout='button_count', data-action='like', data-show-faces='true', data-share='true')
-	+Dialog('SettingDiag', 300, 240, L('settingsText'))
+	+Dialog('SettingDiag', 300, 290, L('settingsText'))
 		div.dialog-bar
-			h4= L('mute')
-			+SettingOption('mute-bgm', L('bgm'))
-			+SettingOption('mute-effect', L('effect'))
+			h4= L('bgm')
+			+SettingOptionVolume('volume-bgm')
+		div.dialog-bar
+			h4= L('effect')
+			+SettingOptionVolume('volume-effect')
 		div.dialog-bar
 			h4= L('denyReq')
 			+SettingOption('deny-invite', L('denyInvite'))
@@ -348,7 +352,10 @@ block Middle
 			h4.dialog-bar-value#replay-players -
 		div.dialog-bar.tail-button
 			button#replay-view= L('replayView')
-	+Dialog('DressDiag', 600, 280, L('dress'))
+	+Dialog('DressDiag', 600, 305, L('dress'))
+		div.dialog-bar
+			h4(style='width: 150px;')= L('myNickname')
+			input#dress-nickname(type='textfield', placeholder=L('myNicknameX'), style='width: 435px;', maxlength=18)
 		div.dialog-bar
 			h4(style='width: 150px;')= L('myExordial')
 			input#dress-exordial(type='textfield', placeholder=L('myExordialX'), style='width: 435px;', maxlength=100)
@@ -448,10 +455,10 @@ block Middle
 		div.bar-text.my-gauge-text
 	+Product('Chat')
 		div#Chat
-		input#Talk(maxlength=200)
+		input#Talk(maxlength=180)
 		button#ChatBtn= L('send')
-	+Product('AD')
 
 block Bottom
-	div.bottom-legal!= L('dictionarySupport')
-	div.bottom-legal!= L('etcSupport')
+	div.bottom-legal!= L('License')
+	div.bottom-legal!= L('Dictionary')
+	div.bottom-legal!= L('Copyright')

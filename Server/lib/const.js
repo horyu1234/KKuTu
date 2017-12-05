@@ -18,9 +18,14 @@
 
 var GLOBAL = require("./sub/global.json");
 
-exports.KKUTU_MAX = 400;
+exports.KKUTU_MAX = 200;
 exports.MAIN_PORTS = GLOBAL.MAIN_PORTS;
 exports.TEST_PORT = 4040;
+exports.CHAT_SPAM_ADD_DELAY = 2500;   //이 시간보다 빨리 치면 도배 카운트 증가
+exports.CHAT_SPAM_CLEAR_DELAY = 7500; //이 시간 이후 치면 도배 카운트 초기화
+exports.CHAT_SPAM_LIMIT = 4;          //이 횟수 이상 도배 카운트 올라가면 차단
+exports.CHAT_BLOCKED_LENGTH = 10000;  //차단됐을 시 이 시간 이후 치면 차단 해제
+exports.CHAT_KICK_BY_SPAM = 9;        //차단됐을 시 이 횟수 이상 치면 킥
 exports.SPAM_CLEAR_DELAY = 1600;
 exports.SPAM_ADD_DELAY = 750;
 exports.SPAM_LIMIT = 7;
@@ -32,6 +37,7 @@ exports.TESTER = GLOBAL.ADMIN.concat([
 ]);
 exports.OPTIONS = {
     'man': {name: "Manner"},
+    'saf': {name: "Safe"},
     'ext': {name: "Injeong"},
     'mis': {name: "Mission"},
     'loa': {name: "Loanword"},
@@ -68,16 +74,16 @@ exports.RULE = {
             ewq: 현재 턴 나가면 라운드 종료?
         }
     */
-    'EKT': {
+    'EKT': {// 영어 끄투
         lang: "en",
         rule: "Classic",
-        opts: ["man", "ext", "mis"],
+        opts: ["man", "saf", "ext", "mis"],
         time: 1,
         ai: true,
         big: false,
         ewq: true
     },
-    'ESH': {
+    'ESH': {// 영어 끝말잇기
         lang: "en",
         rule: "Classic",
         opts: ["ext", "mis"],
@@ -86,25 +92,25 @@ exports.RULE = {
         big: false,
         ewq: true
     },
-    'KKT': {
+    'KKT': {// 한국어 쿵쿵따
         lang: "ko",
         rule: "Classic",
-        opts: ["man", "ext", "mis", "loa", "str", "k32"],
+        opts: ["man", "saf", "ext", "mis", "loa", "str", "k32"],
         time: 1,
         ai: true,
         big: false,
         ewq: true
     },
-    'KSH': {
+    'KSH': {// 한국어 끝말잇기
         lang: "ko",
         rule: "Classic",
-        opts: ["man", "ext", "mis", "loa", "str"],
+        opts: ["man", "saf", "ext", "mis", "loa", "str"],
         time: 1,
         ai: true,
         big: false,
         ewq: true
     },
-    'CSQ': {
+    'CSQ': {// 자음 퀴즈
         lang: "ko",
         rule: "Jaqwi",
         opts: ["ijp"],
@@ -113,7 +119,7 @@ exports.RULE = {
         big: false,
         ewq: false
     },
-    'KCW': {
+    'KCW': {// 한국어 십자말풀이
         lang: "ko",
         rule: "Crossword",
         opts: [],
@@ -122,7 +128,7 @@ exports.RULE = {
         big: true,
         ewq: false
     },
-    'KTY': {
+    'KTY': {// 한국어 타자 대결
         lang: "ko",
         rule: "Typing",
         opts: ["prv"],
@@ -131,7 +137,7 @@ exports.RULE = {
         big: false,
         ewq: false
     },
-    'ETY': {
+    'ETY': {// 영어 타자 대결
         lang: "en",
         rule: "Typing",
         opts: ["prv"],
@@ -140,17 +146,17 @@ exports.RULE = {
         big: false,
         ewq: false
     },
-    'KAP': {
+    'KAP': {// 한국어 앞말잇기
         lang: "ko",
         rule: "Classic",
-        opts: ["man", "ext", "mis", "loa", "str"],
+        opts: ["man", "saf", "ext", "mis", "loa", "str"],
         time: 1,
         ai: true,
         big: false,
         _back: true,
         ewq: true
     },
-    'HUN': {
+    'HUN': {// 훈민정음
         lang: "ko",
         rule: "Hunmin",
         opts: ["ext", "mis", "loa", "str"],
@@ -159,7 +165,7 @@ exports.RULE = {
         big: false,
         ewq: true
     },
-    'KDA': {
+    'KDA': {// 한국어 단어 대결
         lang: "ko",
         rule: "Daneo",
         opts: ["ijp", "mis"],
@@ -168,7 +174,7 @@ exports.RULE = {
         big: false,
         ewq: true
     },
-    'EDA': {
+    'EDA': {// 영어 단어 대결
         lang: "en",
         rule: "Daneo",
         opts: ["ijp", "mis"],
@@ -177,7 +183,7 @@ exports.RULE = {
         big: false,
         ewq: true
     },
-    'KSS': {
+    'KSS': {// 한국어 솎솎
         lang: "ko",
         rule: "Sock",
         opts: ["no2"],
@@ -186,7 +192,7 @@ exports.RULE = {
         big: true,
         ewq: false
     },
-    'ESS': {
+    'ESS': {// 영어 솎솎
         lang: "en",
         rule: "Sock",
         opts: ["no2"],
@@ -213,7 +219,7 @@ exports.MISSION_en = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"
 
 exports.KO_INJEONG = [
     "IMS", "VOC", "KRR", "KTV",
-    "NSK", "KOT", "DOT", "DRR", "DGM", "RAG", "LVL",
+    "NSK", "KOT", "DOT", "THP", "DRR", "DGM", "RAG", "LVL",
     "LOL", "MRN", "MMM", "MAP", "MKK", "MNG",
     "MOB", "HYK", "CYP", "HRH", "STA", "OIJ",
     "KGR", "ESB", "ELW", "OIM", "OVW", "NEX", /*"WOW",*/
@@ -255,12 +261,12 @@ exports.KOR_GROUP = new RegExp("(,|^)(" + [
 ].join('|') + ")(,|$)");
 exports.ENG_ID = /^[a-z]+$/i;
 exports.KOR_FLAG = {
-    LOANWORD: 1, // 외래어
-    INJEONG: 2,	// 어인정
-    SPACED: 4, // 띄어쓰기를 해야 하는 어휘
-    SATURI: 8, // 방언
-    OLD: 16, // 옛말
-    MUNHWA: 32 // 문화어
+    LOANWORD: 1,  // 외래어
+    INJEONG: 2,   // 어인정
+    SPACED: 4,    // 띄어쓰기를 해야 하는 어휘
+    SATURI: 8,    // 방언
+    OLD: 16,      // 옛말
+    MUNHWA: 32    // 문화어
 };
 exports.WP_REWARD = function () {
     return 10 + Math.floor(Math.random() * 91);

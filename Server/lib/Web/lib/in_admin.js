@@ -54,7 +54,7 @@
                         .append($("<td>").append(putter("ij-" + item._id + "-check", 'y').attr('type', "checkbox")))
                         .append($("<td>").append($("<a>").attr({
                             'target': "_blank",
-                            'href': "https://namu.moe/w/" + encodeURI(item._id)
+                            'href': "https://namu.wiki/w/" + encodeURI(item._id)
                         }).html("이동")))
                         .append($("<td>").append(putter("ij-" + item._id + "-_id", 'l', item._id)))
                         .append($("<td>").append(putter("ij-" + item._id + "-theme", 'g', item.theme)))
@@ -184,6 +184,7 @@
                     $table.append($r = $("<tr>").attr('id', ['ur', item._id].join('-')));
                     $r
                         .append($("<td>").append(putter("ud-" + item._id + "-_id", 'g', item._id)))
+                        .append($("<td>").append(putter("ud-" + item._id + "-nickname", 'g', item.nickname || {})))
                         .append($("<td>").append(putter("ud-" + item._id + "-money", 'g', item.money)))
                         .append($("<td>").append(putter("ud-" + item._id + "-kkutu", 'l', JSON.stringify(item.kkutu || {}))))
                         .append($("<td>").append(putter("ud-" + item._id + "-box", 'l', JSON.stringify(item.box || {}))))
@@ -204,15 +205,16 @@
 
                 list.push({
                     _id: $data.get(0).value,
-                    money: $data.get(1).value,
-                    kkutu: $data.get(2).value,
-                    box: $data.get(3).value,
-                    equip: $data.get(4).value,
-                    exordial: $data.get(5).value,
-                    server: $data.get(6).value,
-                    lastLogin: $data.get(7).value,
-                    black: $data.get(8).value,
-                    friends: $data.get(9).value
+                    nickname: $data.get(1).value
+                    money: $data.get(2).value,
+                    kkutu: $data.get(3).value,
+                    box: $data.get(4).value,
+                    equip: $data.get(5).value,
+                    exordial: $data.get(6).value,
+                    server: $data.get(7).value,
+                    lastLogin: $data.get(8).value,
+                    black: $data.get(9).value,
+                    friends: $data.get(10).value
                 });
             });
             $.post("/gwalli/users", {
