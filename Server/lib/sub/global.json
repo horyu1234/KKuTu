@@ -7,8 +7,10 @@
   ],
   "KKUTUHOT_PATH": "/kkutu/data/kkutuhot.json",
   "PASS": "Your password for management Here",
+  "PG_USER": "postgres",
   "PG_PASS": "Your PostgreSQL Password Here",
   "PG_PORT": 5432,
+  "PG_DB": "main",
   "GOOGLE_RECAPTCHA_SITE_KEY": "Your Google Recaptcha site key Here",
   "GOOGLE_RECAPTCHA_SECRET_KEY": "Your Google Recaptcha secret key Here",
   "CRYPTO_KEY": "Your CRYPTO Key Here"

@@ -41,10 +41,10 @@ const FAKE_REDIS = {
 Pub.ready = function (isPub) {
     var Redis = require("redis").createClient();
     var Pg = new PgPool({
-        user: "postgres",
+        user: GLOBAL.PG_USER,
         password: GLOBAL.PG_PASS,
         port: GLOBAL.PG_PORT,
-        database: "main"
+        database: GLOBAL.PG_DB,
     });
     Redis.on('connect', function () {
         connectPg();
@@ -84,6 +84,9 @@ Pub.ready = function (isPub) {
 
             DB.session = new mainAgent.Table("session");
             DB.users = new mainAgent.Table("users");
+
+            DB.users_kkutuio = new mainAgent.Table("users_kkutuio");
+            DB.users_kkutuhanguk = new mainAgent.Table("users_kkutuhanguk");
 
             if (exports.ready) exports.ready(Redis, Pg);
             else JLog.warn("DB.onReady was not defined yet.");
