@@ -111,14 +111,23 @@ var L;
             });
         }).trigger('resize');
 
-        $("#quick-search-btn").on('click', function (e) {
-            var v;
+        $("#menu-kkutuio-migration-btn").on('click', function (e) {
+            importKKuTuio();
+        });
 
-            if ($("#quick-search-btn").hasClass("searching")) return;
-            if (v = $(".autocomp-select").html()) $("#quick-search-tf").val(v);
-            $("#quick-search-btn").addClass("searching").html($("<i>").addClass("fa fa-spin fa-spinner"));
-            location.href = "http://jjo.kr?q=" + encodeURI($("#quick-search-tf").val());
-        }).hotkey($("#quick-search-tf"), 13);
+        $("#kkutuio-migration-btn").on('click', function (e) {
+            importKKuTuio();
+        });
+
+        function importKKuTuio() {
+            if ($("#account-info").html() === L['LOGIN']) {
+                alert('끄투리오로 부터 데이터를 이전하기 위해서는\n데이터를 받아올 계정으로 끄투한국에서 먼저 로그인을 하셔야 합니다.\n\n로그인 페이지로 이동합니다.');
+                location.href = "/login";
+                return;
+            }
+
+            location.href = "/kkutuioMigration";
+        }
 
         // 계정
         if ($.cookie('lc') == "") $.cookie('lc', "ko_KR");

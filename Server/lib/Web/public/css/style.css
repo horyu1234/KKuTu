@@ -130,30 +130,6 @@ span {
     color: inherit;
 }
 
-#quick-search {
-    float: right;
-    margin: 1px;
-}
-
-#quick-search-tf {
-    float: left;
-    border-right: none;
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    width: 100px;
-    height: 16px;
-    font-size: 13px !important;
-}
-
-#quick-search-btn {
-    float: left;
-    border-left: none;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    width: 30px;
-    height: 16px;
-}
-
 .autocomp {
     position: absolute;
     padding: 3px;
@@ -173,6 +149,27 @@ span {
 .autocomp-item:hover, .autocomp-select {
     color: #FFFFFF;
     background-color: rgba(50, 50, 50, 0.8);
+}
+
+/* TODO: 중복되는 CSS 정리 */
+#menu-kkutuio-migration {
+    float: right;
+    margin: 1px;
+    font-size: 12px;
+    color: #444444;
+}
+
+#menu-kkutuio-migration-btn {
+    float: left;
+    padding-top: 7px;
+    width: 160px;
+    text-align: center;
+    cursor: pointer;
+    transition: color 300ms ease;
+}
+
+#menu-kkutuio-migration:hover {
+    color: #EEEEEE;
 }
 
 #account {

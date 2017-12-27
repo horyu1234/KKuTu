@@ -384,7 +384,7 @@ exports.Agent = function (type, origin) {
                         JLog.warn("Unhandled mode: " + mode);
                 }
                 if (!sql) return JLog.warn("SQL is undefined. This call will be ignored.");
-                // JLog.log("Query: " + sql.slice(0, 100));
+                // JLog.log("Query: " + sql);
                 origin.query(sql, preCB);
                 /*if(_my.findLimit){
 

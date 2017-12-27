@@ -47,7 +47,7 @@
 #game-start {
     float: left;
     width: 315px;
-    height: 70px;
+    height: 60px;
     font-size: 20px;
     font-weight: bold;
     border: none;
@@ -58,6 +58,25 @@
 #game-start:hover {
     font-size: 24px;
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* TODO: 중복되는 CSS 정리 */
+#kkutuio-migration-btn {
+    margin-top: 5px;
+    float: left;
+    width: 315px;
+    height: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    background-color: rgba(13, 71, 161, 0.9);
+}
+
+#kkutuio-migration-btn:hover {
+    font-size: 20px;
+    background-color: rgba(13, 71, 161, 0.7);
 }
 
 .server-list-box {
