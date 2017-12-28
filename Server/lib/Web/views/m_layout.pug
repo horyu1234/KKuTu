@@ -23,6 +23,7 @@ html
 	head
 		block Subject
 		meta(charset='utf-8')
+		link(rel='dns-prefetch', href='http://cdn.xn--vz0b065d.xn--3e0b707e')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
 		script(src='https://www.google.com/recaptcha/api.js')
 		script(type='text/javascript').
@@ -58,7 +59,7 @@ html
 		div#Jungle
 			span#mobile= locals.mobile
 			span#summonerID= DATA._id
-			img#Background(src='/img/bg/' + (locals.m_bg || 'def.png'))
+			img#Background(src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/bg/' + (locals.m_bg || 'def.png'))
 			block Jungle
 		div#Middle
 			block Middle

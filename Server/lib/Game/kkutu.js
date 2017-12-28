@@ -34,7 +34,7 @@ var channel = process.env['CHANNEL'] || 0;
 var passRecaptcha = false;
 
 const NUM_SLAVES = 4;
-const GUEST_IMAGE = "/img/kkutu/guest.png";
+const GUEST_IMAGE = "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/guest.png";
 const MAX_OKG = 18;
 const PER_OKG = 600000;
 
