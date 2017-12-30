@@ -2,7 +2,7 @@
   "GLOBAL": {
     "License": "<br><label style='color: #666;'>글자로 놀자! 끄투 온라인. 끄투는 JJoriping의 오픈소스 KKuTu를 기반으로 제작되었습니다.<br>본 소프트웨어는 어떠한 형태의 보증도 제공되지 않는 자유 소프트웨어이며 배포 규정을 만족시키는 조건 하에 자유롭게 재배포할 수 있습니다.<br>이에 대한 자세한 사항은 본 소프트웨어의 구현을 담은 다음 레포지토리에서 확인하십시오: <a target='_blank' href='https://github.com/horyu1234/KKuTu/tree/production'>https://github.com/horyu1234/KKuTu/tree/production</a></label>",
     "Dictionary": "<label style='color: #666;'><a href='http://wordnet.princeton.edu' target='_blank'>WordNet</a> 3.0 Copyright 2006 by Princeton University. All rights reserved.</label>",
-    "Copyright": "<div style='color: #666;'> Copyright 2017. horyu1234 All rights reserved<br><a target='_blank' href='http://kkutu.io/cc/ko-kr/legal/terms.html'>이용약관</a> · <a target='_blank' href='http://kkutu.io/cc/ko-kr/legal/privacy.html'>개인정보처리방침</a></div>",
+    "Copyright": "<div style='color: #666;'> Copyright 2017. horyu1234 All rights reserved<br><a target='_blank' href='https://kkutu-hanguk.horyu.me/legal/terms.html'>이용약관</a> · <a target='_blank' href='https://kkutu-hanguk.horyu.me/legal/privacy.html'>개인정보처리방침</a></div>",
     "CREATOR": "개발자 블로그",
     "HOME": "FA{home}",
     "FORUM": "포럼",
