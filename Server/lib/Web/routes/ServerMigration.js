@@ -18,11 +18,11 @@ exports.run = function (Server, page) {
                 //     return;
                 // }
 
-                res.redirect('http://kkutu.io?code=' + row.code);
+                res.redirect('http://kkutu.io?code=' + encodeURIComponent(row.code));
             } else {
                 MainDB.ServerMigrationProcess.addMigration(uid, utype, function (uniqueCode) {
                     // 새로 신청
-                    res.redirect('http://kkutu.io?code=' + uniqueCode);
+                    res.redirect('http://kkutu.io?code=' + encodeURIComponent(uniqueCode));
                 });
             }
         });

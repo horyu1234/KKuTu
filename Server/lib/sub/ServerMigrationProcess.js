@@ -27,7 +27,7 @@ function getMigration(whereQuery, callback) {
 }
 
 function addMigration(userId, vendor, callback) {
-    const uniqueCode = encodeURIComponent(getUniqueCode(userId, vendor));
+    const uniqueCode = getUniqueCode(userId, vendor);
 
     let query = "INSERT INTO " + MIGRATION_TABLE_NAME + " " +
         "VALUES ('" + uniqueCode + "', '" + userId + "', '" + vendor + "', null, false)";
