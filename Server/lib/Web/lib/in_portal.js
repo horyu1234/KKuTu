@@ -30,10 +30,6 @@
             refi: $("#server-refresh>i")
         };
 
-        if ($("#account-info").html() !== L['LOGIN']) {
-            $('#captcha-container').empty();
-        }
-
         $("#Background").attr('src', "").addClass("jt-image").css({
             'background-image': "url('http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/gamebg.png')",
             'background-size': "200px 200px"

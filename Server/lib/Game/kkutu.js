@@ -31,7 +31,6 @@ var Rule;
 var guestProfiles = [];
 var CHAN;
 var channel = process.env['CHANNEL'] || 0;
-var passRecaptcha = false;
 
 const NUM_SLAVES = 4;
 const GUEST_IMAGE = "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/guest.png";
