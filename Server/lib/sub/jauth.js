@@ -96,7 +96,7 @@ exports.login = function (type, token, sid) {
             url: "https://graph.facebook.com/v2.4/oauth/access_token",
             qs: {
                 client_id: FACEBOOK_ID,
-                redirect_uri: "http://KKUTU_URL/?authType=facebook",
+                redirect_uri: "http://kkutu.cc/?authType=facebook",
                 client_secret: FACEBOOK_SECRET,
                 code: token
             }
@@ -152,7 +152,7 @@ exports.login = function (type, token, sid) {
                 code: token,
                 client_id: GOOGLE_ID,
                 client_secret: GOOGLE_SECRET,
-                redirect_uri: "http://KKUTU_URL/?authType=google",
+                redirect_uri: "http:///kkutu.cc/?authType=google",
                 grant_type: "authorization_code"
             }
         }, function (err, res, doc) {

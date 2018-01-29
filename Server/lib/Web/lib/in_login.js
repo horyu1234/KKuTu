@@ -23,13 +23,13 @@
             url += "response_type=code&";
             url += "client_id=NAVER_CLIENT_ID&";
             url += "state=" + encodeURI($("#stateKey").html()) + "&";
-            url += "redirect_uri=" + encodeURI("http://KKUTU_URL/?authType=naver");
+            url += "redirect_uri=" + encodeURI("http:///kkutu.cc/?authType=naver");
             location.href = url;
         });
         $(".with-facebook").on('click', function (e) {
             var url = "https://www.facebook.com/dialog/oauth?";
             url += "client_id=FACEBOOK_APP_ID&";
-            url += "redirect_uri=" + encodeURI('http://KKUTU_URL/?authType=facebook') + "&";
+            url += "redirect_uri=" + encodeURI('http:///kkutu.cc/?authType=facebook') + "&";
             url += "scope=user_birthday";
             location.href = url;
         });
@@ -38,7 +38,7 @@
             url += "client_id=GOOGLE_CLIENT_ID&";
             url += "response_type=code&";
             url += "scope=profile+email&";
-            url += "redirect_uri=" + encodeURI('http://KKUTU_URL/?authType=google');
+            url += "redirect_uri=" + encodeURI('http:///kkutu.cc/?authType=google');
             location.href = url;
         });
     });

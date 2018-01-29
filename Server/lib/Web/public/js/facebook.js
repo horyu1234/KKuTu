@@ -8,7 +8,7 @@ window.fbAsyncInit = function () {
         document.getElementById("facebook-menu").addEventListener("click", function () {
             FB.ui({
                     method: 'share',
-                    href: 'KKUTU_URL',
+                    href: 'http://kkutu.cc',
                 },
                 function (response) {
                     if (response && !response.error_message) {

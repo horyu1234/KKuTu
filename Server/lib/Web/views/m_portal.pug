@@ -20,22 +20,22 @@ block Subject
 	title= L('title')
 
 block CSS
-	link(rel='stylesheet', href='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/in_game_kkutu.css')
-	link(rel='stylesheet', href='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/in_portal.css')
+	link(rel='stylesheet', href='http://cdn.kkutu.cc/assets/css/in_game_kkutu.css')
+	link(rel='stylesheet', href='http://cdn.kkutu.cc/assets/css/in_portal.css')
 
 block JS
-	script(type='text/javascript', src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/js/in_portal.min.js')
+	script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/in_portal.min.js')
 
 block Middle
 	+separator(5)
 	div(style='margin-left: calc(50% - 170px);')
 		div(style='float: left; padding-left: 70px;')
 			h3#holder= L('title')
-			img#logo(src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/short_logo.png')
+			img#logo(src='http://cdn.kkutu.cc/assets/img/kkutu/short_logo.png')
 		div.jjoriping(style='margin-top: 10px;')
-			img.jjoObj.jjoEyeL(src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/jjoeyeL.png', style='top: 40px; left: -270px;')
-			img.jjoObj.jjoNose(src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/jjonose.png', style='top: 42px; left: -170px;')
-			img.jjoObj.jjoEyeR(src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/jjoeyeR.png', style='top: 40px; left: -70px;')
+			img.jjoObj.jjoEyeL(src='http://cdn.kkutu.cc/assets/img/jjoeyeL.png', style='top: 40px; left: -270px;')
+			img.jjoObj.jjoNose(src='http://cdn.kkutu.cc/assets/img/jjonose.png', style='top: 42px; left: -170px;')
+			img.jjoObj.jjoEyeR(src='http://cdn.kkutu.cc/assets/img/jjoeyeR.png', style='top: 40px; left: -70px;')
 			div.jjoDisplayBar(style='float: left; margin-top: -30px; width: 325px; height: 130px;')
 				button#game-start.jjo-display= L('gameStart')
 				button#kkutuio-migration-btn.jjo-display= '끄투리오로 부터 데이터 이전하기'

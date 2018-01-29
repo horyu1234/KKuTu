@@ -965,7 +965,7 @@ function userListBar(o, forInvite) {
         $R = $("<div>").attr('id', "invite-item-" + o.id).addClass("invite-item users-item")
             .append($("<div>").addClass("jt-image users-image").css('background-image', "url('" + o.profile.image + "')"))
             .append(getLevelImage(o.data.score).addClass("users-level"))
-            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/"+o.profile.type+".png')"))
+            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('http://cdn.kkutu.cc/assets/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name").html(o.profile.title || o.profile.name))
             .on('click', function (e) {
                 requestInvite($(e.currentTarget).attr('id').slice(12));
@@ -974,7 +974,7 @@ function userListBar(o, forInvite) {
         $R = $("<div>").attr('id', "users-item-" + o.id).addClass("users-item")
             .append($("<div>").addClass("jt-image users-image").css('background-image', "url('" + o.profile.image + "')"))
             .append(getLevelImage(o.data.score).addClass("users-level"))
-            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/"+o.profile.type+".png')"))
+            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('http://cdn.kkutu.cc/assets/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name ellipse").html(o.profile.title || o.profile.name))
             .on('click', function (e) {
                 requestProfile($(e.currentTarget).attr('id').slice(11));
@@ -1081,7 +1081,7 @@ function miniGameUserBar(o) {
 function getAIProfile(level) {
     return {
         title: L['aiLevel' + level] + ' ' + L['robot'],
-        image: "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/robot.png"
+        image: "http://cdn.kkutu.cc/assets/img/kkutu/robot.png"
     };
 }
 
@@ -2614,10 +2614,10 @@ function getLevelImage(score) {
     var lX = (lv % 25) * -100;
     var lY = Math.floor(lv * 0.04) * -100;
 
-    // return getImage("http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/lv/lv" + zeroPadding(lv+1, 4) + ".png");
+    // return getImage("http://cdn.kkutu.cc/assets/img/kkutu/lv/lv" + zeroPadding(lv+1, 4) + ".png");
     return $("<div>").css({
         'float': "left",
-        'background-image': "url('http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/lv/newlv.png')",
+        'background-image': "url('http://cdn.kkutu.cc/assets/img/kkutu/lv/newlv.png')",
         'background-position': lX + "% " + lY + "%",
         'background-size': "2560%"
     });
@@ -2672,7 +2672,7 @@ function loadSounds(list, callback) {
 function getAudio(k, url, cb) {
     var req = new XMLHttpRequest();
 
-    req.open("GET", 'http://cdn.xn--vz0b065d.xn--3e0b707e/assets' + url);
+    req.open("GET", 'http://cdn.kkutu.cc/assets' + url);
     req.responseType = "arraybuffer";
     req.onload = function (e) {
         if (audioContext) audioContext.decodeAudioData(e.target.response, function (buf) {
@@ -2933,10 +2933,10 @@ function iImage(key, sObj) {
     } else if (typeof sObj == "string") sObj = {_id: "def", group: sObj, options: {}};
     obj = $data.shop[key] || sObj;
     gif = obj.options.hasOwnProperty('gif') ? ".gif" : ".png";
-    if (obj.group.slice(0, 3) == "BDG") return "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/moremi/badge/" + obj._id + gif;
+    if (obj.group.slice(0, 3) == "BDG") return "http://cdn.kkutu.cc/assets/img/kkutu/moremi/badge/" + obj._id + gif;
     return (obj.group.charAt(0) == 'M')
-        ? "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/moremi/" + obj.group.slice(1) + "/" + obj._id + gif
-        : "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/shop/" + obj._id + ".png";
+        ? "http://cdn.kkutu.cc/assets/img/kkutu/moremi/" + obj.group.slice(1) + "/" + obj._id + gif
+        : "http://cdn.kkutu.cc/assets/img/kkutu/shop/" + obj._id + ".png";
 }
 
 function iDynImage(group, data) {
@@ -3003,7 +3003,7 @@ function renderMoremi(target, equip) {
         );
     }
     $obj.children(".moremi-back").after($("<img>").addClass("moremies moremi-body")
-        .attr('src', equip.robot ? "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/moremi/robot.png" : "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/moremi/body.png")
+        .attr('src', equip.robot ? "http://cdn.kkutu.cc/assets/img/kkutu/moremi/robot.png" : "http://cdn.kkutu.cc/assets/img/kkutu/moremi/body.png")
         .css({'width': "100%", 'height': "100%"})
     );
     $obj.children(".moremi-rhand").css('transform', "scaleX(-1)");

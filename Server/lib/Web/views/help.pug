@@ -17,18 +17,18 @@
 extends ./ext
 
 mixin Img(name, w, h)
-	- var path = "http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/help/" + name + ".png";
+	- var path = "http://cdn.kkutu.cc/assets/img/kkutu/help/" + name + ".png";
 	- if(h)
 		img(src=path, width=w, height=h)
 	- else
 		img(src=path)
 
 block JS
-	script(type='text/javascript', src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/js/jquery.js')
-	script(type='text/javascript', src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/js/in_game_kkutu_help.min.js')
+	script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/jquery.js')
+	script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/in_game_kkutu_help.min.js')
 
 block CSS
-	link(rel='stylesheet', href='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/in_game_kkutu_help.css')
+	link(rel='stylesheet', href='http://cdn.kkutu.cc/assets/css/in_game_kkutu_help.css')
 
 block Middle
 	div#index
@@ -372,7 +372,7 @@ block Middle
 					- var curr, integ = 0;
 					- for(var lv=1; lv<=MAX_LEVEL; lv++)
 						tr
-							td: img(src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/img/kkutu/lv/lv' + zeroPadding(lv, 4) + '.png')
+							td: img(src='http://cdn.kkutu.cc/assets/img/kkutu/lv/lv' + zeroPadding(lv, 4) + '.png')
 							td= lv
 							td= curr = (lv == MAX_LEVEL) ? "-" : getRequiredScore(lv)
 							td= (lv == MAX_LEVEL) ? "-" : integ += curr

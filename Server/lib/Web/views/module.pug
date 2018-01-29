@@ -85,19 +85,19 @@ mixin separator(len)
 
 mixin PageHead(min)
 	if !min
-		link(rel='stylesheet', href=(locals.mobile && !locals.as_pc) ? 'http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/m_style.css' : 'http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/style.css')
-		link(rel='stylesheet', href='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/fa.css')
-		link(rel='stylesheet', href='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/expl.css')
-	script(type='text/javascript', src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/js/jquery.js')
+		link(rel='stylesheet', href=(locals.mobile && !locals.as_pc) ? 'http://cdn.kkutu.cc/assets/css/m_style.css' : 'http://cdn.kkutu.cc/assets/css/style.css')
+		link(rel='stylesheet', href='http://cdn.kkutu.cc/assets/css/fa.css')
+		link(rel='stylesheet', href='http://cdn.kkutu.cc/assets/css/expl.css')
+	script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/jquery.js')
 	script(type='text/javascript', src='/language/' + locals.page.replace("/", "_") + '/' + locals.lang)
 
-	script(type='text/javascript', src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/js/global.min.js')
+	script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/global.min.js')
 	if !min
-		script(type='text/javascript', src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/js/facebook.js')
+		script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/facebook.js')
 	if block
 		block
-	link(rel='stylesheet', href='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/css/in_' + locals.page.replace("/", "_") + '.css')
-	script(type='text/javascript', src='http://cdn.xn--vz0b065d.xn--3e0b707e/assets/js/in_' + locals.page.replace("/", "_") + '.min.js')
+	link(rel='stylesheet', href='http://cdn.kkutu.cc/assets/css/in_' + locals.page.replace("/", "_") + '.css')
+	script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/in_' + locals.page.replace("/", "_") + '.min.js')
 
 mixin SearchBox(arg1, arg2)
 	meta(name='description', content=L('meta_desc', arg1, arg2))
