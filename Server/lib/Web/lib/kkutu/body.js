@@ -2854,7 +2854,7 @@ function chat(profile, msg, from, timestamp) {
     if (link = msg.match(/https?:\/\/[\w\.\?\/&#%=-_\+]+/g)) {
         msg = $msg.html();
         link.forEach(function (item) {
-            msg = msg.replace(item, "[URL이 차단됨]");
+            msg = msg.replace(item, "[URL 차단됨]");
         });
         $msg.html(msg);
     }

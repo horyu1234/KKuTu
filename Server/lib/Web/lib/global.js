@@ -34,18 +34,15 @@ var L;
     }
 
     function getCookie(cName) {
-        var cookieData = document.cookie;
-        var start = cookieData.indexOf(cName);
-        var cValue = '';
-
-        cName = cName + '=';
-        if (start != -1) {
-            start += cName.length;
-            var end = cookieData.indexOf(';', start);
-            if (end == -1) end = cookieData.length;
-            cValue = cookieData.substring(start, end);
+        var cName = cName + "=";
+        var allCookie = decodeURIComponent(document.cookie).split(';');
+        var cval = [];
+        for (var i = 0; i < allCookie.length; i++) {
+            if (allCookie[i].trim().indexOf(cName) == 0) {
+                cval = allCookie[i].trim().split("=");
+            }
         }
-        return unescape(cValue);
+        return unescape((cval.length > 0) ? cval[1] : "");
     }
 
     $.prototype.hotkey = function ($f, code) {
@@ -175,18 +172,6 @@ var L;
     }
 
     function requestLogout(e) {
-        /*if(location.host == "kkutu.kr"){
-            // $.cookie('forlogout', "true");
-            location.href = "/logout";
-            return;
-        }*/
-        // if (global.profile.type == "facebook") FB.getLoginStatus(function (res) {
-        //     if (res.status == "connected") FB.logout(function (res) {
-        //         location.href = "/logout";
-        //     });
-        //     else location.href = "/logout";
-        // });
-        // else location.href = "/logout";
         location.href = "/logout";
     }
 

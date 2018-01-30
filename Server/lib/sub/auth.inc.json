@@ -1,0 +1,17 @@
+{
+  "naver": {
+    "clientID": "",
+    "clientSecret": "",
+    "callbackURL": "{URI}/login/naver/callback"
+  },
+  "facebook": {
+    "clientID": "",
+    "clientSecret": "",
+    "callbackURL": "{URI}/login/facebook/callback"
+  },
+  "google": {
+    "clientID": "",
+    "clientSecret": "",
+    "callbackURL": "{URI}/login/google/callback"
+  }
+}

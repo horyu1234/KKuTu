@@ -20,8 +20,8 @@
     "ETC_ABOUT": "쪼롤이 뭐지",
     "SETTING": "설정",
     "GLOBAL_NOTICE": "클릭하여 닫기",
-    "OG_IMAGE": "KKuTu Image",
-    "OG_URL": "KKuTu URL",
+    "OG_IMAGE": "http://cdn.kkutu.cc/assets/img/logo@2x.png",
+    "OG_URL": "http://kkutu.cc",
     "OG_TITLE": "끄투",
     "OG_DESC": "끄투 온라인, 끝말잇기, 쿵쿵따, 초성퀴즈, 십자말풀이, 타자연습 사이트",
     "VERSION": "버전",
@@ -117,6 +117,11 @@
     "withKakao": "카카오 로그인",
     "login_kkutu": "끄투의 기능을 온전히 사용하시려면 로그인하세요.",
     "loginLegal": "회원가입 또는 로그인을 하면 <a href='http://kkutu-hanguk.horyu.me/legal/terms.html' target='_blank'>이용약관</a>과 <a href='http://kkutu-hanguk.horyu.me/legal/privacy.html' target='_blank'>개인정보처리방침</a>에 동의하는 것으로 봅니다."
+  },
+  "loginfail": {
+    "title": "로그인 실패",
+    "description": "로그인에 실패하였습니다. 다시 시도해주세요.",
+    "login": "로그인"
   },
   "kkutu": {
     "title": "글자로 놀자! 끄투 온라인",
@@ -238,7 +243,7 @@
     "ctrCancel": "연결 취소",
     "linkWarning": "제3자가 등록한 링크를 클릭하셨습니다. 해당 링크로 이동하는 것으로 발생하는 피해는 당사가 책임지지 않습니다. 계속하시겠습니까?",
     "trollWarning": "두 번 연속 차례를 넘기지 못했습니다. 세 번째로 차례를 넘기지 못하는 경우에는 강제퇴장됩니다.",
-    "changeServer": "서버 이동",
+    "changeServer": "채널 이동",
     "friend": "친구",
     "fstat_on": "님이 접속했습니다.",
     "fstat_off": "님이 접속을 종료했습니다.",

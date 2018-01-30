@@ -23,8 +23,8 @@ html
 		+PageHead()
 	body
 		span#locale= JSON.stringify(LANG)
-		div.login-with= locals.text ? L(locals.text) : L('loginWith')
-		each val in loginList
-			a(href="/login/" + val.vendor)
-				button(style="color: " + val.fontColor + "; background-color: " + val.color + ";")= L(val.displayName)
-		div.login-legal!= L('loginLegal')
+		div.middle
+			p= L('description')
+			br
+			a(href="/login")
+				button.login= L('login')

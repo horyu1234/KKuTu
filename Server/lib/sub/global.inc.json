@@ -15,5 +15,14 @@
   "GOOGLE_RECAPTCHA_TO_USER": false,
   "GOOGLE_RECAPTCHA_SITE_KEY": "Your Google Recaptcha site key Here",
   "GOOGLE_RECAPTCHA_SECRET_KEY": "Your Google Recaptcha secret key Here",
-  "CRYPTO_KEY": "Your CRYPTO Key Here"
+  "CRYPTO_KEY": "Your Crypto Key Here",
+  "IS_SECURED": false,
+  "SSL_OPTIONS": {
+    "PRIVKEY": "Your SSL Private Key Here",
+    "CERT": "Your SSL Certificate Here",
+    "CA": "Your SSL CA-Bundle Here",
+    "PFX": "Your PFX Bundle Here",
+    "isPFX": false,
+    "isCA": false
+  }
 }

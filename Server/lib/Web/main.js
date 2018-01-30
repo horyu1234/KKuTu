@@ -28,18 +28,21 @@ var fs = require("fs");
 var Server = Express();
 var DB = require("./db");
 var Crypto = require("../sub/crypto");
-var JAuth = require("../sub/jauth");
 var JLog = require("../sub/jjlog");
 var WebInit = require("../sub/webinit");
 var GLOBAL = require("../sub/global.json");
+var Secure = require('../sub/secure');
+var passport = require('passport');
 var Const = require("../const");
+var https = require('https');
+var fs = require('fs');
 
 var language = {
     'ko_KR': require("./lang/ko_KR.json"),
     'en_US': require("./lang/en_US.json")
 };
 var ROUTES = [
-    "major", "consume", "admin", "ServerMigration"
+    "major", "consume", "admin", "ServerMigration", "login"
 ];
 var page = WebInit.page;
 var gameServers = [];
@@ -66,6 +69,26 @@ Server.use(Exession({
     resave: false,
     saveUninitialized: true
 }));
+Server.use(passport.initialize());
+Server.use(passport.session());
+Server.use((req, res, next) => {
+    if (req.session.passport) {
+        delete req.session.passport;
+    }
+    next();
+});
+Server.use((req, res, next) => {
+    if (Const.IS_SECURED) {
+        if (req.protocol === 'http') {
+            let url = 'https://' + req.get('host') + req.path;
+            res.status(302).redirect(url);
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
 /* use this if you want
 
 DDDoS = new DDDoS({
@@ -115,18 +138,32 @@ DB.ready = function () {
         }
     });
     Server.listen(80);
+
+    if (Const.IS_SECURED) {
+        const options = Secure();
+        https.createServer(options, Server).listen(443);
+    }
 };
 Const.MAIN_PORTS.forEach(function (v, i) {
-    var KEY = process.env['WS_KEY'];
+    const KEY = process.env['WS_KEY'];
 
-    gameServers[i] = new GameClient(KEY, `ws://127.0.0.2:${v}/${KEY}`);
+    let protocol;
+    if (Const.IS_SECURED) {
+        protocol = 'wss';
+    } else {
+        protocol = 'ws';
+    }
+    gameServers[i] = new GameClient(KEY, `${protocol}://127.0.0.2:${v}/${KEY}`);
 });
 
 function GameClient(id, url) {
     var my = this;
 
     my.id = id;
-    my.socket = new WS(url, {perMessageDeflate: false});
+    my.socket = new WS(url, {
+        perMessageDeflate: false,
+        rejectUnauthorized: false
+    });
 
     my.send = function (type, data) {
         if (!data) data = {};
@@ -177,30 +214,16 @@ ROUTES.forEach(function (v) {
 Server.get("/", function (req, res) {
     const server = req.query.server;
 
-    if (req.query.authType == "naver" && req.query.code) {
-        req.session.authType = "naver";
-        req.session.token = req.query.code;
-        res.redirect("/register");
-    } else if (req.query.authType == "facebook" && req.query.code) {
-        req.session.authType = "facebook";
-        req.session.token = req.query.code;
-        res.redirect("/register");
-    } else if (req.query.authType == "google" && req.query.code) {
-        req.session.authType = "google";
-        req.session.token = req.query.code;
-        res.redirect("/register");
-    } else {
-        DB.session.findOne(['_id', req.session.id]).on(function ($ses) {
-            // var sid = (($ses || {}).profile || {}).sid || "NULL";
-            if (global.isPublic) {
-                onFinish($ses);
-                // DB.jjo_session.findOne([ '_id', sid ]).limit([ 'profile', true ]).on(onFinish);
-            } else {
-                if ($ses) $ses.profile.sid = $ses._id;
-                onFinish($ses);
-            }
-        });
-    }
+    DB.session.findOne(['_id', req.session.id]).on(function ($ses) {
+        // var sid = (($ses || {}).profile || {}).sid || "NULL";
+        if (global.isPublic) {
+            onFinish($ses);
+            // DB.jjo_session.findOne([ '_id', sid ]).limit([ 'profile', true ]).on(onFinish);
+        } else {
+            if ($ses) $ses.profile.sid = $ses._id;
+            onFinish($ses);
+        }
+    });
 
     function onFinish($doc) {
         var id = req.session.id;
@@ -217,6 +240,7 @@ Server.get("/", function (req, res) {
             '_crypted': Crypto.encrypt(id, GLOBAL.CRYPTO_KEY), // 토큰 암호화
             'PORT': Const.MAIN_PORTS[server],
             'HOST': req.hostname,
+            'PROTOCOL': Const.IS_SECURED ? 'wss' : 'ws',
             'TEST': req.query.test,
             'MOREMI_PART': Const.MOREMI_PART,
             'AVAIL_EQUIP': Const.AVAIL_EQUIP,
@@ -241,79 +265,6 @@ Server.get("/servers", function (req, res) {
         list[i] = v.seek;
     });
     res.send({list: list, max: Const.KKUTU_MAX});
-});
-
-Server.get("/login", function (req, res) {
-    if (global.isPublic) {
-        page(req, res, "login", {'_id': req.session.id, 'text': req.query.desc});
-    } else {
-        var now = Date.now();
-        var id = req.query.id || "ADMIN";
-        var lp = {
-            id: id,
-            title: "LOCAL #" + id,
-            birth: [4, 16, 0],
-            _age: {min: 20, max: undefined}
-        };
-        DB.session.upsert(['_id', req.session.id]).set(['profile', JSON.stringify(lp)], ['createdAt', now]).on(function ($res) {
-            DB.users.update(['_id', id]).set(['lastLogin', now]).on();
-            req.session.admin = true;
-            req.session.profile = lp;
-            res.redirect("/");
-        });
-    }
-});
-Server.get("/logout", function (req, res) {
-    if (!req.session.profile) {
-        return res.redirect("/");
-    }
-    JAuth.logout(req.session.profile).then(function () {
-        delete req.session.profile;
-        DB.session.remove(['_id', req.session.id]).on(function ($res) {
-            res.redirect("/");
-        });
-    });
-});
-Server.get("/register", function (req, res) {
-    if (!req.session.token) return res.sendStatus(400);
-
-    JAuth.login(req.session.authType, req.session.token, req.session.id).then(function ($profile) {
-        var now = Date.now();
-
-        if ($profile.error) return res.sendStatus($profile.error);
-        if (!$profile.id) return res.sendStatus(401);
-
-        $profile.sid = req.session.id;
-        req.session.admin = GLOBAL.ADMIN.includes($profile.id);
-        DB.users.findOne(['_id', $profile.id]).on(function ($body) {
-            if ($body && $body.nickname) {
-                $profile.title = $body.nickname;
-            }
-            DB.users.update(['_id', $profile.id]).set(['lastLogin', now]).on();
-            DB.session.upsert(['_id', req.session.id]).set({
-                'profile': $profile,
-                'createdAt': now
-            }).on(function ($ses) {
-                res.redirect("/");
-            });
-        });
-    });
-});
-Server.post("/session", function (req, res) {
-    var o;
-
-    if (req.session.profile) o = {
-        authType: req.session.authType,
-        createdAt: req.session.createdAt,
-        profile: {
-            id: req.session.profile.id,
-            image: req.session.profile.image,
-            name: req.session.profile.title || req.session.profile.name,
-            sex: req.session.profile.sex
-        }
-    };
-    else o = {error: 404};
-    res.json(o);
 });
 Server.get("/legal/:page", function (req, res) {
     page(req, res, "legal/" + req.params.page);

@@ -19,12 +19,15 @@
 var Cluster = require("cluster");
 var File = require('fs');
 var WebSocket = require('ws');
+var https = require('https');
+var HTTPS_Server;
 // var Heapdump = require("heapdump");
 var KKuTu = require('./kkutu');
 var Crypto = require("../sub/crypto");
 var GLOBAL = require("../sub/global.json");
 var Const = require("../const");
 var JLog = require('../sub/jjlog');
+var Secure = require('../sub/secure');
 var Recaptcha = require('../sub/recaptcha');
 
 var MainDB;
@@ -291,10 +294,17 @@ exports.init = function (_SID, CHAN) {
         JLog.success("Master DB is ready.");
 
         MainDB.users.update(['server', SID]).set(['server', ""]).on();
-        Server = new WebSocket.Server({
-            port: global.test ? Const.TEST_PORT : PORT,
-            perMessageDeflate: false
-        });
+        if (Const.IS_SECURED) {
+            const options = Secure();
+            HTTPS_Server = https.createServer(options)
+                .listen(global.test ? (Const.TEST_PORT + 416) : process.env['KKUTU_PORT']);
+            Server = new WebSocket.Server({server: HTTPS_Server});
+        } else {
+            Server = new WebSocket.Server({
+                port: global.test ? (Const.TEST_PORT + 416) : process.env['KKUTU_PORT'],
+                perMessageDeflate: false
+            });
+        }
         Server.on('connection', function (socket) {
             var key;
             // 토큰 복호화

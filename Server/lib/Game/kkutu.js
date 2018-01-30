@@ -65,7 +65,7 @@ exports.init = function (_DB, _DIC, _ROOM, _GUEST_PERMISSION, _CHAN) {
 /* 망할 셧다운제
 exports.processAjae = function(){
 	var i;
-	
+
 	exports.NIGHT = (new Date()).getHours() < 6;
 	if(exports.NIGHT){
 		for(i in DIC){
@@ -457,47 +457,51 @@ exports.Client = function (socket, profile, sid) {
             my.friends = {};
 
             R.go({result: 200});
-        } else DB.users.findOne(['_id', my.id]).on(function ($user) {
-            var first = !$user;
-            var black = first ? "" : $user.black;
+        } else {
+            DB.VendorDBMigration.processVendorMigration(my.id, function () {
+                DB.users.findOne(['_id', my.id]).on(function ($user) {
+                    var first = !$user;
+                    var black = first ? "" : $user.black;
 
-            if (first) $user = {money: 0};
-            if (black == "null") black = false;
-            if (black == "chat") {
-                black = false;
-                my.noChat = true;
-            }
-            /* 망할 셧다운제
-            if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
-                my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
-                if(my.isAjae === null){
-                    if(my._birth) my._checkAjae = setTimeout(function(){
-                        my.sendError(442);
-                        my.socket.close();
-                    }, 300000);
-                    else{
-                        my.sendError(441);
-                        my.socket.close();
-                        return;
+                    if (first) $user = {money: 0};
+                    if (black == "null") black = false;
+                    if (black == "chat") {
+                        black = false;
+                        my.noChat = true;
                     }
-                }
-            }*/
-            my.exordial = $user.exordial || "";
-            my.equip = $user.equip || {};
-            my.box = $user.box || {};
-            my.data = new exports.Data($user.kkutu);
-            my.money = Number($user.money);
-            my.friends = $user.friends || {};
-            if (first) my.flush();
-            else {
-                my.checkExpire();
-                my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
-            }
-            if (black) R.go({result: 444, black: black});
-            else if (Cluster.isMaster && $user.server) R.go({result: 409, black: $user.server});
-            // else if (exports.NIGHT && my.isAjae === false) R.go({result: 440});
-            else R.go({result: 200});
-        });
+                    /* 망할 셧다운제
+                    if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
+                        my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
+                        if(my.isAjae === null){
+                            if(my._birth) my._checkAjae = setTimeout(function(){
+                                my.sendError(442);
+                                my.socket.close();
+                            }, 300000);
+                            else{
+                                my.sendError(441);
+                                my.socket.close();
+                                return;
+                            }
+                        }
+                    }*/
+                    my.exordial = $user.exordial || "";
+                    my.equip = $user.equip || {};
+                    my.box = $user.box || {};
+                    my.data = new exports.Data($user.kkutu);
+                    my.money = Number($user.money);
+                    my.friends = $user.friends || {};
+                    if (first) my.flush();
+                    else {
+                        my.checkExpire();
+                        my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
+                    }
+                    if (black) R.go({result: 444, black: black});
+                    else if (Cluster.isMaster && $user.server) R.go({result: 409, black: $user.server});
+                    else if (exports.NIGHT && my.isAjae === false) R.go({result: 440});
+                    else R.go({result: 200});
+                });
+            });
+        }
         return R;
     };
     my.flush = function (box, equip, friends) {

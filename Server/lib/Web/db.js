@@ -24,6 +24,7 @@ var JLog = require("../sub/jjlog");
 var Collection = require("../sub/collection");
 var Pub = require("../sub/checkpub");
 var Lizard = require("../sub/lizard");
+const VendorDBMigration = require("../sub/VendorDBMigration");
 const ServerMigrationProcess = require("../sub/ServerMigrationProcess");
 
 const FAKE_REDIS_FUNC = () => {
@@ -86,7 +87,10 @@ Pub.ready = function (isPub) {
             DB.session = new mainAgent.Table("session");
             DB.users = new mainAgent.Table("users");
 
+            VendorDBMigration.initDatabase(pgMain);
             ServerMigrationProcess.initDatabase(pgMain);
+
+            exports.VendorDBMigration = VendorDBMigration;
             exports.ServerMigrationProcess = ServerMigrationProcess;
 
             if (exports.ready) exports.ready(Redis, Pg);
