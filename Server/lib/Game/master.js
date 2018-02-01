@@ -21,6 +21,7 @@ var File = require('fs');
 var WebSocket = require('ws');
 var https = require('https');
 var request = require('request');
+var Hangul = require('hangul-js')
 var HTTPS_Server;
 // var Heapdump = require("heapdump");
 var KKuTu = require('./kkutu');
@@ -186,7 +187,6 @@ var keylog = {} /*
 }
 */
 function cheatDetection(id, place, msg) {
-    var Hangul = require('hangul-js')
     function message(title, last, now, isChat) {
         let body = {
             "attachments": [
