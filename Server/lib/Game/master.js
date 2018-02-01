@@ -217,18 +217,16 @@ function cheatDetection(id, place, msg) {
                 message('200ms 내 연속 입력', false)
             if(msg.c === 231) 
                 message('가상 키보드(VK_PACKET) 감지됨', false)
-                
+
             keylog[id].lastKey = msg.c
             keylog[id].keyTime = Date.now()
             break;
         case 'c':
             // msg.v = 채팅창에 쓰인 string 전체
-            if(msg.v.length - keylog[id].lastChat.length >= 2) {
+            if(msg.v.length - keylog[id].lastChat.length >= 2) 
                 message('한 번에 2글자 이상 입력', true)
-            }
-            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1))) {
+            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1)))
                 message('초성을 치지 않고 바로 입력', true)
-            }
             keylog[id].lastChat = msg.v
             break;
         case 'u': // 키에서 손을 뗄 때
