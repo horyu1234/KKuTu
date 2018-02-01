@@ -215,6 +215,9 @@ function cheatDetection(id, place, msg) {
                 message('Ctrl+V 사용', false)
             if(Date.now() - keylog[id].keyTime <= 200)
                 message('200ms 내 연속 입력', false)
+            if(msg.c === 231) 
+                message('가상 키보드(VK_PACKET) 감지됨', false)
+                
             keylog[id].lastKey = msg.c
             keylog[id].keyTime = Date.now()
             break;
