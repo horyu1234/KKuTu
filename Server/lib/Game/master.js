@@ -181,7 +181,8 @@ var keylog = {} /*
 {
     "id": {
         "lastKey": d에서 나온 거,
-        "lastChat": c에서 나온 거
+        "lastChat": c에서 나온 거,
+        "keyTime": lastKey가 입력된 시간 (부정확)
     },
     ...
 }
@@ -212,6 +213,8 @@ function cheatDetection(id, place, msg) {
                 message('F12 사용', false)
             if((keylog[id].lastKey === 17 || msg.c === 17) && (keylog[id].lastKey === 86 || msg.c === 86))
                 message('Ctrl+V 사용', false)
+            if(Date.now() - keylog[id].keyTime <= 200)
+                message('200ms 내 연속 입력', false)
             keylog[id].lastKey = msg.c
             keylog[id].keyTime = Date.now()
             break;
