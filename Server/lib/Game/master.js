@@ -206,6 +206,7 @@ function cheatDetection(id, place, msg) {
     switch(msg.ev) {
         case 'd': // 키를 누를 때
             // msg.c = keycode
+            keylog[id].lastKey = msg.c
             break;
         case 'c':
             // msg.v = 채팅창에 쓰인 string 전체
@@ -218,7 +219,7 @@ function cheatDetection(id, place, msg) {
             keylog[id].lastChat = msg.v
             break;
         case 'u': // 키에서 손을 뗄 때
-            keylog[id].lastKey = msg.c
+            // 주의: lastKey는 이미 눌렀던 키로, msg.c와 같을 수 있음.
             break;
     }
 }
