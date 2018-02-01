@@ -188,14 +188,14 @@ var keylog = {} /*
 */
 function cheatDetection(id, place, msg) {
     function message(title, isChat) {
+        let text = isChat ? '채팅: ' + keylog[id].lastChat + ' -> ' + msg.v + '\n' + id 
+                        : '키: ' + keylog[id].lastKey + ' -> ' + msg.c + '\n' + id + ', ' + (Date.now() - keylog[id].keyTime) + 'ms'
         let body = {
             "attachments": [
                 {
                     "title": title,
                     "pretext": "치트 사용이 감지되었습니다.",
-                    "text": (isChat ? '채팅: ' : '키: ') + 
-                        (isChat ? keylog[id].lastChat : keylog[id].lastKey) + 
-                        ' -> '+(isChat ? msg.v : msg.v)+'\n'+id,
+                    "text": text,
                     "mrkdwn_in": ["text", "pretext"]
                 }
             ]
@@ -213,6 +213,7 @@ function cheatDetection(id, place, msg) {
             if((keylog[id].lastKey === 17 || msg.c === 17) && (keylog[id].lastKey === 86 || msg.c === 86))
                 message('Ctrl+V 사용', false)
             keylog[id].lastKey = msg.c
+            keylog[id].keyTime = Date.now()
             break;
         case 'c':
             // msg.v = 채팅창에 쓰인 string 전체
