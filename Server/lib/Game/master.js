@@ -206,6 +206,10 @@ function cheatDetection(id, place, msg) {
     switch(msg.ev) {
         case 'd': // 키를 누를 때
             // msg.c = keycode
+            if(msg.c === 123) 
+                message('F12 사용', keylog[id].lastKey, msg.c, false)
+            if((keylog[id].lastKey === 17 || msg.c === 17) && (keylog[id].lastKey === 86 || msg.c === 86))
+                message('Ctrl+V 사용', keylog[id].lastKey, msg.c, false)
             keylog[id].lastKey = msg.c
             break;
         case 'c':
