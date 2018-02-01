@@ -20,6 +20,8 @@ var Cluster = require("cluster");
 var File = require('fs');
 var WebSocket = require('ws');
 var https = require('https');
+var request = require('request');
+var Hangul = require('hangul-js')
 var HTTPS_Server;
 // var Heapdump = require("heapdump");
 var KKuTu = require('./kkutu');
@@ -175,6 +177,52 @@ function narrateFriends(id, friends, stat) {
     });
 }
 
+var keylog = {} /* 
+{
+    "id": {
+        "lastKey": d에서 나온 거,
+        "lastChat": c에서 나온 거
+    },
+    ...
+}
+*/
+function cheatDetection(id, place, msg) {
+    function message(title, last, now, isChat) {
+        let body = {
+            "attachments": [
+                {
+                    "title": title,
+                    "pretext": "치트 사용이 감지되었습니다.",
+                    "text": (ischat ? '채팅: ' : '키: ')+last+' -> '+now+'\n'+id,
+                    "mrkdwn_in": ["text", "pretext"]
+                }
+            ]
+        }
+        request(GLOBAL.SLACK_URL, { body: body, json: true }, (err, res, body) => {
+            
+        })
+    }
+    // https://blog.outsider.ne.kr/322
+    switch(msg.ev) {
+        case 'd': // 키를 누를 때
+            // msg.c = keycode
+            break;
+        case 'c':
+            // msg.v = 채팅창에 쓰인 string 전체
+            if(msg.v.length - keylog[id].lastChat.length >= 2) {
+                message('한 번에 2글자 이상 입력', keylog[id].lastChat, msg.v, true)
+            }
+            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1))) {
+                message('초성을 치지 않고 바로 입력', keylog[id].lastChat, msg.v, true)
+            }
+            keylog[id].lastChat = msg.v
+            break;
+        case 'u': // 키에서 손을 뗄 때
+            keylog[id].lastKey = msg.c
+            break;
+    }
+}
+
 Cluster.on('message', function (worker, msg) {
     var temp;
 
@@ -188,6 +236,7 @@ Cluster.on('message', function (worker, msg) {
                 DIC[temp].send('tail', {a: "room", rid: msg.place, id: msg.id, msg: msg.msg});
             }
             checkTailUser(msg.id, msg.place, msg.msg);
+            cheatDetection(msg.id, msg.place, msg.msg)
             break;
         case "okg":
             if (DIC[msg.id]) DIC[msg.id].onOKG(msg.time);

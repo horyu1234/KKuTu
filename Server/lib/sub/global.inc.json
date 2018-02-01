@@ -16,6 +16,7 @@
   "GOOGLE_RECAPTCHA_SITE_KEY": "Your Google Recaptcha site key Here",
   "GOOGLE_RECAPTCHA_SECRET_KEY": "Your Google Recaptcha secret key Here",
   "CRYPTO_KEY": "Your Crypto Key Here",
+  "SLACK_URL": "Your Slack-compatible api request url here",
   "IS_SECURED": false,
   "SSL_OPTIONS": {
     "PRIVKEY": "Your SSL Private Key Here",
