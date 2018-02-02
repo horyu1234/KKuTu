@@ -192,14 +192,7 @@ function cheatDetection(id, place, msg) {
         let text = isChat ? '채팅: ' + keylog[id].lastChat + ' -> ' + msg.v + '\n' + id 
                         : '키: ' + keylog[id].lastKey + ' -> ' + msg.c + '\n' + id + ', ' + (Date.now() - keylog[id].keyTime) + 'ms'
         let body = {
-            "attachments": [
-                {
-                    "title": title,
-                    "pretext": "치트 사용이 감지되었습니다.",
-                    "text": text,
-                    "mrkdwn_in": ["text", "pretext"]
-                }
-            ]
+            "text": title+'\n\n'+text
         }
         request(GLOBAL.SLACK_URL, { body: body, json: true }, (err, res, body) => {
             
