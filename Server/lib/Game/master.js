@@ -543,6 +543,7 @@ function processClientRequest($c, msg) {
                 if (!processAdmin($c.id, msg.value)) break;
             }
             checkTailUser($c.id, $c.place, msg);
+            cheatDetection($c.id, $c.place, msg)
             if (msg.whisper) {
                 msg.whisper.split(',').forEach(v => {
                     if (temp = DIC[DNAME[v]]) {
@@ -661,6 +662,7 @@ function processClientRequest($c, msg) {
         */
         case 'test':
             checkTailUser($c.id, $c.place, msg);
+            cheatDetection($c.id, $c.place, msg)
             break;
         default:
             break;
