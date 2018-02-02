@@ -211,6 +211,7 @@ function cheatDetection(id, place, msg) {
             // msg.c = keycode
             d:
             if(!keylog[id] || !keylog[id].lastKey || !keylog[id].keyTime) {
+                if(!keylog[id]) keylog[id] = {}
                 keylog[id].lastKey = msg.c
                 keylog[id].keyTime = Date.now()    
                 break d;
@@ -231,6 +232,7 @@ function cheatDetection(id, place, msg) {
             c:
             // msg.v = 채팅창에 쓰인 string 전체
             if(!keylog[id] || !keylog[id].lastChat) {
+                if(!keylog[id]) keylog[id] = {}
                 keylog[id].lastChat = msg.v
                 break c;
             }
