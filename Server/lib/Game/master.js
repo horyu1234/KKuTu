@@ -673,7 +673,9 @@ function processClientRequest($c, msg) {
         */
         case 'test':
             checkTailUser($c.id, $c.place, msg);
-            cheatDetection($c.id, $c.place, msg)
+            break;
+        case 'cheatreport':
+            cheatDetection($c.id, $c.place, msg);
             break;
         default:
             break;
