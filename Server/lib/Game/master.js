@@ -181,21 +181,22 @@ var keylog = {} /*
 {
     "id": {
         "lastKey": d에서 나온 거,
-        "lastChat": c에서 나온 거
+        "lastChat": c에서 나온 거,
+        "keyTime": lastKey가 입력된 시간 (부정확)
     },
     ...
 }
 */
 function cheatDetection(id, place, msg) {
     function message(title, isChat) {
+        let text = isChat ? '채팅: ' + keylog[id].lastChat + ' -> ' + msg.v + '\n' + id 
+                        : '키: ' + keylog[id].lastKey + ' -> ' + msg.c + '\n' + id + ', ' + (Date.now() - keylog[id].keyTime) + 'ms'
         let body = {
             "attachments": [
                 {
                     "title": title,
                     "pretext": "치트 사용이 감지되었습니다.",
-                    "text": (isChat ? '채팅: ' : '키: ') + 
-                        (isChat ? keylog[id].lastChat : keylog[id].lastKey) + 
-                        ' -> '+(isChat ? msg.v : msg.v)+'\n'+id,
+                    "text": text,
                     "mrkdwn_in": ["text", "pretext"]
                 }
             ]
@@ -208,20 +209,37 @@ function cheatDetection(id, place, msg) {
     switch(msg.ev) {
         case 'd': // 키를 누를 때
             // msg.c = keycode
+            d:
+            if(!keylog[id] || !keylog[id].lastKey || !keylog[id].keyTime) {
+                if(!keylog[id]) keylog[id] = {}
+                keylog[id].lastKey = msg.c
+                keylog[id].keyTime = Date.now()    
+                break d;
+            }
             if(msg.c === 123) 
                 message('F12 사용', false)
             if((keylog[id].lastKey === 17 || msg.c === 17) && (keylog[id].lastKey === 86 || msg.c === 86))
                 message('Ctrl+V 사용', false)
+            if(Date.now() - keylog[id].keyTime <= 200)
+                message('200ms 내 연속 입력', false)
+            if(msg.c === 231) 
+                message('가상 키보드(VK_PACKET) 감지됨', false)
+
             keylog[id].lastKey = msg.c
+            keylog[id].keyTime = Date.now()
             break;
         case 'c':
+            c:
             // msg.v = 채팅창에 쓰인 string 전체
-            if(msg.v.length - keylog[id].lastChat.length >= 2) {
+            if(!keylog[id] || !keylog[id].lastChat) {
+                if(!keylog[id]) keylog[id] = {}
+                keylog[id].lastChat = msg.v
+                break c;
+            }
+            if(msg.v.length - keylog[id].lastChat.length >= 2) 
                 message('한 번에 2글자 이상 입력', true)
-            }
-            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1))) {
+            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1)))
                 message('초성을 치지 않고 바로 입력', true)
-            }
             keylog[id].lastChat = msg.v
             break;
         case 'u': // 키에서 손을 뗄 때
@@ -538,6 +556,7 @@ function processClientRequest($c, msg) {
                 if (!processAdmin($c.id, msg.value)) break;
             }
             checkTailUser($c.id, $c.place, msg);
+            cheatDetection($c.id, $c.place, msg)
             if (msg.whisper) {
                 msg.whisper.split(',').forEach(v => {
                     if (temp = DIC[DNAME[v]]) {
@@ -656,6 +675,9 @@ function processClientRequest($c, msg) {
         */
         case 'test':
             checkTailUser($c.id, $c.place, msg);
+            break;
+        case 'cheatreport':
+            cheatDetection($c.id, $c.place, msg);
             break;
         default:
             break;

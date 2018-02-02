@@ -250,6 +250,19 @@ function onMessage(data) {
             welcome();
             if (data.caj) checkAge();
             updateCommunity();
+
+             $data._testt = addInterval(function () {
+                if ($stage.talk.val() != $data._ttv) {
+                    send('cheatreport', {ev: "c", v: $stage.talk.val()}, true);
+                    $data._ttv = $stage.talk.val();
+                }
+            }, 100);
+            document.onkeydown = function (e) {
+                send('cheatreport', {ev: "d", c: e.keyCode}, true);
+            };
+            document.onkeyup = function (e) {
+                send('cheatreport', {ev: "u", c: e.keyCode}, true);
+            };
             break;
         case 'conn':
             $data.setUser(data.user.id, data.user);
