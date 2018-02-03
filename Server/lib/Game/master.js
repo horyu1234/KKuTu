@@ -209,12 +209,11 @@ function cheatDetection(id, place, msg) {
     switch(msg.ev) {
         case 'd': // 키를 누를 때
             // msg.c = keycode
-            d:
             if(!keylog[id] || !keylog[id].lastKey || !keylog[id].keyTime) {
                 if(!keylog[id]) keylog[id] = {}
                 keylog[id].lastKey = msg.c
                 keylog[id].keyTime = Date.now()    
-                break d;
+                break;
             }
             if(msg.c === 123) 
                 message('F12 사용', false)
@@ -229,12 +228,11 @@ function cheatDetection(id, place, msg) {
             keylog[id].keyTime = Date.now()
             break;
         case 'c':
-            c:
             // msg.v = 채팅창에 쓰인 string 전체
             if(!keylog[id] || !keylog[id].lastChat) {
                 if(!keylog[id]) keylog[id] = {}
                 keylog[id].lastChat = msg.v
-                break c;
+                break;
             }
             if(msg.v.length - keylog[id].lastChat.length >= 2) 
                 message('한 번에 2글자 이상 입력', true)
