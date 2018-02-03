@@ -205,7 +205,7 @@
 
                 list.push({
                     _id: $data.get(0).value,
-                    nickname: $data.get(1).value
+                    nickname: $data.get(1).value,
                     money: $data.get(2).value,
                     kkutu: $data.get(3).value,
                     box: $data.get(4).value,
