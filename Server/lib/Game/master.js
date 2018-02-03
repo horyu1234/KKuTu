@@ -236,6 +236,8 @@ function cheatDetection(id, place, msg) {
                 message('한 번에 2글자 이상 입력', true)
             if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1)))
                 message('초성을 치지 않고 바로 입력', true)
+            if(msg.v.includes('.macro')) 
+                message('특정 매크로 사용', true)
             keylog[id].lastChat = msg.v
             break;
         case 'u': // 키에서 손을 뗄 때
