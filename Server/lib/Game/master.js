@@ -217,8 +217,6 @@ function cheatDetection(id, place, msg) {
             }
             if(msg.c === 123) 
                 message('F12 사용', false)
-            if((keylog[id].lastKey === 17 || msg.c === 17) && (keylog[id].lastKey === 86 || msg.c === 86))
-                message('Ctrl+V 사용', false)
             if(Date.now() - keylog[id].keyTime <= 200)
                 message('200ms 내 연속 입력', false)
             if(msg.c === 231) 
