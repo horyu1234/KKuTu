@@ -196,9 +196,12 @@ function cheatDetection(id, place, msg) {
         let body = {
             "text": title + '\n\n' + text
         };
-        request(GLOBAL.SLACK_URL, {body: body, json: true}, (err, res, body) => {
-
-        });
+        request.post(GLOBAL.SLACK_URL, { body: body, json: true }, (err, res, body) => {
+            if(err) { 
+                JLog.error(err);
+                return
+            }
+        })
     }
 
     // https://blog.outsider.ne.kr/322
@@ -213,8 +216,10 @@ function cheatDetection(id, place, msg) {
             }
             if(msg.c === 123) 
                 message('F12 사용', false)
-            if(Date.now() - keylog[id].keyTime <= 200)
+            if(Date.now() - keylog[id].keyTime <= 200) {
+                if(keylog.lastKey === 8) break
                 message('200ms 내 연속 입력', false)
+            }
             if(msg.c === 231) 
                 message('가상 키보드(VK_PACKET) 감지됨', false)
 
@@ -228,10 +233,12 @@ function cheatDetection(id, place, msg) {
                 keylog[id].lastChat = msg.v
                 break;
             }
-            if(msg.v.length - keylog[id].lastChat.length >= 2) 
-                message('한 번에 2글자 이상 입력', true)
-            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1)))
+            if(msg.v.length - keylog[id].lastChat.length >= 4) 
+                message('한 번에 4글자 이상 입력', true)
+            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1))) {
+                if(Hangul.isJong(Hangul.d(msg.v.slice(-1))[0]) && Hangul.endsWithConsonant(keylog[id].lastChat.slice(-1))) break
                 message('초성을 치지 않고 바로 입력', true)
+            }
             if(msg.v.includes('.macro')) 
                 message('특정 매크로 사용', true)
             keylog[id].lastChat = msg.v
