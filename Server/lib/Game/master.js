@@ -205,38 +205,36 @@ function cheatDetection(id, place, msg) {
     switch (msg.ev) {
         case 'd': // 키를 누를 때
             // msg.c = keycode
-            d:
-                if (!keylog[id] || !keylog[id].lastKey || !keylog[id].keyTime) {
-                    if (!keylog[id]) keylog[id] = {};
-                    keylog[id].lastKey = msg.c;
-                    keylog[id].keyTime = Date.now();
-                    break d;
-                }
-            if (msg.c === 123)
-                message('F12 사용', false);
-            if ((keylog[id].lastKey === 17 || msg.c === 17) && (keylog[id].lastKey === 86 || msg.c === 86))
-                message('Ctrl+V 사용', false);
-            if (Date.now() - keylog[id].keyTime <= 200)
-                message('200ms 내 연속 입력', false);
-            if (msg.c === 231)
-                message('가상 키보드(VK_PACKET) 감지됨', false);
+            if(!keylog[id] || !keylog[id].lastKey || !keylog[id].keyTime) {
+                if(!keylog[id]) keylog[id] = {}
+                keylog[id].lastKey = msg.c
+                keylog[id].keyTime = Date.now()    
+                break;
+            }
+            if(msg.c === 123) 
+                message('F12 사용', false)
+            if(Date.now() - keylog[id].keyTime <= 200)
+                message('200ms 내 연속 입력', false)
+            if(msg.c === 231) 
+                message('가상 키보드(VK_PACKET) 감지됨', false)
 
             keylog[id].lastKey = msg.c;
             keylog[id].keyTime = Date.now();
             break;
         case 'c':
-            c:
-                // msg.v = 채팅창에 쓰인 string 전체
-                if (!keylog[id] || !keylog[id].lastChat) {
-                    if (!keylog[id]) keylog[id] = {};
-                    keylog[id].lastChat = msg.v;
-                    break c;
-                }
-            if (msg.v.length - keylog[id].lastChat.length >= 2)
-                message('한 번에 2글자 이상 입력', true);
-            if (msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1)))
-                message('초성을 치지 않고 바로 입력', true);
-            keylog[id].lastChat = msg.v;
+            // msg.v = 채팅창에 쓰인 string 전체
+            if(!keylog[id] || !keylog[id].lastChat) {
+                if(!keylog[id]) keylog[id] = {}
+                keylog[id].lastChat = msg.v
+                break;
+            }
+            if(msg.v.length - keylog[id].lastChat.length >= 2) 
+                message('한 번에 2글자 이상 입력', true)
+            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1)))
+                message('초성을 치지 않고 바로 입력', true)
+            if(msg.v.includes('.macro')) 
+                message('특정 매크로 사용', true)
+            keylog[id].lastChat = msg.v
             break;
         case 'u': // 키에서 손을 뗄 때
             // 주의: lastKey는 이미 눌렀던 키로, msg.c와 같을 수 있음.
