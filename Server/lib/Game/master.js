@@ -191,8 +191,8 @@ var keylog = {};
 */
 function cheatDetection(id, place, msg) {
     function message(title, isChat) {
-        let text = isChat ? '채팅: ' + keylog[id].lastChat + ' → ' + msg.v + '\n' + id
-            : '키: ' + keylog[id].lastKey + ' → ' + msg.c + '\n' + id + ', ' + (Date.now() - keylog[id].keyTime) + 'ms';
+        let text = isChat ? '채팅: ' + keylog[id].lastChat + ' → ' + msg.v + '\n' + id + '@' + place
+            : '키: ' + keylog[id].lastKey + ' → ' + msg.c + '\n' + id + '@' + place + ', ' + (Date.now() - keylog[id].keyTime) + 'ms';
         let body = {
             "chat_id": -1001206450931,
             "text": '__' + title + '__\n\n' + text,
