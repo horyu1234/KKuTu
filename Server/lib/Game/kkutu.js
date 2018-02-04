@@ -295,7 +295,7 @@ exports.Client = function (socket, profile, sid) {
     socket.on('message', function (msg) {
         var data, room = ROOM[my.place];
 
-        JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
+        if(msg.type === 'cheatreport') JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
         try {
             data = JSON.parse(msg);
         } catch (e) {
