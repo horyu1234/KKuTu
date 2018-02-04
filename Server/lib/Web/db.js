@@ -24,6 +24,7 @@ var JLog = require("../sub/jjlog");
 var Collection = require("../sub/collection");
 var Pub = require("../sub/checkpub");
 var Lizard = require("../sub/lizard");
+const ConnectionLog = require("../sub/ConnectionLog");
 const VendorDBMigration = require("../sub/VendorDBMigration");
 const ServerMigrationProcess = require("../sub/ServerMigrationProcess");
 
@@ -87,9 +88,11 @@ Pub.ready = function (isPub) {
             DB.session = new mainAgent.Table("session");
             DB.users = new mainAgent.Table("users");
 
+            ConnectionLog.initDatabase(pgMain);
             VendorDBMigration.initDatabase(pgMain);
             ServerMigrationProcess.initDatabase(pgMain);
 
+            exports.ConnectionLog = ConnectionLog;
             exports.VendorDBMigration = VendorDBMigration;
             exports.ServerMigrationProcess = ServerMigrationProcess;
 

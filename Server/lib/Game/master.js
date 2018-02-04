@@ -457,6 +457,14 @@ exports.init = function (_SID, CHAN) {
                         DNAME[($c.profile.title || $c.profile.name).replace(/\s/g, "")] = $c.id;
                         MainDB.users.update(['_id', $c.id]).set(['server', SID]).on();
 
+                        let id = $c.id;
+                        let name = KKuTu.getUserList()[id].profile.title;
+                        let ip = $c.socket._socket.remoteAddress;
+                        let channel = SID;
+                        let userAgent = $c.socket.upgradeReq.headers['user-agent'];
+
+                        MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent);
+
                         if (($c.guest && GLOBAL.GOOGLE_RECAPTCHA_TO_GUEST) || GLOBAL.GOOGLE_RECAPTCHA_TO_USER) {
                             $c.socket.send(JSON.stringify({
                                 type: 'recaptcha',
