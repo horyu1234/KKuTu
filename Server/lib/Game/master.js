@@ -220,8 +220,10 @@ function cheatDetection(id, place, msg) {
             }
             if(msg.c === 123) 
                 message('F12 사용', false)
-            if(Date.now() - keylog[id].keyTime <= 200)
+            if(Date.now() - keylog[id].keyTime <= 200) {
+                if(keylog.lastKey === 8) break
                 message('200ms 내 연속 입력', false)
+            }
             if(msg.c === 231) 
                 message('가상 키보드(VK_PACKET) 감지됨', false)
 
