@@ -198,8 +198,8 @@ function cheatDetection(id, place, msg) {
             "text": '__' + title + '__\n\n' + text,
             "parse_mode": "markdown"
         };
-        request.post(GLOBAL.SLACK_URL, { body: body, json: true }, (err, res, body) => {
-            if(err) { 
+        request.post(GLOBAL.SLACK_URL, {body: body, json: true}, (err, res, body) => {
+            if (err) {
                 JLog.error(err);
                 return
             }
@@ -210,19 +210,19 @@ function cheatDetection(id, place, msg) {
     switch (msg.ev) {
         case 'd': // 키를 누를 때
             // msg.c = keycode
-            if(!keylog[id] || !keylog[id].lastKey || !keylog[id].keyTime) {
-                if(!keylog[id]) keylog[id] = {}
+            if (!keylog[id] || !keylog[id].lastKey || !keylog[id].keyTime) {
+                if (!keylog[id]) keylog[id] = {}
                 keylog[id].lastKey = msg.c
-                keylog[id].keyTime = Date.now()    
+                keylog[id].keyTime = Date.now()
                 break;
             }
-            if(msg.c === 123) 
+            if (msg.c === 123)
                 message('F12 사용', false)
-            if(Date.now() - keylog[id].keyTime <= 200) {
-                if(keylog.lastKey === 8) break
+            if (Date.now() - keylog[id].keyTime <= 200) {
+                if (keylog.lastKey === 8) break
                 message('200ms 내 연속 입력', false)
             }
-            if(msg.c === 231) 
+            if (msg.c === 231)
                 message('가상 키보드(VK_PACKET) 감지됨', false)
 
             keylog[id].lastKey = msg.c;
@@ -230,18 +230,18 @@ function cheatDetection(id, place, msg) {
             break;
         case 'c':
             // msg.v = 채팅창에 쓰인 string 전체
-            if(!keylog[id] || !keylog[id].lastChat) {
-                if(!keylog[id]) keylog[id] = {}
+            if (!keylog[id] || !keylog[id].lastChat) {
+                if (!keylog[id]) keylog[id] = {}
                 keylog[id].lastChat = msg.v
                 break;
             }
-            if(msg.v.length - keylog[id].lastChat.length >= 4) 
+            if (msg.v.length - keylog[id].lastChat.length >= 4)
                 message('한 번에 4글자 이상 입력', true)
-            if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1))) {
-                if(Hangul.isJong(Hangul.d(msg.v.slice(-1))[0]) && Hangul.endsWithConsonant(keylog[id].lastChat.slice(-1))) break
+            if (msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1))) {
+                if (Hangul.isJong(Hangul.d(msg.v.slice(-1))[0]) && Hangul.endsWithConsonant(keylog[id].lastChat.slice(-1))) break
                 message('초성을 치지 않고 바로 입력', true)
             }
-            if(msg.v.includes('.macro')) 
+            if (msg.v.includes('.macro'))
                 message('특정 매크로 사용', true)
             keylog[id].lastChat = msg.v
             break;
@@ -457,13 +457,7 @@ exports.init = function (_SID, CHAN) {
                         DNAME[($c.profile.title || $c.profile.name).replace(/\s/g, "")] = $c.id;
                         MainDB.users.update(['_id', $c.id]).set(['server', SID]).on();
 
-                        let id = $c.id;
-                        let name = KKuTu.getUserList()[id].profile.title;
-                        let ip = $c.socket._socket.remoteAddress;
-                        let channel = SID;
-                        let userAgent = $c.socket.upgradeReq.headers['user-agent'];
-
-                        MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent);
+                        logConnection($c);
 
                         if (($c.guest && GLOBAL.GOOGLE_RECAPTCHA_TO_GUEST) || GLOBAL.GOOGLE_RECAPTCHA_TO_USER) {
                             $c.socket.send(JSON.stringify({
@@ -491,6 +485,16 @@ exports.init = function (_SID, CHAN) {
         });
         KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION, CHAN);
     };
+
+    function logConnection($c) {
+        let id = $c.id;
+        let name = KKuTu.getUserList()[id].profile.title;
+        let ip = $c.socket._socket.remoteAddress;
+        let channel = SID;
+        let userAgent = $c.socket.upgradeReq.headers['user-agent'];
+
+        MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent);
+    }
 };
 
 function joinNewUser($c) {
