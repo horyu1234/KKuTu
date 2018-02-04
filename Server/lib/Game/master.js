@@ -235,8 +235,8 @@ function cheatDetection(id, place, msg) {
                 keylog[id].lastChat = msg.v
                 break;
             }
-            if(msg.v.length - keylog[id].lastChat.length >= 2) 
-                message('한 번에 2글자 이상 입력', true)
+            if(msg.v.length - keylog[id].lastChat.length >= 4) 
+                message('한 번에 4글자 이상 입력', true)
             if(msg.v.length - keylog[id].lastChat.length === 1 && Hangul.isComplete(msg.v.slice(-1)))
                 message('초성을 치지 않고 바로 입력', true)
             if(msg.v.includes('.macro')) 
