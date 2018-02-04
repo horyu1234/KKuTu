@@ -202,7 +202,10 @@ function cheatDetection(id, place, msg) {
             ]
         }
         request(GLOBAL.SLACK_URL, { body: body, json: true }, (err, res, body) => {
-            
+            if(err) { 
+                JLog.error(err);
+                return
+            }
         })
     }
     // https://blog.outsider.ne.kr/322

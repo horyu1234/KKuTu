@@ -251,7 +251,7 @@ function onMessage(data) {
             if (data.caj) checkAge();
             updateCommunity();
 
-             $data._testt = addInterval(function () {
+            $data._testt = addInterval(function () {
                 if ($stage.talk.val() != $data._ttv) {
                     send('cheatreport', {ev: "c", v: $stage.talk.val()}, true);
                     $data._ttv = $stage.talk.val();
