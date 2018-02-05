@@ -253,15 +253,15 @@ function onMessage(data) {
 
             $data._testt = addInterval(function () {
                 if ($stage.talk.val() != $data._ttv) {
-                    send('cheatreport', {ev: "c", v: $stage.talk.val()}, true);
+                    send('chat-activity', {activityType: "chat", value: $stage.talk.val()}, true);
                     $data._ttv = $stage.talk.val();
                 }
             }, 100);
             document.onkeydown = function (e) {
-                send('cheatreport', {ev: "d", c: e.keyCode}, true);
+                send('chat-activity', {activityType: "keydown", value: e.keyCode}, true);
             };
             document.onkeyup = function (e) {
-                send('cheatreport', {ev: "u", c: e.keyCode}, true);
+                send('chat-activity', {activityType: "keyup", value: e.keyCode}, true);
             };
             break;
         case 'conn':

@@ -295,12 +295,16 @@ exports.Client = function (socket, profile, sid) {
     socket.on('message', function (msg) {
         var data, room = ROOM[my.place];
 
-        if(msg.type === 'cheatreport') JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
         try {
             data = JSON.parse(msg);
         } catch (e) {
             data = {error: 400};
         }
+
+        if (data.type !== 'chat-activity') {
+            JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
+        }
+
         if (Cluster.isWorker) process.send({
             type: "tail-report",
             id: my.id,
