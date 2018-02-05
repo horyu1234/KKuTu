@@ -189,7 +189,7 @@ let lastChatMap = {};
 }
 */
 
-// const BETWEEN_CHAT_MINIMUM_MILLIS = 100;
+const BETWEEN_CHAT_MINIMUM_MILLIS = 100;
 const MINIMUM_CHAR_COUNT_PER_CHAT = 4;
 
 const KEY_CODES = {
@@ -217,16 +217,16 @@ function cheatDetection(id, place, msg) {
                 sendCheatDetectedMessage('F12(개발자 도구)를 사용하였습니다.', false);
             }
 
-            /*
-            TODO: 일반 채팅에서 한글자만 꾹 누르고 있으면 무조건 감지되는 버그가 있습니다.
             if (currentTime - lastChatMap[id].keyTime <= BETWEEN_CHAT_MINIMUM_MILLIS) {
                 if (lastChatMap[id].lastKey === KEY_CODES['Backspace']) {
+                    break;
+                }
+                if (lastChatMap[id].lastKey === keyCode) {
                     break;
                 }
 
                 sendCheatDetectedMessage(BETWEEN_CHAT_MINIMUM_MILLIS + 'ms 내에 연속적으로 입력하였습니다.', false);
             }
-            */
 
             if (keyCode === KEY_CODES['VK_PACKET']) {
                 sendCheatDetectedMessage('가상 키보드(VK_PACKET)가 감지되었습니다.', false);
