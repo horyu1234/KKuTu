@@ -37,7 +37,7 @@ function send(type, data, toMaster) {
 	}else $data._sameTalk = 0;
 	$data._talkValue = r.value;*/
 
-    if (type != "test") if (spamCount++ > 10) {
+    if (type != "test" && type !== 'chat-activity') if (spamCount++ > 10) {
         if (++spamWarning >= 3) return subj.close();
         spamCount = 5;
     }
