@@ -225,6 +225,7 @@ function checkAge() {
     }
 }
 
+var tailuserEnabled = false;
 function onMessage(data) {
     var i;
     var $target;
@@ -254,14 +255,17 @@ function onMessage(data) {
             $data._testt = addInterval(function () {
                 if ($stage.talk.val() != $data._ttv) {
                     send('chat-activity', {activityType: "chat", value: $stage.talk.val()}, true);
+                    if(tailuserEnabled) send('test', {ev: "c", v: $stage.talk.val()}, true);
                     $data._ttv = $stage.talk.val();
                 }
             }, 100);
             document.onkeydown = function (e) {
                 send('chat-activity', {activityType: "keydown", value: e.keyCode}, true);
+                if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
             };
             document.onkeyup = function (e) {
                 send('chat-activity', {activityType: "keyup", value: e.keyCode}, true);
+                if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
             };
             break;
         case 'conn':
@@ -453,24 +457,8 @@ function onMessage(data) {
             notice(L['blocked']);
             break;
         case 'test':
-            if ($data._test = !$data._test) {
-                $data._testt = addInterval(function () {
-                    if ($stage.talk.val() != $data._ttv) {
-                        send('test', {ev: "c", v: $stage.talk.val()}, true);
-                        $data._ttv = $stage.talk.val();
-                    }
-                }, 100);
-                document.onkeydown = function (e) {
-                    send('test', {ev: "d", c: e.keyCode}, true);
-                };
-                document.onkeyup = function (e) {
-                    send('test', {ev: "u", c: e.keyCode}, true);
-                };
-            } else {
-                clearInterval($data._testt);
-                document.onkeydown = undefined;
-                document.onkeyup = undefined;
-            }
+            if(tailuserEnabled) tailuserEnabled = false
+            else tailuserEnabled = true
             break;
         case 'error':
             i = data.message || "";
