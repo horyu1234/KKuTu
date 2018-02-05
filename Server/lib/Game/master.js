@@ -324,7 +324,6 @@ Cluster.on('message', function (worker, msg) {
                 DIC[temp].send('tail', {a: "room", rid: msg.place, id: msg.id, msg: msg.msg});
             }
             checkTailUser(msg.id, msg.place, msg.msg);
-            cheatDetection(msg.id, msg.place, msg.msg)
             break;
         case "okg":
             if (DIC[msg.id]) DIC[msg.id].onOKG(msg.time);
