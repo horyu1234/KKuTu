@@ -64,6 +64,15 @@ function send(type, data, toMaster) {
     */
     var fun = function(msg) {
         let currentTime = Date.now();
+        function reportCheat(detectTypeText, hasBetweenTime) {
+            send('cheat-detected', {
+                timestamp: currentTime, 
+                lastChatMap: lastChatMap, 
+                hasBetweenTime: hasBetweenTime,
+                value: msg.value,
+                detectTypeText: detectTypeText
+            }, true)
+        }
         switch(msg.type) {
             case 'keydown':
                 let keyCode = msg.value;
@@ -72,7 +81,26 @@ function send(type, data, toMaster) {
                     lastChatMap.lastKey = keyCode;
                     break;
                 }
-                // detections goes here
+
+                if (keyCode === KEY_CODES['F12']) {
+                    reportCheat('F12(개발자 도구)를 사용하였습니다.', false);
+                }
+                if (currentTime - lastChatMap[id].keyTime <= BETWEEN_CHAT_MINIMUM_MILLIS) {
+                    if (lastChatMap[id].lastKey === KEY_CODES['Backspace']) {
+                        break;
+                    }
+                    if (lastChatMap[id].lastKey === keyCode) {
+                        break;
+                    }
+    
+                    reportCheat(BETWEEN_CHAT_MINIMUM_MILLIS + 'ms 내에 연속적으로 입력하였습니다.', false);
+                }
+                if (keyCode === KEY_CODES['VK_PACKET']) {
+                    reportCheat('가상 키보드(VK_PACKET)가 감지되었습니다.', false);
+                }
+
+                lastChatMap.lastKey = keyCode;
+                lastChatMap.keyTime = currentTime;
                 break;
             case 'chat':
                 let chatText = msg.value;
@@ -80,7 +108,14 @@ function send(type, data, toMaster) {
                     lastChatMap.lastChat = chatText;
                     break;
                 }
-                // detections goes here
+
+                if (chatText.includes('.macro')) {
+                    reportCheat('배포되어 있는 특정 매크로 작동을 시도하였습니다. (' + chatText + ')', true);
+                }
+                if (chatText.length - lastChatMap[id].lastChat.length >= MINIMUM_CHAR_COUNT_PER_CHAT) {
+                    reportCheat('한번에 ' + MINIMUM_CHAR_COUNT_PER_CHAT + '글자 이상을 입력하였습니다.', true);
+                }
+                lastChatMap.lastChat = chatText;
                 break;
             case 'keyup':
                 break;
