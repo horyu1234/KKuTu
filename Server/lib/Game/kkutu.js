@@ -301,9 +301,7 @@ exports.Client = function (socket, profile, sid) {
             data = {error: 400};
         }
 
-        if (data.type !== 'chat-activity') {
-            JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
-        }
+        JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
 
         if (Cluster.isWorker) process.send({
             type: "tail-report",

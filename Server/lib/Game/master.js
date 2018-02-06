@@ -20,8 +20,6 @@ var Cluster = require("cluster");
 var File = require('fs');
 var WebSocket = require('ws');
 var https = require('https');
-var request = require('request');
-var Hangul = require('hangul-js')
 var HTTPS_Server;
 // var Heapdump = require("heapdump");
 var KKuTu = require('./kkutu');
@@ -175,140 +173,6 @@ function narrateFriends(id, friends, stat) {
             break;
         }
     });
-}
-
-let lastChatMap = {};
-/*
-{
-   "id": {
-       "lastKey": keydown 에서 나온 거,
-       "lastChat": chat 에서 나온 거,
-       "keyTime": lastKey 가 입력된 시간 (부정확)
-   },
-   ...
-}
-*/
-
-const BETWEEN_CHAT_MINIMUM_MILLIS = 100;
-const MINIMUM_CHAR_COUNT_PER_CHAT = 4;
-
-const KEY_CODES = {
-    'F12': 123,
-    'Backspace': 8,
-    'VK_PACKET': 231
-};
-
-function cheatDetection(id, place, msg) {
-    let currentTime = Date.now();
-    switch (msg.activityType) {
-        case 'keydown':
-            let keyCode = msg.value;
-            if (!lastChatMap[id] || !lastChatMap[id].lastKey || !lastChatMap[id].keyTime) {
-                if (!lastChatMap[id]) {
-                    lastChatMap[id] = {};
-                }
-
-                lastChatMap[id].lastKey = keyCode;
-                lastChatMap[id].keyTime = currentTime;
-                break;
-            }
-
-            if (keyCode === KEY_CODES['F12']) {
-                sendCheatDetectedMessage('F12(개발자 도구)를 사용하였습니다.', false);
-            }
-
-            if (currentTime - lastChatMap[id].keyTime <= BETWEEN_CHAT_MINIMUM_MILLIS) {
-                if (lastChatMap[id].lastKey === KEY_CODES['Backspace']) {
-                    break;
-                }
-                if (lastChatMap[id].lastKey === keyCode) {
-                    break;
-                }
-
-                sendCheatDetectedMessage(BETWEEN_CHAT_MINIMUM_MILLIS + 'ms 내에 연속적으로 입력하였습니다.', false);
-            }
-
-            if (keyCode === KEY_CODES['VK_PACKET']) {
-                sendCheatDetectedMessage('가상 키보드(VK_PACKET)가 감지되었습니다.', false);
-            }
-
-            lastChatMap[id].lastKey = keyCode;
-            lastChatMap[id].keyTime = currentTime;
-            break;
-        case 'chat':
-            let chatText = msg.value;
-            if (!lastChatMap[id] || !lastChatMap[id].lastChat) {
-                if (!lastChatMap[id]) {
-                    lastChatMap[id] = {};
-                }
-
-                lastChatMap[id].lastChat = chatText;
-                break;
-            }
-
-            if (chatText.includes('.macro')) {
-                sendCheatDetectedMessage('배포되어 있는 특정 매크로 작동을 시도하였습니다. (' + chatText + ')', true);
-            }
-
-            if (chatText.length - lastChatMap[id].lastChat.length >= MINIMUM_CHAR_COUNT_PER_CHAT) {
-                sendCheatDetectedMessage('한번에 ' + MINIMUM_CHAR_COUNT_PER_CHAT + '글자 이상을 입력하였습니다.', true);
-            }
-
-            if (chatText.length - lastChatMap[id].lastChat.length === 1 && Hangul.isComplete(chatText.slice(-1))) {
-                if (Hangul.isJong(Hangul.d(chatText.slice(-1))[0]) && Hangul.endsWithConsonant(lastChatMap[id].lastChat.slice(-1))) {
-                    break;
-                }
-
-                sendCheatDetectedMessage('초성을 입력하지 않고 바로 입력하였습니다.', true);
-            }
-
-            lastChatMap[id].lastChat = chatText;
-            break;
-        case 'keyup':
-            // 주의: lastChatMap[id].lastKey 는 이미 눌렀던 키로, msg.value 와 같을 수 있음.
-            break;
-    }
-
-    function sendCheatDetectedMessage(detectTypeText, hasBetweenTime) {
-        let message = createDetectedMessage(detectTypeText, hasBetweenTime);
-        sendTelegramMessage(message);
-    }
-
-    function createDetectedMessage(detectTypeText, hasBetweenTime) {
-        let currentTime = new Date();
-        let formattedDate = currentTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-
-        let detail;
-        if (hasBetweenTime) {
-            let betweenTime = currentTime - lastChatMap[id].keyTime;
-            detail = lastChatMap[id].lastKey + ' → ' + msg.value + ' (' + betweenTime + 'ms)';
-        } else {
-            detail = lastChatMap[id].lastChat + ' → ' + msg.value;
-        }
-
-        return '`비 인가 프로그램` 사용 의심 유저가 발견되었습니다.\n' +
-            '\n' +
-            '감지 정보: ' + detectTypeText + '\n' +
-            '세부 내용: ' + detail + '\n' +
-            '고유 번호: ' + id + '\n' +
-            '방     번호: ' + (place === 0 ? '로비' : place) + '\n' +
-            '감지 시간: ' + formattedDate;
-    }
-
-    function sendTelegramMessage(message) {
-        let body = {
-            "chat_id": -1001206450931,
-            "text": message,
-            "parse_mode": "markdown"
-        };
-
-        let url = 'https://api.telegram.org/' + GLOBAL.TELEGRAM_BOT_TOKEN + '/sendMessage';
-        request.post(url, {body: body, json: true}, (err, res, body) => {
-            if (err) {
-                JLog.error(err);
-            }
-        })
-    }
 }
 
 Cluster.on('message', function (worker, msg) {
@@ -630,7 +494,6 @@ function processClientRequest($c, msg) {
                 if (!processAdmin($c.id, msg.value)) break;
             }
             checkTailUser($c.id, $c.place, msg);
-            cheatDetection($c.id, $c.place, msg)
             if (msg.whisper) {
                 msg.whisper.split(',').forEach(v => {
                     if (temp = DIC[DNAME[v]]) {
@@ -749,9 +612,6 @@ function processClientRequest($c, msg) {
         */
         case 'test':
             checkTailUser($c.id, $c.place, msg);
-            break;
-        case 'chat-activity':
-            cheatDetection($c.id, $c.place, msg);
             break;
         default:
             break;

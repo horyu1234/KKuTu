@@ -37,7 +37,7 @@ function send(type, data, toMaster) {
 	}else $data._sameTalk = 0;
 	$data._talkValue = r.value;*/
 
-    if (type != "test" && type !== 'chat-activity') if (spamCount++ > 10) {
+    if (type !== "test") if (spamCount++ > 10) {
         if (++spamWarning >= 3) return subj.close();
         spamCount = 5;
     }
@@ -225,7 +225,6 @@ function checkAge() {
     }
 }
 
-var tailuserEnabled = false;
 function onMessage(data) {
     var i;
     var $target;
@@ -251,22 +250,6 @@ function onMessage(data) {
             welcome();
             if (data.caj) checkAge();
             updateCommunity();
-
-            $data._testt = addInterval(function () {
-                if ($stage.talk.val() != $data._ttv) {
-                    send('chat-activity', {activityType: "chat", value: $stage.talk.val()}, true);
-                    if(tailuserEnabled) send('test', {ev: "c", v: $stage.talk.val()}, true);
-                    $data._ttv = $stage.talk.val();
-                }
-            }, 100);
-            document.onkeydown = function (e) {
-                send('chat-activity', {activityType: "keydown", value: e.keyCode}, true);
-                if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
-            };
-            document.onkeyup = function (e) {
-                send('chat-activity', {activityType: "keyup", value: e.keyCode}, true);
-                if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
-            };
             break;
         case 'conn':
             $data.setUser(data.user.id, data.user);
@@ -457,8 +440,24 @@ function onMessage(data) {
             notice(L['blocked']);
             break;
         case 'test':
-            if(tailuserEnabled) tailuserEnabled = false
-            else tailuserEnabled = true
+            if ($data._test = !$data._test) {
+                $data._testt = addInterval(function () {
+                    if ($stage.talk.val() !== $data._ttv) {
+                        send('test', {ev: "c", v: $stage.talk.val()}, true);
+                        $data._ttv = $stage.talk.val();
+                    }
+                }, 100);
+                document.onkeydown = function (e) {
+                    send('test', {ev: "d", c: e.keyCode}, true);
+                };
+                document.onkeyup = function (e) {
+                    send('test', {ev: "u", c: e.keyCode}, true);
+                };
+            } else {
+                clearInterval($data._testt);
+                document.onkeydown = undefined;
+                document.onkeyup = undefined;
+            }
             break;
         case 'error':
             i = data.message || "";
