@@ -52,6 +52,36 @@ function send(type, data, toMaster) {
     }
     subj.send(JSON.stringify(r));
 }
+var cCho = [ 'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ' ], 
+    cJung = [ 'ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ' ], 
+    cJong = [ '', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ' ]
+String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/javascript-%ED%95%9C%EA%B8%80-%EC%B4%88%EC%84%B1-%EC%A4%91%EC%84%B1-%EC%A2%85%EC%84%B1-%EB%B6%84%EB%A6%AC-38ad1227aa90 수정
+    var cho, jung, jong; 
+    var str = this, cnt = str.length, chars = [], cCode; 
+
+    for (var i = 0; i < cnt; i++) { 
+       cCode = str.charCodeAt(i); 
+
+       if (cCode == 32) { continue; } // 한글이 아닌 경우 
+       if (cCode < 0xAC00 || cCode > 0xD7A3) {
+            chars.push(str.charAt(i)); 
+            continue; 
+       } 
+
+       cCode = str.charCodeAt(i) - 0xAC00; 
+       jong = cCode % 28; // 종성 
+       jung = ((cCode - jong) / 28 ) % 21; // 중성 
+       cho = (((cCode - jong) / 28 ) - jung ) / 21; // 초성 
+ 
+       chars.push(cCho[cho], cJung[jung]); 
+
+       if (cJong[jong] !== '') { 
+          chars.push(cJong[jong]); 
+       } 
+    }
+
+    return chars; 
+}
 
 (function () {
     var lastChatMap = {};
@@ -114,6 +144,12 @@ function send(type, data, toMaster) {
                 }
                 if (chatText.length - lastChatMap.lastChat.length >= MINIMUM_CHAR_COUNT_PER_CHAT) {
                     reportCheat('한번에 ' + MINIMUM_CHAR_COUNT_PER_CHAT + '글자 이상을 입력하였습니다.', true);
+                }
+                if (chatText.length - lastChatMap.lastChat.length === 1) {
+                    var lastChar = chatText.slice(-1)
+                    if(!/^[가-힣]$/.test(lastChar)) break;
+                    if(lastChar.toKorChars()[0] === lastChatMap.lastChat.slice(-1).toKorChars()[2]) break; // 새 글자의 초성과 전 글자의 종성이 같음
+                    reportCheat('초성 입력 없이 한글을 입력하였습니다.', true)
                 }
                 lastChatMap.lastChat = chatText;
                 break;
