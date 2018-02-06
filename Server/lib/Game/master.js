@@ -177,27 +177,6 @@ function narrateFriends(id, friends, stat) {
     });
 }
 
-let lastChatMap = {};
-/*
-{
-   "id": {
-       "lastKey": keydown 에서 나온 거,
-       "lastChat": chat 에서 나온 거,
-       "keyTime": lastKey 가 입력된 시간 (부정확)
-   },
-   ...
-}
-*/
-
-const BETWEEN_CHAT_MINIMUM_MILLIS = 100;
-const MINIMUM_CHAR_COUNT_PER_CHAT = 4;
-
-const KEY_CODES = {
-    'F12': 123,
-    'Backspace': 8,
-    'VK_PACKET': 231
-};
-
 function cheatDetection(id, place, msg) {
     let currentTime = Date.now();
     switch (msg.activityType) {
@@ -280,7 +259,7 @@ function cheatDetection(id, place, msg) {
 
         let detail;
         if (hasBetweenTime) {
-            let betweenTime = currentTime - lastChatMap[id].keyTime;
+            let betweenTime = currentTime - msg.timestamp;
             detail = lastChatMap[id].lastKey + ' → ' + msg.value + ' (' + betweenTime + 'ms)';
         } else {
             detail = lastChatMap[id].lastChat + ' → ' + msg.value;
@@ -630,7 +609,6 @@ function processClientRequest($c, msg) {
                 if (!processAdmin($c.id, msg.value)) break;
             }
             checkTailUser($c.id, $c.place, msg);
-            cheatDetection($c.id, $c.place, msg)
             if (msg.whisper) {
                 msg.whisper.split(',').forEach(v => {
                     if (temp = DIC[DNAME[v]]) {
@@ -750,7 +728,7 @@ function processClientRequest($c, msg) {
         case 'test':
             checkTailUser($c.id, $c.place, msg);
             break;
-        case 'chat-activity':
+        case 'cheat-detected':
             cheatDetection($c.id, $c.place, msg);
             break;
         default:
