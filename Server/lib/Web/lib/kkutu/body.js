@@ -19,6 +19,15 @@
 var spamWarning = 0;
 var spamCount = 0;
 
+const BETWEEN_CHAT_MINIMUM_MILLIS = 100;
+const MINIMUM_CHAR_COUNT_PER_CHAT = 4;
+
+const KEY_CODES = {
+    'F12': 123,
+    'Backspace': 8,
+    'VK_PACKET': 231
+};
+
 // var smile = 94, tag = 35;
 
 function zeroPadding(num, len) {
@@ -37,12 +46,53 @@ function send(type, data, toMaster) {
 	}else $data._sameTalk = 0;
 	$data._talkValue = r.value;*/
 
-    if (type != "test" && type !== 'chat-activity') if (spamCount++ > 10) {
+    if (type != "test") if (spamCount++ > 10) {
         if (++spamWarning >= 3) return subj.close();
         spamCount = 5;
     }
     subj.send(JSON.stringify(r));
 }
+
+(function () {
+    let lastChatMap = {};
+    /*
+    {
+        "lastKey": keydown 에서 나온 거,
+        "lastChat": chat 에서 나온 거,
+        "keyTime": lastKey 가 입력된 시간 (부정확)
+    }
+    */
+    var fun = function(msg) {
+        let currentTime = Date.now();
+        switch(msg.type) {
+            case 'keydown':
+                let keyCode = msg.value;
+                if (!lastChatMap.lastKey || !lastChatMap.keyTime) {
+                    lastChatMap.keyTime = currentTime;
+                    lastChatMap.lastKey = keyCode;
+                    break;
+                }
+                // detections goes here
+                break;
+            case 'chat':
+                let chatText = msg.value;
+                if (!lastChatMap.lastChat) {
+                    lastChatMap.lastChat = chatText;
+                    break;
+                }
+                // detections goes here
+                break;
+            case 'keyup':
+                break;
+        }
+    }
+
+    Object.defineProperties(window, {
+        'cheatDetection': {
+            value: fun
+        }
+    })
+})()
 
 function loading(text) {
     if (text) {
@@ -255,7 +305,7 @@ function onMessage(data) {
             Object.defineProperty($data, '_testt', {
                 value: addInterval(function () {
                     if ($stage.talk.val() != $data._ttv) {
-                        send('chat-activity', {activityType: "chat", value: $stage.talk.val()}, true);
+                        cheatDetection({type: "chat", value: $stage.talk.val()});
                         if(tailuserEnabled) send('test', {ev: "c", v: $stage.talk.val()}, true);
                         $data._ttv = $stage.talk.val();
                     }
@@ -264,13 +314,13 @@ function onMessage(data) {
             Object.defineProperties(document, {
                 'onkeydown': {
                     value: function (e) {
-                        send('chat-activity', {activityType: "keydown", value: e.keyCode}, true);
+                        cheatDetection({type: "keydown", value: e.keyCode});
                         if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
                     }
                 },
                 'onkeyup': {
                     value: function (e) {
-                        send('chat-activity', {activityType: "keyup", value: e.keyCode}, true);
+                        cheatDetection({type: "keyup", value: e.keyCode});
                         if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
                     }
                 }
