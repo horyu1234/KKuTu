@@ -36,6 +36,7 @@ var passport = require('passport');
 var Const = require("../const");
 var https = require('https');
 var fs = require('fs');
+var sri = require('node-sri')
 
 var language = {
     'ko_KR': require("./lang/ko_KR.json"),
@@ -46,6 +47,7 @@ var ROUTES = [
 ];
 var page = WebInit.page;
 var gameServers = [];
+var integrity;
 
 WebInit.MOBILE_AVAILABLE = [
     "portal", "main", "kkutu"
@@ -121,6 +123,12 @@ DB.ready = function () {
             else v.seek = undefined;
         });
     }, 4000);
+    
+    sri.hash('./lib/in_game_kkutu.min.js', (err, hash) => {
+        if(err) JLog.error(err)
+        integrity = hash
+    })
+
     JLog.success("DB is ready.");
 
     DB.kkutu_shop_desc.find().on(function ($docs) {
@@ -253,7 +261,9 @@ Server.get("/", function (req, res) {
             'EN_INJEONG': Const.EN_INJEONG,
             'KO_THEME': Const.KO_THEME,
             'EN_THEME': Const.EN_THEME,
-            'IJP_EXCEPT': Const.IJP_EXCEPT
+            'IJP_EXCEPT': Const.IJP_EXCEPT,
+            'KKUTU_CODE': 'http://cdn.kkutu.cc/assets/js/in_game_kkutu.min.js',
+            'KKUTU_INTEGRITY': integrity
         });
     }
 });
