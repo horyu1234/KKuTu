@@ -380,8 +380,6 @@ exports.init = function (_SID, CHAN) {
                         DNAME[($c.profile.title || $c.profile.name).replace(/\s/g, "")] = $c.id;
                         MainDB.users.update(['_id', $c.id]).set(['server', SID]).on();
 
-                        logConnection($c);
-
                         if (($c.guest && GLOBAL.GOOGLE_RECAPTCHA_TO_GUEST) || GLOBAL.GOOGLE_RECAPTCHA_TO_USER) {
                             $c.socket.send(JSON.stringify({
                                 type: 'recaptcha',
@@ -408,16 +406,6 @@ exports.init = function (_SID, CHAN) {
         });
         KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION, CHAN);
     };
-
-    function logConnection($c) {
-        let id = $c.id;
-        let name = KKuTu.getUserList()[id].profile.title;
-        let ip = $c.socket._socket.remoteAddress;
-        let channel = SID;
-        let userAgent = $c.socket.upgradeReq.headers['user-agent'];
-
-        MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent);
-    }
 };
 
 function joinNewUser($c) {
@@ -443,9 +431,17 @@ function joinNewUser($c) {
 KKuTu.onClientMessage = function ($c, msg) {
     if (!msg) return;
 
-    if ($c.passRecaptcha) {
-        processClientRequest($c, msg);
-    } else {
+    if (!$c.passFingerprint2) {
+        if (msg.type === 'fingerprint2') {
+            $c.passFingerprint2 = true;
+
+            logConnection($c, msg.value);
+        }
+
+        return;
+    }
+
+    if (!$c.passRecaptcha) {
         if (msg.type === 'recaptcha') {
             Recaptcha.verifyRecaptcha(msg.token, $c.socket._socket.remoteAddress, function (success) {
                 if (success) {
@@ -462,8 +458,22 @@ KKuTu.onClientMessage = function ($c, msg) {
                 }
             });
         }
+
+        return;
     }
+
+    processClientRequest($c, msg);
 };
+
+function logConnection($c, fingerprint2) {
+    let id = $c.id;
+    let name = KKuTu.getUserList()[id].profile.title;
+    let ip = $c.socket._socket.remoteAddress;
+    let channel = SID;
+    let userAgent = $c.socket.upgradeReq.headers['user-agent'];
+
+    MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent, fingerprint2);
+}
 
 function processClientRequest($c, msg) {
     var stable = true;

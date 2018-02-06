@@ -10,12 +10,12 @@ exports.initDatabase = function (_database) {
     database = _database;
 };
 
-function addLog(id, name, ip, channel, useragent) {
+function addLog(id, name, ip, channel, useragent, fingerprint2) {
     let time = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     let query = "INSERT INTO " + CONNECTION_LOG_TABLE_NAME + " " +
-        "VALUES ($1, $2, $3, $4, $5, $6)";
+        "VALUES ($1, $2, $3, $4, $5, $6, $7)";
 
-    database.query(query, [time, id, name, ip, channel, useragent], (err, result) => {
+    database.query(query, [time, id, name, ip, channel, useragent, fingerprint2], (err, result) => {
         if (err) {
             return JLog.error(`Error executing query ${err.stack}`);
         }

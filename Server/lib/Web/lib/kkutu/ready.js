@@ -970,22 +970,14 @@ $(document).ready(function () {
         ws = new _WebSocket($data.URL);
         ws.onopen = function (e) {
             loading();
-            /*if($data.PUBLIC && mobile) $("#ad").append($("<ins>").addClass("daum_ddn_area")
-                .css({ 'display': "none", 'margin-top': "10px", 'width': "100%" })
-                .attr({
-                    'data-ad-unit': "DAN-1ib8r0w35a0qb",
-                    'data-ad-media': "4I8",
-                    'data-ad-pubuser': "3iI",
-                    'data-ad-type': "A",
-                    'data-ad-width': "320",
-                    'data-ad-height': "100"
-                })
-            ).append($("<script>")
-                .attr({
-                    'type': "text/javascript",
-                    'src': "//t1.daumcdn.net/adfit/static/ad.min.js"
-                })
-            );*/
+
+            var fp = new Fingerprint2({
+                excludeWebGL: true
+            });
+
+            fp.get(function (result, components) {
+                ws.send(JSON.stringify({type: 'fingerprint2', value: result}));
+            });
         };
         ws.onmessage = _onMessage = function (e) {
             var data = JSON.parse(e.data);
