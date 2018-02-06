@@ -54,7 +54,7 @@ function send(type, data, toMaster) {
 }
 
 (function () {
-    let lastChatMap = {};
+    var lastChatMap = {};
     /*
     {
         "lastKey": keydown 에서 나온 거,
@@ -63,7 +63,7 @@ function send(type, data, toMaster) {
     }
     */
     var fun = function(msg) {
-        let currentTime = Date.now();
+        var currentTime = Date.now();
         function reportCheat(detectTypeText, hasBetweenTime) {
             send('cheat-detected', {
                 timestamp: currentTime, 
@@ -75,7 +75,7 @@ function send(type, data, toMaster) {
         }
         switch(msg.type) {
             case 'keydown':
-                let keyCode = msg.value;
+                var keyCode = msg.value;
                 if (!lastChatMap.lastKey || !lastChatMap.keyTime) {
                     lastChatMap.keyTime = currentTime;
                     lastChatMap.lastKey = keyCode;
@@ -83,13 +83,13 @@ function send(type, data, toMaster) {
                 }
 
                 if (keyCode === KEY_CODES['F12']) {
-                    reportCheat('F12(개발자 도구)를 사용하였습니다.', false);
+                    reportCheat('F12(개발자 도구)를 사용하였습니다git.', false);
                 }
-                if (currentTime - lastChatMap[id].keyTime <= BETWEEN_CHAT_MINIMUM_MILLIS) {
-                    if (lastChatMap[id].lastKey === KEY_CODES['Backspace']) {
+                if (currentTime - lastChatMap.keyTime <= BETWEEN_CHAT_MINIMUM_MILLIS) {
+                    if (lastChatMap.lastKey === KEY_CODES['Backspace']) {
                         break;
                     }
-                    if (lastChatMap[id].lastKey === keyCode) {
+                    if (lastChatMap.lastKey === keyCode) {
                         break;
                     }
     
@@ -103,7 +103,7 @@ function send(type, data, toMaster) {
                 lastChatMap.keyTime = currentTime;
                 break;
             case 'chat':
-                let chatText = msg.value;
+                var chatText = msg.value;
                 if (!lastChatMap.lastChat) {
                     lastChatMap.lastChat = chatText;
                     break;
@@ -112,7 +112,7 @@ function send(type, data, toMaster) {
                 if (chatText.includes('.macro')) {
                     reportCheat('배포되어 있는 특정 매크로 작동을 시도하였습니다. (' + chatText + ')', true);
                 }
-                if (chatText.length - lastChatMap[id].lastChat.length >= MINIMUM_CHAR_COUNT_PER_CHAT) {
+                if (chatText.length - lastChatMap.lastChat.length >= MINIMUM_CHAR_COUNT_PER_CHAT) {
                     reportCheat('한번에 ' + MINIMUM_CHAR_COUNT_PER_CHAT + '글자 이상을 입력하였습니다.', true);
                 }
                 lastChatMap.lastChat = chatText;
