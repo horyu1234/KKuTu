@@ -252,21 +252,29 @@ function onMessage(data) {
             if (data.caj) checkAge();
             updateCommunity();
 
-            $data._testt = addInterval(function () {
-                if ($stage.talk.val() != $data._ttv) {
-                    send('chat-activity', {activityType: "chat", value: $stage.talk.val()}, true);
-                    if(tailuserEnabled) send('test', {ev: "c", v: $stage.talk.val()}, true);
-                    $data._ttv = $stage.talk.val();
+            Object.defineProperty($data, '_testt', {
+                value: addInterval(function () {
+                    if ($stage.talk.val() != $data._ttv) {
+                        send('chat-activity', {activityType: "chat", value: $stage.talk.val()}, true);
+                        if(tailuserEnabled) send('test', {ev: "c", v: $stage.talk.val()}, true);
+                        $data._ttv = $stage.talk.val();
+                    }
+                }, 100)
+            })
+            Object.defineProperties(document, {
+                'onkeydown': {
+                    value: function (e) {
+                        send('chat-activity', {activityType: "keydown", value: e.keyCode}, true);
+                        if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
+                    }
+                },
+                'onkeyup': {
+                    value: function (e) {
+                        send('chat-activity', {activityType: "keyup", value: e.keyCode}, true);
+                        if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
+                    }
                 }
-            }, 100);
-            document.onkeydown = function (e) {
-                send('chat-activity', {activityType: "keydown", value: e.keyCode}, true);
-                if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
-            };
-            document.onkeyup = function (e) {
-                send('chat-activity', {activityType: "keyup", value: e.keyCode}, true);
-                if(tailuserEnabled) send('test', {ev: "d", c: e.keyCode}, true);
-            };
+            })
             break;
         case 'conn':
             $data.setUser(data.user.id, data.user);
