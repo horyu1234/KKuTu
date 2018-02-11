@@ -25,6 +25,7 @@ var Collection = require("../sub/collection");
 var Pub = require("../sub/checkpub");
 var Lizard = require("../sub/lizard");
 const ConnectionLog = require("../sub/ConnectionLog");
+const UserBlockModule = require("../sub/UserBlockModule");
 const VendorDBMigration = require("../sub/VendorDBMigration");
 const ServerMigrationProcess = require("../sub/ServerMigrationProcess");
 
@@ -89,10 +90,12 @@ Pub.ready = function (isPub) {
             DB.users = new mainAgent.Table("users");
 
             ConnectionLog.initDatabase(pgMain);
+            UserBlockModule.initDatabase(pgMain);
             VendorDBMigration.initDatabase(pgMain);
             ServerMigrationProcess.initDatabase(pgMain);
 
             exports.ConnectionLog = ConnectionLog;
+            exports.UserBlockModule = UserBlockModule;
             exports.VendorDBMigration = VendorDBMigration;
             exports.ServerMigrationProcess = ServerMigrationProcess;
 

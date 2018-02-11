@@ -415,8 +415,40 @@ exports.Client = function (socket, profile, sid) {
         if (Cluster.isWorker && type == 'user') process.send({type: "user-publish", data: data});
     };
     my.chat = function (msg, code) {
-        if (my.noChat) return my.send('chat', {notice: true, code: 443});
+        if (my.noChat) {
+            my.send('chat', {
+                notice: true,
+                code: 443
+            });
+            return;
+        }
+
+        if (my.dbBlockedChat !== undefined) {
+            my.send('chat', {
+                notice: true,
+                message: makeBlockChatMessage(my.dbBlockedChat)
+            });
+            return;
+        }
+
         my.publish('chat', {value: msg, notice: code ? true : false, code: code});
+
+        function makeBlockChatMessage(block) {
+            let message = '회원님의 계정은 채팅이 ' + (block.permanency ? '영구적으로' : '일정 기간') + ' 제한되었습니다.<br/>' +
+                '<br/>' +
+                '제한 일자: ' + block.time.toISOString().replace(/T/, ' ').replace(/\..+/, '') + '<br/>';
+
+            if (!block.permanency) {
+                message += '해제 일자: ' + block.pardonTime.toISOString().replace(/T/, ' ').replace(/\..+/, '') + '<br/>';
+            }
+
+            message += '사유: ' + block.reason + '<br/>' +
+                '처리자: ' + block.punisher + '<br/>' +
+                '<br/>' +
+                '본 처리에 이의가 있으신 분은 https://discord.gg/eQ3R8J8 로 문의해주시기 바랍니다.';
+
+            return message;
+        }
     };
     my.checkExpire = function () {
         var now = new Date();
@@ -450,60 +482,112 @@ exports.Client = function (socket, profile, sid) {
         }
     };
     my.refresh = function () {
-        var R = new Lizard.Tail();
+        let R = new Lizard.Tail();
 
-        if (my.guest) {
-            my.equip = {};
-            my.data = new exports.Data();
-            my.money = 0;
-            my.friends = {};
-
-            R.go({result: 200});
-        } else {
-            DB.VendorDBMigration.processVendorMigration(my.id, function () {
-                DB.users.findOne(['_id', my.id]).on(function ($user) {
-                    var first = !$user;
-                    var black = first ? "" : $user.black;
-
-                    if (first) $user = {money: 0};
-                    if (black == "null") black = false;
-                    if (black == "chat") {
-                        black = false;
-                        my.noChat = true;
-                    }
-                    /* 망할 셧다운제
-                    if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
-                        my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
-                        if(my.isAjae === null){
-                            if(my._birth) my._checkAjae = setTimeout(function(){
-                                my.sendError(442);
-                                my.socket.close();
-                            }, 300000);
-                            else{
-                                my.sendError(441);
-                                my.socket.close();
-                                return;
-                            }
-                        }
-                    }*/
-                    my.exordial = $user.exordial || "";
-                    my.equip = $user.equip || {};
-                    my.box = $user.box || {};
-                    my.data = new exports.Data($user.kkutu);
-                    my.money = Number($user.money);
-                    my.friends = $user.friends || {};
-                    if (first) my.flush();
-                    else {
-                        my.checkExpire();
-                        my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
-                    }
-                    if (black) R.go({result: 444, black: black});
-                    else if (Cluster.isMaster && $user.server) R.go({result: 409, black: $user.server});
-                    else if (exports.NIGHT && my.isAjae === false) R.go({result: 440});
-                    else R.go({result: 200});
+        let ip = my.socket.upgradeReq.connection.remoteAddress;
+        DB.UserBlockModule.checkBlockIp(ip, function (result) {
+            if (result.block) {
+                R.go({
+                    result: 551,
+                    black: result
                 });
-            });
-        }
+            } else {
+                if (my.guest) {
+                    my.equip = {};
+                    my.data = new exports.Data();
+                    my.money = 0;
+                    my.friends = {};
+
+                    R.go({
+                        result: 200
+                    });
+                } else {
+                    DB.VendorDBMigration.processVendorMigration(my.id, function () {
+                        DB.users.findOne(['_id', my.id]).on(function ($user) {
+                            let first = !$user;
+                            let black = first ? "" : $user.black;
+
+                            if (first) {
+                                $user = {money: 0};
+                            }
+                            if (black === "null" || black === "") {
+                                black = false;
+                            }
+                            if (black === "chat") {
+                                black = false;
+                                my.noChat = true;
+                            }
+
+                            /* 망할 셧다운제
+                            if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
+                                my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
+                                if(my.isAjae === null){
+                                    if(my._birth) my._checkAjae = setTimeout(function(){
+                                        my.sendError(442);
+                                        my.socket.close();
+                                    }, 300000);
+                                    else{
+                                        my.sendError(441);
+                                        my.socket.close();
+                                        return;
+                                    }
+                                }
+                            }*/
+
+                            my.exordial = $user.exordial || "";
+                            my.equip = $user.equip || {};
+                            my.box = $user.box || {};
+                            my.data = new exports.Data($user.kkutu);
+                            my.money = Number($user.money);
+                            my.friends = $user.friends || {};
+
+                            if (first) {
+                                my.flush();
+                            } else {
+                                my.checkExpire();
+                                my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
+                            }
+
+                            if (black) {
+                                R.go({
+                                    result: 444,
+                                    black: black
+                                });
+                            } else {
+                                DB.UserBlockModule.checkBlockUser(my.id, function (result) {
+                                    if (result.block) {
+                                        R.go({
+                                            result: 550,
+                                            black: result
+                                        });
+                                    } else if (Cluster.isMaster && $user.server) {
+                                        R.go({
+                                            result: 409,
+                                            black: $user.server
+                                        });
+                                    } else if (exports.NIGHT && my.isAjae === false) {
+                                        R.go({
+                                            result: 440
+                                        });
+                                    } else {
+                                        DB.UserBlockModule.checkBlockChat(my.id, function (result) {
+                                            if (result.block) {
+                                                my.dbBlockedChat = result;
+                                            }
+
+                                            R.go({
+                                                result: 200
+                                            });
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
+            }
+        });
+
         return R;
     };
     my.flush = function (box, equip, friends) {

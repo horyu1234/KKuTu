@@ -299,7 +299,11 @@ function onMessage(data) {
             }
 
             if (data.notice) {
-                notice(L['error_' + data.code]);
+                if (data.message !== undefined) {
+                    notice(data.message);
+                } else {
+                    notice(L['error_' + data.code]);
+                }
             } else {
                 chat(data.profile || {title: L['robot']}, data.value, data.from, data.timestamp);
             }
@@ -508,6 +512,9 @@ function onMessage(data) {
                 }
             } else if (data.code === 447) {
                 alert("자동화 봇 방지를 위한 캡챠 인증에 실패했습니다. 메인 화면에서 다시 시도해 주세요.");
+                break;
+            } else if (data.code === 550 || data.code === 551) {
+                alert(data.message);
                 break;
             }
             alert("[#" + data.code + "] " + L['error_' + data.code] + i);
