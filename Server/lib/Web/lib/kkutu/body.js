@@ -294,6 +294,10 @@ function onMessage(data) {
             notice(data.a + "|" + data.rid + "@" + data.id + ": " + ((data.msg instanceof String) ? data.msg : JSON.stringify(data.msg)).replace(/</g, "&lt;").replace(/>/g, "&gt;"), "tail");
             break;
         case 'chat':
+            if (data.value === '') {
+                break;
+            }
+
             if (data.notice) {
                 notice(L['error_' + data.code]);
             } else {
