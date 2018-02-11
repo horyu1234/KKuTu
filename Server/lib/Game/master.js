@@ -467,12 +467,15 @@ KKuTu.onClientMessage = function ($c, msg) {
 
 function logConnection($c, fingerprint2) {
     let id = $c.id;
-    let name = KKuTu.getUserList()[id].profile.title;
-    let ip = $c.socket._socket.remoteAddress;
-    let channel = SID;
-    let userAgent = $c.socket.upgradeReq.headers['user-agent'];
+    let user = KKuTu.getUserList()[id];
+    if (user !== undefined) {
+        let name = user.profile.title;
+        let ip = $c.socket.upgradeReq.connection.remoteAddress;
+        let channel = SID;
+        let userAgent = $c.socket.upgradeReq.headers['user-agent'];
 
-    MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent, fingerprint2);
+        MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent, fingerprint2);
+    }
 }
 
 function processClientRequest($c, msg) {
