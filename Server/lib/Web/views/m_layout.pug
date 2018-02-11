@@ -25,6 +25,7 @@ html
 		meta(charset='utf-8')
 		link(rel='dns-prefetch', href='http://cdn.kkutu.cc')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+		script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-75680482-5')
 		script(type='text/javascript').
 			function getObject(v, i) {
 				Object.defineProperty(v, i, {value: v[i], writable: false});
@@ -32,6 +33,11 @@ html
 			getObject(window.WebSocket, "send");
 			getObject(window.WebSocket, "onmessage");
 			getObject(window, "WebSocket");
+
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-75680482-5');
 
 		block Search
 			meta(name='description', content=LANG['meta_desc'] || L('META_DESC'))
