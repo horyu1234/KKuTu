@@ -10,7 +10,6 @@ exports.initDatabase = function (_database) {
 };
 
 function checkBlockUser(id, callback) {
-    JLog.info('checkBlockUser - ' + id);
     let query = "SELECT * " +
         "FROM block_users " +
         "WHERE id=$1;";
@@ -105,7 +104,6 @@ function checkBlockIp(ip, callback) {
 }
 
 function checkBlockChat(id, callback) {
-    JLog.info('checkBlockChat - ' + id);
     let query = "SELECT * " +
         "FROM block_chat " +
         "WHERE id=$1;";
