@@ -34,10 +34,9 @@ function process(req, accessToken, MainDB, $p, done) {
     req.session.authType = $p.authType;
 
     MainDB.users.findOne(['_id', $p.id]).on(function ($body) {
-        let nickname = $body.nickname;
-
-        $p.title = nickname;
-        $p.name = nickname;
+        if ($body !== undefined && $body.hasOwnProperty('nickname')) {
+            $p.title = $body.nickname;
+        }
 
         MainDB.session.upsert(['_id', req.session.id]).set({
             'profile': $p,
