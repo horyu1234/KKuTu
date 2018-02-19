@@ -38,12 +38,13 @@
             var i, j;
 
             if ($("#account-info").html() === L['LOGIN']) {
-                return $("#server-0").trigger('click');
+                joinServer(0);
+                return;
             }
             for (i = 0.9; i < 1; i += 0.01) {
                 for (j in LIST) {
                     if (LIST[j] < i * LIMIT) {
-                        $("#server-" + j).trigger('click');
+                        joinServer(j);
                         return;
                     }
                 }
@@ -89,12 +90,16 @@
                     .append($("<div>").addClass("server-enter").html(L['serverEnter']))
                 );
                 if (status != "x") $e.on('click', function (e) {
-                    location.href = "/?server=" + i;
+                    joinServer(i);
                 }); else $e.children(".server-enter").html("-");
             });
             $stage.total.html("&nbsp;" + L['TOTAL'] + " " + sum + L['MN']);
             $stage.refi.removeClass("fa-spin");
             $stage.start.prop('disabled', false);
         });
+    }
+
+    function joinServer(id) {
+        location.href = "/?server=" + id;
     }
 })();
