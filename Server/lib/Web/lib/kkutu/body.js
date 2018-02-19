@@ -131,6 +131,7 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
 
                 lastChatMap.lastKey = keyCode;
                 lastChatMap.keyTime = currentTime;
+                lastChatMap.lastAction = 'keydown';
                 break;
             case 'chat':
                 var chatText = msg.value;
@@ -151,9 +152,17 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
                     if(lastChar.toKorChars()[0] === lastChatMap.lastChat.slice(-1).toKorChars()[2]) break; // 새 글자의 초성과 전 글자의 종성이 같음
                     reportCheat('초성 입력 없이 한글을 입력하였습니다.', true)
                 }
+                if (lastChatMap.lastAction === 'chat') {
+                    reportCheat('키 입력 없이 바로 입력했습니다.', true)
+                }
                 lastChatMap.lastChat = chatText;
+                lastChatMap.lastAction = 'chat';
                 break;
             case 'keyup':
+                var keycode = msg.value;
+                if (lastChatMap.lastKey !== keycode) {
+                    reportCheat('keydown과 keyup가 같지 않습니다.', false)
+                }
                 break;
         }
     }
