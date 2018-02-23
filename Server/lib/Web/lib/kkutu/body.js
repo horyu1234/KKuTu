@@ -101,7 +101,7 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
                 hasBetweenTime: hasBetweenTime,
                 value: msg.value,
                 detectTypeText: detectTypeText
-            }, true)
+            }, true);
         }
         switch(msg.type) {
             case 'keydown':
@@ -113,7 +113,7 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
                 }
 
                 if (keyCode === KEY_CODES['F12']) {
-                    reportCheat('F12(개발자 도구)를 사용하였습니다git.', false);
+                    reportCheat('F12(개발자 도구)를 사용하였습니다.', false);
                 }
                 if (currentTime - lastChatMap.keyTime <= BETWEEN_CHAT_MINIMUM_MILLIS) {
                     if (lastChatMap.lastKey === KEY_CODES['Backspace']) {
@@ -147,13 +147,13 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
                     reportCheat('한번에 ' + MINIMUM_CHAR_COUNT_PER_CHAT + '글자 이상을 입력하였습니다.', true);
                 }
                 if (chatText.length - lastChatMap.lastChat.length === 1) {
-                    var lastChar = chatText.slice(-1)
+                    var lastChar = chatText.slice(-1);
                     if(!/^[가-힣]$/.test(lastChar)) break;
                     if(lastChar.toKorChars()[0] === lastChatMap.lastChat.slice(-1).toKorChars()[2]) break; // 새 글자의 초성과 전 글자의 종성이 같음
-                    reportCheat('초성 입력 없이 한글을 입력하였습니다.', true)
+                    reportCheat('초성 입력 없이 한글을 입력하였습니다.', true);
                 }
                 if (lastChatMap.lastAction === 'chat') {
-                    reportCheat('키 입력 없이 바로 입력했습니다.', true)
+                    reportCheat('키 입력 없이 바로 입력했습니다.', true);
                 }
                 lastChatMap.lastChat = chatText;
                 lastChatMap.lastAction = 'chat';
@@ -161,7 +161,7 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
             case 'keyup':
                 var keycode = msg.value;
                 if (lastChatMap.lastKey !== keycode) {
-                    reportCheat('keydown과 keyup가 같지 않습니다.', false)
+                    reportCheat('keydown과 keyup가 같지 않습니다.', false);
                 }
                 break;
         }
@@ -171,8 +171,8 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
         'cheatDetection': {
             value: fun
         }
-    })
-})()
+    });
+})();
 
 function loading(text) {
     if (text) {
