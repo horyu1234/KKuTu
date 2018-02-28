@@ -82,8 +82,8 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
 
     return chars; 
 }
-
-(function () {
+function invoke(e) { e(); }
+invoke(function () {
     var lastChatMap = {};
     /*
     {
@@ -172,7 +172,7 @@ String.prototype.toKorChars = function() { // 출처 https://medium.com/@laziel/
             value: fun
         }
     });
-})();
+})
 
 function loading(text) {
     if (text) {
