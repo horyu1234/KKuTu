@@ -144,7 +144,7 @@ invoke(function () {
                     reportCheat('배포되어 있는 특정 매크로 작동을 시도하였습니다. (' + chatText + ')', true);
                 }
                 if (chatText.length - lastChatMap.lastChat.length >= MINIMUM_CHAR_COUNT_PER_CHAT) {
-                    if(chatText.slice(lastChatMap.lastChat.length).split('').some((v, i, a) => a.lastIndexOf(v)!=i)) return // 같은 글자가 반복되는 경우 예외
+                    if(chatText.slice(lastChatMap.lastChat.length).split('').some(function (v, i, a) {   return a.lastIndexOf(v) != i; })) return // 같은 글자가 반복되는 경우 예외
                     reportCheat('한번에 ' + MINIMUM_CHAR_COUNT_PER_CHAT + '글자 이상을 입력하였습니다.', true);
                 }
                 if (chatText.length - lastChatMap.lastChat.length === 1) {
@@ -154,7 +154,7 @@ invoke(function () {
                     reportCheat('초성 입력 없이 한글을 입력하였습니다.', true);
                 }
                 if (lastChatMap.lastAction === 'chat') {
-                    if(chatText.slice(lastChatMap.lastChat.length).split('').some((v, i, a) => a.lastIndexOf(v)!=i)) return // 같은 글자가 반복되는 경우 예외
+                    if(chatText.slice(lastChatMap.lastChat.length).split('').some(function (v, i, a) {   return a.lastIndexOf(v) != i; })) return // 같은 글자가 반복되는 경우 예외
                     reportCheat('키 입력 없이 바로 입력했습니다.', true);
                 }
                 lastChatMap.lastChat = chatText;
