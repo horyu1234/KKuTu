@@ -781,7 +781,7 @@ iframe {
 .GameBox {
     width: calc(100% - 10px);
     height: 410px;
-    background-image: url('http://kkutu.cc/img/kkutu/gamebg.png');
+    background-image: url('https://kkutu.cc/img/kkutu/gamebg.png');
 }
 
 .GameBox .product-title {
@@ -1392,15 +1392,15 @@ iframe {
 }
 
 .result-me-before-bar {
-    background-image: url('http://kkutu.cc/img/kkutu/scorebar.png');
+    background-image: url('https://kkutu.cc/img/kkutu/scorebar.png');
 }
 
 .result-me-current-bar {
-    background-image: url('http://kkutu.cc/img/kkutu/currentbar.png');
+    background-image: url('https://kkutu.cc/img/kkutu/currentbar.png');
 }
 
 .result-me-bonus-bar {
-    background-image: url('http://kkutu.cc/img/kkutu/bonusbar.png');
+    background-image: url('https://kkutu.cc/img/kkutu/bonusbar.png');
 }
 
 .result-me-score-text {
@@ -1513,7 +1513,7 @@ iframe {
 }
 
 .my-gauge .graph-bar {
-    background-image: url('http://kkutu.cc/img/kkutu/scorebar.png');
+    background-image: url('https://kkutu.cc/img/kkutu/scorebar.png');
 }
 
 .my-gauge-text {
