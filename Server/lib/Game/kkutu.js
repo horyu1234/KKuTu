@@ -33,7 +33,7 @@ var CHAN;
 var channel = process.env['CHANNEL'] || 0;
 
 const NUM_SLAVES = 4;
-const GUEST_IMAGE = "http://cdn.kkutu.cc/assets/img/kkutu/guest.png";
+const GUEST_IMAGE = "http://kkutu.cc/img/kkutu/guest.png";
 const MAX_OKG = 18;
 const PER_OKG = 600000;
 

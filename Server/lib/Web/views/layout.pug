@@ -23,7 +23,6 @@ html
 	head
 		block Subject
 		meta(charset='utf-8')
-		link(rel='dns-prefetch', href='http://cdn.kkutu.cc')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
 		script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-75680482-5')
 		script(type='text/javascript').
@@ -71,7 +70,7 @@ html
 		div#Jungle
 			span#mobile= locals.mobile
 			span#summonerID= DATA._id
-			img#Background(src='http://cdn.kkutu.cc/assets/img/bg/' + (locals.bg || 'def.png'))
+			img#Background(src='http://kkutu.cc/img/bg/' + (locals.bg || 'def.png'))
 			block Jungle
 		div#Middle
 			block Middle

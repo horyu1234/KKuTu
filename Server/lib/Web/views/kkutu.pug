@@ -44,12 +44,12 @@ block Subject
 	title= L('title')
 
 block JS
-	script(type='text/javascript', src='http://cdn.kkutu.cc/assets/js/in_game_kkutu.min.js')
-	script(src='http://cdn.kkutu.cc/assets/js/kawaiii.min.js')
+	script(type='text/javascript', src='http://kkutu.cc/js/in_game_kkutu.min.js')
+	script(src='http://kkutu.cc/js/kawaiii.min.js')
 	script(src='https://www.google.com/recaptcha/api.js')
 
 block CSS
-	link(rel='stylesheet', href='http://cdn.kkutu.cc/assets/css/in_game_kkutu_shop.css')
+	link(rel='stylesheet', href='http://kkutu.cc/css/in_game_kkutu_shop.css')
 
 block Jungle
 	span#PUBLIC= PUBLIC ? "true" : undefined
@@ -73,8 +73,8 @@ block Middle
 	- var VERSION = L('version');
 	- var nick = SESSION.profile ? (SESSION.profile.title || SESSION.profile.name) : null;
 	div#Intro
-		img#intro(src='http://cdn.kkutu.cc/assets/img/kkutu/intro.png')
-		// img#intro-start(src='http://cdn.kkutu.cc/assets/img/kkutu/intro_start.gif')
+		img#intro(src='http://kkutu.cc/img/kkutu/intro.png')
+		// img#intro-start(src='http://kkutu.cc/img/kkutu/intro_start.gif')
 		div#version= VERSION
 		div#intro-text= L('LOADING')
 	div.kkutu-menu
@@ -426,9 +426,9 @@ block Middle
 				div.cw-q-body
 			div.b-left.bb(style='display: none;')
 			div.jjoriping
-				img.jjoObj.jjoEyeL(src='http://cdn.kkutu.cc/assets/img/jjoeyeL.png')
-				img.jjoObj.jjoNose(src='http://cdn.kkutu.cc/assets/img/jjonose.png')
-				img.jjoObj.jjoEyeR(src='http://cdn.kkutu.cc/assets/img/jjoeyeR.png')
+				img.jjoObj.jjoEyeL(src='http://kkutu.cc/img/jjoeyeL.png')
+				img.jjoObj.jjoNose(src='http://kkutu.cc/img/jjonose.png')
+				img.jjoObj.jjoEyeR(src='http://kkutu.cc/img/jjoeyeR.png')
 				div.jjoDisplayBar
 					div.jjo-display.ellipse
 					+GraphBar('jjo-turn-time')
