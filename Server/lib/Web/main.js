@@ -36,6 +36,7 @@ var passport = require('passport');
 var Const = require("../const");
 var https = require('https');
 var fs = require('fs');
+var cors = require('cors');
 
 var language = {
     'ko_KR': require("./lang/ko_KR.json"),
@@ -54,6 +55,7 @@ WebInit.MOBILE_AVAILABLE = [
 require("../sub/checkpub");
 
 JLog.info("<< KKuTu Web >>");
+Server.use(cors());
 Server.set('views', __dirname + "/views");
 Server.set('view engine', "pug");
 Server.use(Express.static(__dirname + "/public"));
