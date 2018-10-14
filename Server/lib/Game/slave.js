@@ -20,9 +20,11 @@ var WebSocket = require('ws');
 var File = require('fs');
 var Const = require("../const");
 var https = require('https');
-var secure = require('../sub/secure');
+var Secure = require('../sub/secure');
 var Server;
 var HTTPS_Server;
+
+Const.IS_SECURED = true;
 if (Const.IS_SECURED) {
     const options = Secure();
     HTTPS_Server = https.createServer(options)

@@ -36,7 +36,6 @@ var passport = require('passport');
 var Const = require("../const");
 var https = require('https');
 var fs = require('fs');
-var cors = require('cors');
 
 var language = {
     'ko_KR': require("./lang/ko_KR.json"),
@@ -55,7 +54,6 @@ WebInit.MOBILE_AVAILABLE = [
 require("../sub/checkpub");
 
 JLog.info("<< KKuTu Web >>");
-Server.use(cors());
 Server.set('views', __dirname + "/views");
 Server.set('view engine', "pug");
 Server.use(Express.static(__dirname + "/public"));
@@ -80,7 +78,7 @@ Server.use((req, res, next) => {
     next();
 });
 Server.use((req, res, next) => {
-    if (Const.IS_SECURED) {
+    if (false) {
         if (req.protocol === 'http') {
             let url = 'https://' + req.get('host') + req.path;
             res.status(302).redirect(url);
@@ -155,6 +153,8 @@ Const.MAIN_PORTS.forEach(function (v, i) {
     } else {
         protocol = 'ws';
     }
+	
+	protocol = 'wss';
     gameServers[i] = new GameClient(KEY, `${protocol}://127.0.0.2:${v}/${KEY}`);
 });
 
@@ -242,7 +242,7 @@ Server.get("/", function (req, res) {
             '_crypted': Crypto.encrypt(id, GLOBAL.CRYPTO_KEY), // 토큰 암호화
             'PORT': Const.MAIN_PORTS[server],
             'HOST': req.hostname,
-            'PROTOCOL': Const.IS_SECURED ? 'wss' : 'ws',
+            'PROTOCOL': true ? 'wss' : 'ws',
             'TEST': req.query.test,
             'MOREMI_PART': Const.MOREMI_PART,
             'AVAIL_EQUIP': Const.AVAIL_EQUIP,

@@ -294,6 +294,8 @@ exports.init = function (_SID, CHAN) {
         JLog.success("Master DB is ready.");
 
         MainDB.users.update(['server', SID]).set(['server', ""]).on();
+
+        Const.IS_SECURED = true;
         if (Const.IS_SECURED) {
             const options = Secure();
             HTTPS_Server = https.createServer(options)
