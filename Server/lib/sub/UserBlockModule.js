@@ -57,6 +57,11 @@ function checkBlockUser(id, callback) {
 }
 
 function checkBlockIp(ip, callback) {
+    if (ip.indexOf(':') > -1) {
+        let splitedIp = ip.split(':');
+        ip = splitedIp[splitedIp.length - 1];
+    }
+
     let query = "SELECT * " +
         "FROM block_ips " +
         "WHERE ip=$1;";
