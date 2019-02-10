@@ -33,7 +33,7 @@ var CHAN;
 var channel = process.env['CHANNEL'] || 0;
 
 const NUM_SLAVES = 4;
-const GUEST_IMAGE = "https://kkutu.cc/img/kkutu/guest.png";
+const GUEST_IMAGE = "/img/kkutu/guest.png";
 const MAX_OKG = 18;
 const PER_OKG = 600000;
 
@@ -1178,8 +1178,8 @@ exports.Room = function (room, channel) {
             if (!my.opts.injpick) return 400;
             if (!my.opts.injpick.length) return 413;
             if (!my.opts.injpick.every(function (item) {
-                    return !Const.IJP_EXCEPT.includes(item);
-                })) return 414;
+                return !Const.IJP_EXCEPT.includes(item);
+            })) return 414;
         }
         return false;
     };

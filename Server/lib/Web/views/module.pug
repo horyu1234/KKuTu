@@ -79,19 +79,19 @@ mixin separator(len)
 
 mixin PageHead(min)
 	if !min
-		link(rel='stylesheet', href=(locals.mobile && !locals.as_pc) ? 'https://kkutu.cc/css/m_style.css' : 'https://kkutu.cc/css/style.css')
-		link(rel='stylesheet', href='https://kkutu.cc/css/fa.css')
-		link(rel='stylesheet', href='https://kkutu.cc/css/expl.css')
-	script(type='text/javascript', src='https://kkutu.cc/js/jquery.js')
+		link(rel='stylesheet', href=(locals.mobile && !locals.as_pc) ? '/css/m_style.css' : '/css/style.css')
+		link(rel='stylesheet', href='/css/fa.css')
+		link(rel='stylesheet', href='/css/expl.css')
+	script(type='text/javascript', src='/js/jquery.js')
 	script(type='text/javascript', src='/language/' + locals.page.replace("/", "_") + '/' + locals.lang)
 
-	script(type='text/javascript', src='https://kkutu.cc/js/global.min.js')
+	script(type='text/javascript', src='/js/global.min.js')
 	if !min
-		script(type='text/javascript', src='https://kkutu.cc/js/facebook.js')
+		script(type='text/javascript', src='/js/facebook.js')
 	if block
 		block
-	link(rel='stylesheet', href='https://kkutu.cc/css/in_' + locals.page.replace("/", "_") + '.css')
-	script(type='text/javascript', src='https://kkutu.cc/js/in_' + locals.page.replace("/", "_") + '.min.js')
+	link(rel='stylesheet', href='/css/in_' + locals.page.replace("/", "_") + '.css')
+	script(type='text/javascript', src='/js/in_' + locals.page.replace("/", "_") + '.min.js')
 
 mixin SearchBox(arg1, arg2)
 	meta(name='description', content=L('meta_desc', arg1, arg2))

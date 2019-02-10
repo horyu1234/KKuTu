@@ -213,9 +213,9 @@ function checkAge() {
         }
         if (lv == 4) {
             if (confirm(L['checkAgeSure'] + "\n"
-                    + input[0] + L['YEAR'] + " "
-                    + input[1] + L['MONTH'] + " "
-                    + input[2] + L['DATE'])) return send('caj', {
+                + input[0] + L['YEAR'] + " "
+                + input[1] + L['MONTH'] + " "
+                + input[2] + L['DATE'])) return send('caj', {
                 answer: "yes",
                 input: [input[1], input[2], input[0]]
             }, true);
@@ -976,7 +976,7 @@ function userListBar(o, forInvite) {
         $R = $("<div>").attr('id', "invite-item-" + o.id).addClass("invite-item users-item")
             .append($("<div>").addClass("jt-image users-image").css('background-image', "url('" + o.profile.image + "')"))
             .append(getLevelImage(o.data.score).addClass("users-level"))
-            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('https://kkutu.cc/img/kkutu/"+o.profile.type+".png')"))
+            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name").html(o.profile.title || o.profile.name))
             .on('click', function (e) {
                 requestInvite($(e.currentTarget).attr('id').slice(12));
@@ -985,7 +985,7 @@ function userListBar(o, forInvite) {
         $R = $("<div>").attr('id', "users-item-" + o.id).addClass("users-item")
             .append($("<div>").addClass("jt-image users-image").css('background-image', "url('" + o.profile.image + "')"))
             .append(getLevelImage(o.data.score).addClass("users-level"))
-            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('https://kkutu.cc/img/kkutu/"+o.profile.type+".png')"))
+            // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name ellipse").html(o.profile.title || o.profile.name))
             .on('click', function (e) {
                 requestProfile($(e.currentTarget).attr('id').slice(11));
@@ -1092,7 +1092,7 @@ function miniGameUserBar(o) {
 function getAIProfile(level) {
     return {
         title: L['aiLevel' + level] + ' ' + L['robot'],
-        image: "https://kkutu.cc/img/kkutu/robot.png"
+        image: "/img/kkutu/robot.png"
     };
 }
 
@@ -2625,10 +2625,10 @@ function getLevelImage(score) {
     var lX = (lv % 25) * -100;
     var lY = Math.floor(lv * 0.04) * -100;
 
-    // return getImage("https://kkutu.cc/img/kkutu/lv/lv" + zeroPadding(lv+1, 4) + ".png");
+    // return getImage("/img/kkutu/lv/lv" + zeroPadding(lv+1, 4) + ".png");
     return $("<div>").css({
         'float': "left",
-        'background-image': "url('https://kkutu.cc/img/kkutu/lv/newlv.png')",
+        'background-image': "url('/img/kkutu/lv/newlv.png')",
         'background-position': lX + "% " + lY + "%",
         'background-size': "2560%"
     });
@@ -2683,7 +2683,7 @@ function loadSounds(list, callback) {
 function getAudio(k, url, cb) {
     var req = new XMLHttpRequest();
 
-    req.open("GET", 'https://kkutu.cc' + url);
+    req.open("GET", url);
     req.responseType = "arraybuffer";
     req.onload = function (e) {
         if (audioContext) audioContext.decodeAudioData(e.target.response, function (buf) {
@@ -2747,7 +2747,7 @@ function playSound(key, loop) {
             src.buffer = audioContext.createBuffer(2, sound.length, audioContext.sampleRate);
         } else {
             src.buffer = sound;
-            var gainNode = typeof(audioContext.createGain) == "function" ? audioContext.createGain() : null;
+            var gainNode = typeof (audioContext.createGain) == "function" ? audioContext.createGain() : null;
             if (gainNode) {
                 gainNode.gain.value = Number(volume) - 1;
                 gainNode.connect(audioContext.destination);
@@ -2944,10 +2944,10 @@ function iImage(key, sObj) {
     } else if (typeof sObj == "string") sObj = {_id: "def", group: sObj, options: {}};
     obj = $data.shop[key] || sObj;
     gif = obj.options.hasOwnProperty('gif') ? ".gif" : ".png";
-    if (obj.group.slice(0, 3) == "BDG") return "https://kkutu.cc/img/kkutu/moremi/badge/" + obj._id + gif;
+    if (obj.group.slice(0, 3) == "BDG") return "/img/kkutu/moremi/badge/" + obj._id + gif;
     return (obj.group.charAt(0) == 'M')
-        ? "https://kkutu.cc/img/kkutu/moremi/" + obj.group.slice(1) + "/" + obj._id + gif
-        : "https://kkutu.cc/img/kkutu/shop/" + obj._id + ".png";
+        ? "/img/kkutu/moremi/" + obj.group.slice(1) + "/" + obj._id + gif
+        : "/img/kkutu/shop/" + obj._id + ".png";
 }
 
 function iDynImage(group, data) {
@@ -3014,7 +3014,7 @@ function renderMoremi(target, equip) {
         );
     }
     $obj.children(".moremi-back").after($("<img>").addClass("moremies moremi-body")
-        .attr('src', equip.robot ? "https://kkutu.cc/img/kkutu/moremi/robot.png" : "https://kkutu.cc/img/kkutu/moremi/body.png")
+        .attr('src', equip.robot ? "/img/kkutu/moremi/robot.png" : "/img/kkutu/moremi/body.png")
         .css({'width': "100%", 'height': "100%"})
     );
     $obj.children(".moremi-rhand").css('transform', "scaleX(-1)");

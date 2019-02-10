@@ -31,7 +31,7 @@
         };
 
         $("#Background").attr('src', "").addClass("jt-image").css({
-            'background-image': "url('https://kkutu.cc/img/kkutu/gamebg.png')",
+            'background-image': "url('/img/kkutu/gamebg.png')",
             'background-size': "200px 200px"
         });
         $stage.start.prop('disabled', true).on('click', function (e) {
