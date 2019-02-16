@@ -49,7 +49,7 @@ $(document).ready(function () {
         },
         chat: $("#Chat"),
         chatLog: $("#chat-log-board"),
-        talk: $("#Talk"),
+        talk: $("#MessageInput"),
         chatBtn: $("#ChatBtn"),
         menu: {
             help: $("#HelpBtn"),
@@ -243,6 +243,17 @@ $(document).ready(function () {
             }
         }
     };
+
+    $stage.talk.css({
+        "float": "left",
+        "border-right": "none",
+        "border-top-right-radius": "0",
+        "border-bottom-right-radius": "0",
+        "margin-top": "5px",
+        "width": "calc(100% - 82px)",
+        "height": "20px"
+    });
+    $stage.talk.removeAttr('id');
 
 // 객체 설정
     /*addTimeout(function(){

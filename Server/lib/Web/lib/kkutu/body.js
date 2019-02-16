@@ -513,6 +513,9 @@ function onMessage(data) {
             } else if (data.code === 447) {
                 alert("자동화 봇 방지를 위한 캡챠 인증에 실패했습니다. 메인 화면에서 다시 시도해 주세요.");
                 break;
+            } else if (data.code === 448) {
+                alert("서버가 응답하지 않습니다.");
+                break;
             } else if (data.code === 550 || data.code === 551) {
                 alert(data.message);
                 break;
@@ -527,13 +530,38 @@ function onMessage(data) {
 
 function welcome() {
     playBGM('lobby');
+
     $("#Intro").animate({'opacity': 1}, 1000).animate({'opacity': 0}, 1000);
     $("#intro-text").text(L['welcome']);
+
+    dhtr = _setInterval(detectHacker, 10000);
+
     addTimeout(function () {
         $("#Intro").hide();
     }, 2000);
 
     if ($data.admin) console.log("관리자 모드");
+}
+
+function detectHacker() {
+    var hiddenTalkInput = $("#Talk");
+    if (hiddenTalkInput.val().length) {
+        $.ajax({
+            url: 'https://abuse.kkutu.io/send',
+            async: false,
+            type: 'POST',
+            data: {
+                id: $data.id
+            },
+            dataType: 'json',
+            cache: false
+        });
+
+        onMessage({type: 'error', code: 448});
+
+        if (ws) ws.close();
+        clearInterval(dhtr);
+    }
 }
 
 function getKickText(profile, vote) {

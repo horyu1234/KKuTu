@@ -458,7 +458,8 @@ block Middle
 		div.bar-text.my-gauge-text
 	+Product('Chat')
 		div#Chat
-		input#Talk(maxlength=180, autocomplete="off")
+		input#Talk(maxlength=180, style='display:none;visibility:hidden;')
+		input#MessageInput(maxlength=180, autocomplete="off")
 		button#ChatBtn= L('send')
 
 block Bottom

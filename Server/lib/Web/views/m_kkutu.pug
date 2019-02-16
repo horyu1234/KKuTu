@@ -385,7 +385,8 @@ block Middle
 			input#game-input(placeholder=L('yourTurn') + ' ' + L('inputHere'))
 	+Product('Chat')
 		div#Chat
-		input#Talk(maxlength=180, autocomplete="off")
+		input#Talk(maxlength=180, style='display:none;visibility:hidden;')
+		input#MessageInput(maxlength=180, autocomplete="off")
 		button#ChatBtn= L('send')
 
 block Bottom
