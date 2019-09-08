@@ -108,24 +108,6 @@ var L;
             });
         }).trigger('resize');
 
-        $("#menu-kkutuio-migration-btn").on('click', function (e) {
-            importKKuTuio();
-        });
-
-        $("#kkutuio-migration-btn").on('click', function (e) {
-            importKKuTuio();
-        });
-
-        function importKKuTuio() {
-            if ($("#account-info").html() === L['LOGIN']) {
-                alert('끄투리오로 부터 데이터를 이전하기 위해서는\n데이터를 받아올 계정으로 끄투한국에서 먼저 로그인을 하셔야 합니다.\n\n로그인 페이지로 이동합니다.');
-                location.href = "/login";
-                return;
-            }
-
-            location.href = "/kkutuioMigration";
-        }
-
         // 계정
         if ($.cookie('lc') == "") $.cookie('lc', "ko_KR");
 

@@ -55,16 +55,12 @@ mixin Menu()
 		div#account
 			span#profile= SESSION.profile ? JSON.stringify(SESSION.profile) : '{}'
 			div#account-info
-		div#menu-kkutuio-migration
-			div#menu-kkutuio-migration-btn 끄투리오로 부터 데이터 이전하기
 
 mixin MMenu()
 	div.Menu
 		div#account
 			span#profile= SESSION.profile ? JSON.stringify(SESSION.profile) : '{}'
 			div#account-info
-		div#menu-kkutuio-migration
-			div#menu-kkutuio-migration-btn 끄투리오로 부터 데이터 이전하기
 
 mixin Image(c, url)
 	div(class="jt-image " + c, style="background-image: url(" + url + ");")

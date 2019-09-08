@@ -27,7 +27,6 @@ var Lizard = require("../sub/lizard");
 const ConnectionLog = require("../sub/ConnectionLog");
 const UserBlockModule = require("../sub/UserBlockModule");
 const VendorDBMigration = require("../sub/VendorDBMigration");
-const ServerMigrationProcess = require("../sub/ServerMigrationProcess");
 
 const FAKE_REDIS_FUNC = () => {
     var R = new Lizard.Tail();
@@ -92,12 +91,10 @@ Pub.ready = function (isPub) {
             ConnectionLog.initDatabase(pgMain);
             UserBlockModule.initDatabase(pgMain);
             VendorDBMigration.initDatabase(pgMain);
-            ServerMigrationProcess.initDatabase(pgMain);
 
             exports.ConnectionLog = ConnectionLog;
             exports.UserBlockModule = UserBlockModule;
             exports.VendorDBMigration = VendorDBMigration;
-            exports.ServerMigrationProcess = ServerMigrationProcess;
 
             if (exports.ready) exports.ready(Redis, Pg);
             else JLog.warn("DB.onReady was not defined yet.");

@@ -42,7 +42,7 @@ var language = {
     'en_US': require("./lang/en_US.json")
 };
 var ROUTES = [
-    "major", "consume", "admin", "ServerMigration", "login"
+    "major", "consume", "admin", "login"
 ];
 var page = WebInit.page;
 var gameServers = [];
