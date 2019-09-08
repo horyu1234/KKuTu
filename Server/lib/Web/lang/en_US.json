@@ -2,7 +2,7 @@
   "GLOBAL": {
     "License": "<br><label style='color: #666;'>글자로 놀자! 끄투 온라인. 끄투는 JJoriping의 오픈소스 KKuTu를 기반으로 제작되었습니다.<br>본 소프트웨어는 어떠한 형태의 보증도 제공되지 않는 자유 소프트웨어이며 배포 규정을 만족시키는 조건 하에 자유롭게 재배포할 수 있습니다.<br>이에 대한 자세한 사항은 본 소프트웨어의 구현을 담은 다음 레포지토리에서 확인하십시오: <a target='_blank' href='https://github.com/horyu1234/KKuTu/tree/production'>https://github.com/horyu1234/KKuTu/tree/production</a></label>",
     "Dictionary": "<label style='color: #666;'><a href='http://wordnet.princeton.edu' target='_blank'>WordNet</a> 3.0 Copyright 2006 by Princeton University. All rights reserved.<br/>한국어 단어에 대한 모든 저작권은 <a href='https://www.korean.go.kr/' target='_blank'>국립국어원</a>에 있습니다.</label>",
-    "Copyright": "<div style='color: #666;'> Copyright 2017-2018. horyu1234 All rights reserved<br><a target='_blank' href='https://legal.kkutu.io/terms.html'>이용약관</a> · <a target='_blank' href='https://legal.kkutu.io/privacy.html'>개인정보처리방침</a></div>",
+    "Copyright": "<div style='color: #666;'> Copyright 2017-2018. horyu1234 All rights reserved<br><a target='_blank' href='https://legal.kkutu.io/legal/terms.html'>이용약관</a> · <a target='_blank' href='https://legal.kkutu.io/legal/privacy.html'>개인정보처리방침</a></div>",
     "CREATOR": "개발자 블로그",
     "HOME": "FA{home}",
     "FORUM": "포럼",
@@ -116,7 +116,7 @@
     "withGoogle": "Google 로그인",
     "withKakao": "카카오 로그인",
     "login_kkutu": "끄투의 기능을 온전히 사용하시려면 로그인하세요.",
-    "loginLegal": "회원가입 또는 로그인을 하면 <a href='https://legal.kkutu.io/terms.html' target='_blank'>이용약관</a>과 <a href='https://legal.kkutu.io/privacy.html' target='_blank'>개인정보처리방침</a>에 동의하는 것으로 봅니다."
+    "loginLegal": "회원가입 또는 로그인을 하면 <a href='https://legal.kkutu.io/legal/terms.html' target='_blank'>이용약관</a>과 <a href='https://legal.kkutu.io/legal/privacy.html' target='_blank'>개인정보처리방침</a>에 동의하는 것으로 봅니다."
   },
   "loginfail": {
     "title": "로그인 실패",
