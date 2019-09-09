@@ -1958,20 +1958,17 @@ iframe {
     min-height: 14px;
 }
 
-.ADBox {
+.TLXFQZBox {
+    margin-top: 10px;
     width: 1000px;
-    box-shadow: 0px 1px 1px #141414;
+    box-shadow: 0 1px 1px #141414;
     background-color: #232323;
 }
 
-.ADBox .product-title {
+.TLXFQZBox .product-title {
     border-bottom-color: #333333;
     color: #CCCCCC;
     background-color: inherit;
-}
-
-.ADBox .product-body {
-    padding-left: 131px;
 }
 
 @keyframes RoundEffect {
