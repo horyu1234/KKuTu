@@ -301,7 +301,7 @@ exports.Client = function (socket, profile, sid) {
             data = {error: 400};
         }
 
-        JLog.log(`[` + socket.upgradeReq.connection.remoteAddress + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
+        JLog.log(`[` + socket.upgradeReq.connection.remoteAddress.slice(7) + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
 
         if (Cluster.isWorker) process.send({
             type: "tail-report",
