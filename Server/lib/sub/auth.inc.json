@@ -13,5 +13,19 @@
     "clientID": "",
     "clientSecret": "",
     "callbackURL": "{URI}/login/google/callback"
+  },
+  "kakao": {
+    "clientID": "",
+    "callbackURL": "{URL}/login/kakao/callback"
+  },
+  "discord": {
+    "clientID": "",
+    "clientSecret": "",
+    "callbackURL": "{URL}/login/discord/callback"
+  },
+  "github": {
+    "clientID": "",
+    "clientSecret": "",
+    "callbackURL": "{URL}/login/github/callback"
   }
 }
