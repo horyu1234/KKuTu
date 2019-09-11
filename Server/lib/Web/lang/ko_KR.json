@@ -114,7 +114,9 @@
     "withTwitter": "Twitter 로그인",
     "withFacebook": "Facebook 로그인",
     "withGoogle": "Google 로그인",
-    "withKakao": "카카오 로그인",
+    "withKakao": "Kakao 로그인",
+    "withGithub": "Github 로그인",
+    "withDiscord": "Discord 로그인",
     "login_kkutu": "끄투의 기능을 온전히 사용하시려면 로그인하세요.",
     "loginLegal": "회원가입 또는 로그인을 하면 <a href='https://legal.kkutu.io/legal/terms.html' target='_blank'>이용약관</a>과 <a href='https://legal.kkutu.io/legal/privacy.html' target='_blank'>개인정보처리방침</a>에 동의하는 것으로 봅니다."
   },
