@@ -6,13 +6,13 @@ module.exports.config = {
     fontColor: '#3C1E1E',
     vendor: 'kakao',
     displayName: 'withKakao'
-}
+};
 
 module.exports.strategyConfig = {
     clientID: config.kakao.clientID, // 보안을 위해서입니다.
     callbackURL: config.kakao.callbackURL,  // 이 방법을 사용하는 것을
     passReqToCallback: true  // 적극 권장합니다.
-}
+};
 
 module.exports.strategy = (process, MainDB, Ajae) => {
     return (req, accessToken, refreshToken, profile, done) => {
@@ -26,4 +26,4 @@ module.exports.strategy = (process, MainDB, Ajae) => {
 
         process(req, accessToken, MainDB, $p, done);
     }
-}
+};

@@ -6,7 +6,7 @@ module.exports.config = {
     fontColor: '#FFFFFF',
     vendor: 'discord',
     displayName: 'withDiscord'
-}
+};
 
 module.exports.strategyConfig = {
     clientID: config.discord.clientID,
@@ -14,7 +14,7 @@ module.exports.strategyConfig = {
     callbackURL: config.discord.callbackURL,
     passReqToCallback: true,
     scope: "identify"
-}
+};
 
 module.exports.strategy = (process, MainDB, Ajae) => {
     return (req, accessToken, refreshToken, profile, done) => {
@@ -30,4 +30,4 @@ module.exports.strategy = (process, MainDB, Ajae) => {
 
         process(req, accessToken, MainDB, $p, done);
     }
-}
+};

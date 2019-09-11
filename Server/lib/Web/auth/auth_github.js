@@ -6,14 +6,14 @@ module.exports.config = {
     fontColor: '#000000',
     vendor: 'github',
     displayName: 'withGithub'
-}
+};
 
 module.exports.strategyConfig = {
     clientID: config.github.clientID, // 보안을 위해서입니다.
     clientSecret: config.github.clientSecret, // 이 방법을 사용하는 것을
     callbackURL: config.github.callbackURL, // 적극 권장합니다.
     passReqToCallback: true,
-}
+};
 
 module.exports.strategy = (process, MainDB, Ajae) => {
     return (req, accessToken, refreshToken, profile, done) => {
@@ -29,4 +29,4 @@ module.exports.strategy = (process, MainDB, Ajae) => {
 
         process(req, accessToken, MainDB, $p, done);
     }
-}
+};
