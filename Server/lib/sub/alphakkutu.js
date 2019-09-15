@@ -26,8 +26,8 @@ function alphakkutuscore(lv){
 EXP.push(alphakkutuscore(1));
 for(let i=2; i<MAX_LEVEL; i++)
 	EXP.push(EXP[i-2] + alphakkutuscore(i));
-EXP[MAX_LEVEL - 1] = IL;
-EXP.push(IL);
+EXP[MAX_LEVEL - 1] = Infinity;
+EXP.push(Infinity);
 
 exports.getLevel = _score => {
 	let score = typeof _score == 'object' ? _score.data.score : _score;
