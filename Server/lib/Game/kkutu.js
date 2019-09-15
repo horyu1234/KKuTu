@@ -642,13 +642,20 @@ exports.Client = function (socket, profile, sid) {
                 }
                 return my.sendError(430, room.id);
             }
-            if (!spec) {
-                if ($room.gaming) {
-                    return my.send('error', {code: 416, target: $room.id});
-                } else if (my.guest) if (!GUEST_PERMISSION.enter) {
-                    return my.sendError(401);
-                }
-            }
+			if (!spec) {
+				if ($room.gaming) {
+					return my.send('error', { code: 416, target: $room.id });
+				} else if (my.guest) {
+                    if (!GUEST_PERMISSION.enter) return my.sendError(401);
+                } else if ($room.opts.onlybeginner && my.getLevel() > 50) {
+					if (my.guest == true) {
+						return my.sendError(2000)
+					} else {
+						return my.sendError(2010);
+					}
+				}
+			}
+			if ($room.opts.noguest && my.guest == true) return my.sendError(2001);
             if ($room.players.length >= $room.limit + (spec && $room.gaming ? Const.MAX_OBSERVER : 0)) {
                 return my.sendError(429);
             }
@@ -702,7 +709,16 @@ exports.Client = function (socket, profile, sid) {
                     my.sendError(409);
                 }
                 $room = new exports.Room(room, getFreeChannel());
-
+                
+				if ($room.opts.onlybeginner && my.getLevel() > 50) {
+					if (my.guest == true) {
+						return my.sendError(2000);
+					} else {
+						return my.sendError(2010);
+					}
+				}
+				if ($room.opts.noguest && my.guest == true) return my.sendError(2001);
+                
                 process.send({type: "room-new", target: my.id, room: $room.getData()});
                 ROOM[$room.id] = $room;
                 spec = false;
