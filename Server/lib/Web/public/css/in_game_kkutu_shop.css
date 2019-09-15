@@ -68,20 +68,20 @@
 
 /* NIK */
 .x-gm .users-name::before {
-    content: "[GM]";
-    color: #2F77D9;
+    content: "[운영자]";
+    color: #008AED;
     text-shadow: 0px 0px 2px #2AF;
 }
 
 .chat-item > .x-gm::before {
-    content: "[GM]";
-    color: #2F77D9;
+    content: "[운영자]";
+    color: #008AED;
     text-shadow: 0px 0px 2px #2AF;
 }
 
 .room-user-title > .x-gm::before {
-    content: "[GM]";
-    color: #2F77D9;
+    content: "[운영자]";
+    color: #008AED;
     text-shadow: 0px 0px 2px #2AF;
 }
 
