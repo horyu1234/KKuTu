@@ -719,7 +719,7 @@ exports.Client = function (socket, profile, sid) {
                         return my.sendError(2010);
                     }
                 }
-                console.log(my);
+
                 if ($room.opts.noguest && my.guest) return my.sendError(2001);
                 
                 process.send({type: "room-new", target: my.id, room: $room.getData()});
