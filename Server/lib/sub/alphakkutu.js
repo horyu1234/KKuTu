@@ -28,3 +28,10 @@ for(let i=2; i<MAX_LEVEL; i++)
 	EXP.push(EXP[i-2] + alphakkutuscore(i));
 EXP[MAX_LEVEL - 1] = IL;
 EXP.push(IL);
+
+exports.getLevel = _score => {
+	let score = typeof _score == 'object' ? _score.data.score : _score;
+	let l = EXP.length, level = 1;
+	for ( ; level<=l ; level++) if (score < EXP[level-1]) break;
+	return level;
+};
