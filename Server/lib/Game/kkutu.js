@@ -31,7 +31,7 @@ var Rule;
 var guestProfiles = [];
 var CHAN;
 var channel = process.env['CHANNEL'] || 0;
-var alphakkutu = require("../sub/alphakkutu");
+var kkutuLevel = require("../sub/KKuTuLevel");
 
 const NUM_SLAVES = 4;
 const GUEST_IMAGE = "/img/kkutu/guest.png";
@@ -482,7 +482,7 @@ exports.Client = function (socket, profile, sid) {
             my.flush(my.box, my.equip);
         }
     };
-    my.getLevel = () => { return alphakkutu.getLevel(my) };
+    my.getLevel = () => { return kkutuLevel.getLevel(my) };
     my.refresh = function () {
         let R = new Lizard.Tail();
 
