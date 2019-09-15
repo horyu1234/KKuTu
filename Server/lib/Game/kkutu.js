@@ -446,7 +446,7 @@ exports.Client = function (socket, profile, sid) {
             message += '사유: ' + block.reason + '<br/>' +
                 '처리자: ' + block.punisher + '<br/>' +
                 '<br/>' +
-                '본 처리에 이의가 있으신 분은 https://discord.gg/eQ3R8J8 로 문의해주시기 바랍니다.';
+                '본 처리에 이의가 있으신 분은 all@kkutu.io 이메일로 문의해주시기 바랍니다.';
 
             return message;
         }
