@@ -46,7 +46,9 @@ exports.OPTIONS = {
     'prv': {name: "Proverb"},
     'str': {name: "Strict"},
     'k32': {name: "Sami"},
-    'no2': {name: "No2"}
+    'no2': {name: "No2"},
+    'beg': { name: "OnlyBeginner" },
+    'nog': { name: "NoGuest" }
 };
 exports.MOREMI_PART = ['back', 'eye', 'mouth', 'shoes', 'clothes', 'head', 'lhand', 'rhand', 'front'];
 exports.CATEGORIES = ["all", "spec", "skin", "badge", "head", "eye", "mouth", "clothes", "hs", "back"];
@@ -79,7 +81,7 @@ exports.RULE = {
     'EKT': {// 영어 끄투
         lang: "en",
         rule: "Classic",
-        opts: ["man", "saf", "ext", "mis"],
+        opts: ["man", "saf", "ext", "mis", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -88,7 +90,7 @@ exports.RULE = {
     'ESH': {// 영어 끝말잇기
         lang: "en",
         rule: "Classic",
-        opts: ["ext", "mis"],
+        opts: ["ext", "mis", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -97,7 +99,7 @@ exports.RULE = {
     'KKT': {// 한국어 쿵쿵따
         lang: "ko",
         rule: "Classic",
-        opts: ["man", "saf", "ext", "mis", "loa", "str", "k32"],
+        opts: ["man", "saf", "ext", "mis", "loa", "str", "k32", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -106,7 +108,7 @@ exports.RULE = {
     'KSH': {// 한국어 끝말잇기
         lang: "ko",
         rule: "Classic",
-        opts: ["man", "saf", "ext", "mis", "loa", "str"],
+        opts: ["man", "saf", "ext", "mis", "loa", "str", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -115,7 +117,7 @@ exports.RULE = {
     'CSQ': {// 자음 퀴즈
         lang: "ko",
         rule: "Jaqwi",
-        opts: ["ijp"],
+        opts: ["ijp", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -124,7 +126,7 @@ exports.RULE = {
     'KCW': {// 한국어 십자말풀이
         lang: "ko",
         rule: "Crossword",
-        opts: [],
+        opts: ["beg", "nog"],
         time: 2,
         ai: false,
         big: true,
@@ -133,7 +135,7 @@ exports.RULE = {
     'KTY': {// 한국어 타자 대결
         lang: "ko",
         rule: "Typing",
-        opts: ["prv"],
+        opts: ["prv", "beg", "nog"],
         time: 1,
         ai: false,
         big: false,
@@ -142,7 +144,7 @@ exports.RULE = {
     'ETY': {// 영어 타자 대결
         lang: "en",
         rule: "Typing",
-        opts: ["prv"],
+        opts: ["prv", "beg", "nog"],
         time: 1,
         ai: false,
         big: false,
@@ -151,7 +153,7 @@ exports.RULE = {
     'KAP': {// 한국어 앞말잇기
         lang: "ko",
         rule: "Classic",
-        opts: ["man", "saf", "ext", "mis", "loa", "str"],
+        opts: ["man", "saf", "ext", "mis", "loa", "str", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -161,7 +163,7 @@ exports.RULE = {
     'HUN': {// 훈민정음
         lang: "ko",
         rule: "Hunmin",
-        opts: ["ext", "mis", "loa", "str"],
+        opts: ["ext", "mis", "loa", "str", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -170,7 +172,7 @@ exports.RULE = {
     'KDA': {// 한국어 단어 대결
         lang: "ko",
         rule: "Daneo",
-        opts: ["ijp", "mis"],
+        opts: ["ijp", "mis", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -179,7 +181,7 @@ exports.RULE = {
     'EDA': {// 영어 단어 대결
         lang: "en",
         rule: "Daneo",
-        opts: ["ijp", "mis"],
+        opts: ["ijp", "mis", "beg", "nog"],
         time: 1,
         ai: true,
         big: false,
@@ -188,7 +190,7 @@ exports.RULE = {
     'KSS': {// 한국어 솎솎
         lang: "ko",
         rule: "Sock",
-        opts: ["no2"],
+        opts: ["no2", "beg", "nog"],
         time: 1,
         ai: false,
         big: true,
@@ -197,7 +199,7 @@ exports.RULE = {
     'ESS': {// 영어 솎솎
         lang: "en",
         rule: "Sock",
-        opts: ["no2"],
+        opts: ["no2", "beg", "nog"],
         time: 1,
         ai: false,
         big: true,
