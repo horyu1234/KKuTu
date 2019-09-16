@@ -1032,8 +1032,6 @@ $(document).ready(function () {
 
         function recaptchaCallback(response) {
             ws.send(JSON.stringify({type: 'recaptcha', token: response}));
-
-            delete window.setTimeout;
         }
     }
 });
