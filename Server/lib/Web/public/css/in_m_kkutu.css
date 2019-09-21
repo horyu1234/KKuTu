@@ -1714,6 +1714,10 @@ iframe {
     background-color: inherit;
 }
 
+.TLXFQZBox .product-body {
+    text-align: center;
+}
+
 @keyframes ReadyBlink {
     0% {
         margin-top: 0px;

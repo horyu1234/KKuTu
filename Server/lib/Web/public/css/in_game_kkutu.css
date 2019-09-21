@@ -1921,6 +1921,10 @@ iframe {
     background-color: inherit;
 }
 
+.TLXFQZBox .product-body {
+    text-align: center;
+}
+
 @keyframes RoundEffect {
     0% {
         font-size: 16px;
