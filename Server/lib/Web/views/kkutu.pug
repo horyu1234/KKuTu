@@ -365,7 +365,7 @@ block Middle
 		div.dialog-bar.tail-button
 			button#dress-ok= L('OK')
 			button#dress-cf= L('charFactory')
-			button(onclick=`alert("${L("paybackHelp")}");`)= L('payback')
+			button(onclick=`kkutuioAlert("${L("paybackHelp")}");`)= L('payback')
 	+Dialog('CharFactoryDiag', 500, 410, L('charFactory'))
 		div.dialog-bar(style='width: 300px;')
 			div#cf-tray
@@ -390,6 +390,11 @@ block Middle
 			button#obtain-ok= L('OK')
 	+Dialog('HelpDiag', 550, 400, L('helpText'))
 		iframe#help-board(width=550, height=375)
+	+Dialog('MsgDiag', 300, 150, "끄투리오 메세지")
+		div#msg-content(style='height:80px;text-align:center;padding:0px 12px 0px 12px;word-break:keep-all;vertical-align:middle;display:table-cell;')
+		div.dialog-bar.tail-button
+			button#msg-no= L('NO')
+			button#msg-ok= L('OK')
 	+Product('UserList')
 		div 불러오는 중
 	+Product('RoomList')
