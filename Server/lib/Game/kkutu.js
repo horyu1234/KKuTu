@@ -562,12 +562,12 @@ exports.Client = function (socket, profile, sid) {
                                             result: 550,
                                             black: result
                                         });
-                                    } else if (Cluster.isMaster && $user.server) {
+                                    }/* else if (Cluster.isMaster && $user.server) {
                                         R.go({
                                             result: 409,
                                             black: $user.server
                                         });
-                                    } else if (exports.NIGHT && my.isAjae === false) {
+                                    }*/ else if (exports.NIGHT && my.isAjae === false) {
                                         R.go({
                                             result: 440
                                         });
