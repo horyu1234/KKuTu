@@ -182,15 +182,15 @@ function checkAge(){
 				if(--lv < 1) break; else continue;
 			}
 			if(lv == 1 && (str < 1000 || str > 2999)){
-				kkutuioAlert(str + "\n" + L['checkAgeNo']);
+				alert(str + "\n" + L['checkAgeNo']);
 				continue;
 			}
 			if(lv == 2 && (str < 1 || str > 12)){
-				kkutuioAlert(str + "\n" + L['checkAgeNo']);
+				alert(str + "\n" + L['checkAgeNo']);
 				continue;
 			}
 			if(lv == 3 && (str < 1 || str > 31)){
-				kkutuioAlert(str + "\n" + L['checkAgeNo']);
+				alert(str + "\n" + L['checkAgeNo']);
 				continue;
 			}
 			input[lv++ - 1] = str;
@@ -237,7 +237,7 @@ function onMessage(data){
 			$data._okg = data.okg;
 			$data._gaming = false;
 			$data.box = data.box;
-			if(data.test) kkutuioAlert(L['welcomeTestServer']);
+			if(data.test) alert(L['welcomeTestServer']);
 			if(location.hash[1]) tryJoin(location.hash.slice(1));
 			updateUI(undefined, true);
 			welcome();
@@ -334,16 +334,10 @@ function onMessage(data){
 		case 'friendAdd':
 			$target = $data.users[data.from].profile;
 			i = ($target.title || $target.name) + "(#" + data.from.substr(0, 5) + ")";
-			if ($data.opts.df) send('friendAddRes', {
-					from: data.from,
-					res: false
-				}, true);
-			else kkutuioConfirm(i + L['attemptFriendAdd'], function(resp) {
-				send('friendAddRes', {
-					from: data.from,
-					res: resp
-				}, true);
-			});
+			send('friendAddRes', {
+				from: data.from,
+				res: $data.opts.df ? false : confirm(i + L['attemptFriendAdd'])
+			}, true);
 			break;
 		case 'friendAddRes':
 			$target = $data.users[data.target].profile;
@@ -394,7 +388,7 @@ function onMessage(data){
 			}
 			/*if($data.guest){
 				$stage.menu.exit.trigger('click');
-				kkutuioAlert(L['guestExit']);
+				alert(L['guestExit']);
 			}*/
 			$data._resultRank = data.ranks;
 			roundEnd(data.result, data.data);
@@ -410,15 +404,9 @@ function onMessage(data){
 			notice(getKickText($data._kickTarget.profile, data));
 			break;
 		case 'invited':
-			if ($data.opts.di) send('inviteRes', {
-					from: data.from,
-					res: false
-				});
-			else kkutuioConfirm(data.from + L['invited'], function(resp) {
-				send('inviteRes', {
-					from: data.from,
-					res: resp
-				});
+			send('inviteRes', {
+				from: data.from,
+				res: $data.opts.di ? false : confirm(data.from + L['invited'])
 			});
 			break;
 		case 'inviteNo':
@@ -481,13 +469,12 @@ function onMessage(data){
 				i = L['server_' + i];
 			}else if(data.code == 416){
 				// 게임 중
-				kkutuioConfirm(L['error_'+data.code], function(resp) {
-					if (!resp) return;
+				if(confirm(L['error_'+data.code])){
 					stopBGM();
 					$data._spectate = true;
 					$data._gaming = true;
 					send('enter', { id: data.target, password: $data._pw, spectate: true }, true);
-				});
+				}
 				return;
 			}else if(data.code == 413){
 				$stage.dialog.room.hide();
@@ -505,14 +492,14 @@ function onMessage(data){
 			}else if(data.code == 444){
 				i = data.message;
 				if(i.indexOf("생년월일") != -1){
-					kkutuioAlert("생년월일이 올바르게 입력되지 않아 게임 이용이 제한되었습니다. 잠시 후 다시 시도해 주세요.");
+					alert("생년월일이 올바르게 입력되지 않아 게임 이용이 제한되었습니다. 잠시 후 다시 시도해 주세요.");
 					break;
 				}
 			} else if (data.code === 447) {
-				kkutuioAlert("자동화 봇 방지를 위한 캡챠 인증에 실패했습니다. 메인 화면에서 다시 시도해 주세요.");
+				alert("자동화 봇 방지를 위한 캡챠 인증에 실패했습니다. 메인 화면에서 다시 시도해 주세요.");
 				break;
 			}
-			kkutuioAlert("[#" + data.code + "] " + L['error_'+data.code] + i);
+			alert("[#" + data.code + "] " + L['error_'+data.code] + i);
 			break;
 		default:
 			break;
@@ -652,7 +639,7 @@ function processRoom(data){
 		$target = $data.users[data.target];
 		if(data.kickVote){
 			notice(getKickText($target.profile, data.kickVote));
-			if($target.id == data.id) kkutuioAlert(L['hasKicked']);
+			if($target.id == data.id) alert(L['hasKicked']);
 		}
 		if(data.room.players.indexOf($data.id) == -1){
 			if($data.room) if($data.room.gaming){
@@ -1156,7 +1143,7 @@ function onMasterSubJamsu(){
 	notice(L['subJamsu']);
 	$data._jamsu = addTimeout(function(){
 		send('leave');
-		kkutuioAlert(L['masterJamsu']);
+		alert(L['masterJamsu']);
 	}, 30000);
 }
 function updateScore(id, score){
@@ -1302,7 +1289,7 @@ function drawMyGoods(avGroup){
 			if(!confirm(L['surePayback'] + commify(Math.round((item.cost || 0) * 0.2)) + L['ping'])) return;
 			$.post("/payback/" + id, function(res){
 				if(res.error) return fail(res.error);
-				kkutuioAlert(L['painback']);
+				alert(L['painback']);
 				$data.box = res.box;
 				$data.users[$data.id].money = res.money;
 				
@@ -1315,19 +1302,17 @@ function drawMyGoods(avGroup){
 			}
 			requestEquip(id, isLeft);
 		}else if(item.group == "CNS"){
-			kkutuioConfirm(L['sureConsume'], function(resp){
-				if(!resp) return;
-				$.post("/consume/" + id, function(res){
-					if(res.exp) notice(L['obtainExp'] + ": " + commify(res.exp));
-					if(res.money) notice(L['obtainMoney'] + ": " + commify(res.money));
-					res.gain.forEach(function(item){ queueObtain(item); });
-					$data.box = res.box;
-					$data.users[$data.id].data = res.data;
-					send('refresh');
-					
-					drawMyDress($data._avGroup);
-					updateMe();
-				});
+			if(!confirm(L['sureConsume'])) return;
+			$.post("/consume/" + id, function(res){
+				if(res.exp) notice(L['obtainExp'] + ": " + commify(res.exp));
+				if(res.money) notice(L['obtainMoney'] + ": " + commify(res.money));
+				res.gain.forEach(function(item){ queueObtain(item); });
+				$data.box = res.box;
+				$data.users[$data.id].data = res.data;
+				send('refresh');
+				
+				drawMyDress($data._avGroup);
+				updateMe();
 			});
 		}
 	});
@@ -1338,19 +1323,18 @@ function requestEquip(id, isLeft){
 	if(part == "Mhand") part = isLeft ? "Mlhand" : "Mrhand";
 	if(part.substr(0, 3) == "BDG") part = "BDG";
 	var already = my.equip[part] == id;
-	kkutuioConfirm(L[already ? 'sureUnequip' : 'sureEquip'] + ": " + L["item_" + id], function(resp) {
-		if(resp) {
-			$.post("/equip/" + id, { isLeft: isLeft }, function(res){
-				if(res.error) return fail(res.error);
-				$data.box = res.box;
-				my.equip = res.equip;
-				
-				drawMyDress($data._avGroup);
-				send('refresh');
-				updateUI(false);
-			});
-		}
-	});
+	
+	if(confirm(L[already ? 'sureUnequip' : 'sureEquip'] + ": " + L[id][0])){
+		$.post("/equip/" + id, { isLeft: isLeft }, function(res){
+			if(res.error) return fail(res.error);
+			$data.box = res.box;
+			my.equip = res.equip;
+			
+			drawMyDress($data._avGroup);
+			send('refresh');
+			updateUI(false);
+		});
+	}
 }
 function drawCharFactory(){
 	var $tray = $("#cf-tray");
@@ -1518,10 +1502,8 @@ function updateCommunity(){
 		var memo = $data.friends[id];
 		
 		if($data._friends[id].server) return fail(455);
-		kkutuioConfirm(memo + "(#" + id.substr(0, 5) + ")\n" + L['friendSureRemove'], function(resp) {
-			if(!resp) return;
-			send('friendRemove', { id: id }, true);
-		});
+		if(!confirm(memo + "(#" + id.substr(0, 5) + ")\n" + L['friendSureRemove'])) return;
+		send('friendRemove', { id: id }, true);
 	}
 	$("#CommunityDiag .dialog-title").html(L['communityText'] + " (" + len + " / 100)");
 }
@@ -1630,11 +1612,9 @@ function requestInvite(id){
 	
 	if(id != "AI"){
 		nick = $data.users[id].profile.title || $data.users[id].profile.name;
-		kkutuioConfirm(nick + L['sureInvite'], function(resp) {
-			if(!resp) return;
-			send('invite', { target: id });
-		});
-	} else send('invite', { target: id });
+		if(!confirm(nick + L['sureInvite'])) return;
+	}
+	send('invite', { target: id });
 }
 function checkFailCombo(id){
 	if(!$data._replay && $data.lastFail == $data.id && $data.id == id){
@@ -2884,7 +2864,7 @@ function setLocation(place){
 	else location.hash = "";
 }
 function fail(code){
-	return kkutuioAlert(L['error_' + code]);
+	return alert(L['error_' + code]);
 }
 function yell(msg){
 	$stage.yell.show().css('opacity', 1).html(msg);
