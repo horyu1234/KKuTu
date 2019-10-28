@@ -1,6 +1,5 @@
 /**
  * Rule the words! KKuTu Online
- * Copyright (C) 2017 horyu1234(all@kkutu.io)
  * Copyright (C) 2017 JJoriping(op@jjo.kr)
  *
  * This program is free software: you can redistribute it and/or modify
