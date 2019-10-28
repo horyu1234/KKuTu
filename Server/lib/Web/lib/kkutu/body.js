@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 var spamWarning = 0;
 var spamCount = 0;
 
@@ -162,7 +163,7 @@ function route(func, a0, a1, a2, a3, a4) {
 }
 
 function connectToRoom(chan, rid) {
-    var url = $data.URL.replace(/:(\d+)/, function(v, p1) {
+    var url = $data.URL.replace(/:(\d+)/, function (v, p1) {
         return ":" + (Number(p1) + 416 + Number(chan) - 1);
     }) + "&" + chan + "&" + rid;
 
@@ -170,19 +171,19 @@ function connectToRoom(chan, rid) {
     rws = new _WebSocket(url);
 
     loading(L['connectToRoom'] + "\n<center><button id='ctr-close'>" + L['ctrCancel'] + "</button></center>");
-    $("#ctr-close").on('click', function() {
+    $("#ctr-close").on('click', function () {
         loading();
         if (rws) rws.close();
     });
-    rws.onopen = function(e) {
+    rws.onopen = function (e) {
         console.log("room-conn", chan, rid);
     };
     rws.onmessage = _onMessage;
-    rws.onclose = function(e) {
+    rws.onclose = function (e) {
         console.log("room-disc", chan, rid);
         rws = undefined;
     };
-    rws.onerror = function(e) {
+    rws.onerror = function (e) {
         console.warn(L['error'], e);
     };
 }
@@ -343,7 +344,7 @@ function onMessage(data) {
         case 'friends':
             $data._friends = {};
             for (i in data.list) {
-                data.list[i].forEach(function(v) {
+                data.list[i].forEach(function (v) {
                     $data._friends[v] = {
                         server: i
                     };
@@ -367,7 +368,7 @@ function onMessage(data) {
                 from: data.from,
                 res: false
             }, true);
-            else kkutuioConfirm(i + L['attemptFriendAdd'], function(resp) {
+            else kkutuioConfirm(i + L['attemptFriendAdd'], function (resp) {
                 send('friendAddRes', {
                     from: data.from,
                     res: resp
@@ -445,7 +446,7 @@ function onMessage(data) {
                 from: data.from,
                 res: false
             });
-            else kkutuioConfirm(data.from + L['invited'], function(resp) {
+            else kkutuioConfirm(data.from + L['invited'], function (resp) {
                 send('inviteRes', {
                     from: data.from,
                     res: resp
@@ -477,7 +478,7 @@ function onMessage(data) {
             break;
         case 'test':
             if ($data._test = !$data._test) {
-                $data._testt = addInterval(function() {
+                $data._testt = addInterval(function () {
                     if ($stage.talk.val() !== $data._ttv) {
                         send('test', {
                             ev: "c",
@@ -486,13 +487,13 @@ function onMessage(data) {
                         $data._ttv = $stage.talk.val();
                     }
                 }, 100);
-                document.onkeydown = function(e) {
+                document.onkeydown = function (e) {
                     send('test', {
                         ev: "d",
                         c: e.keyCode
                     }, true);
                 };
-                document.onkeyup = function(e) {
+                document.onkeyup = function (e) {
                     send('test', {
                         ev: "u",
                         c: e.keyCode
@@ -521,7 +522,7 @@ function onMessage(data) {
                 i = L['server_' + i];
             } else if (data.code == 416) {
                 // 게임 중
-                kkutuioConfirm(L['error_' + data.code], function(resp) {
+                kkutuioConfirm(L['error_' + data.code], function (resp) {
                     if (!resp) return;
                     stopBGM();
                     $data._spectate = true;
@@ -582,7 +583,7 @@ function welcome() {
 
     dhtr = _setInterval(detectHacker, 10000);
 
-    addTimeout(function() {
+    addTimeout(function () {
         $("#Intro").hide();
     }, 2000);
 
@@ -931,7 +932,7 @@ function updateUI(myRoom, refresh) {
 
 function animModified(cls) {
     $(cls).addClass("room-head-modified");
-    addTimeout(function() {
+    addTimeout(function () {
         $(cls).removeClass("room-head-modified");
     }, 3000);
 }
@@ -1030,7 +1031,7 @@ function updateUserList(refresh) {
             len++;
             arr.push($data.users[i]);
         }
-        arr.sort(function(a, b) {
+        arr.sort(function (a, b) {
             return b.data.score - a.data.score;
         });
         refresh = true;
@@ -1066,7 +1067,7 @@ function userListBar(o, forInvite) {
             .append(getLevelImage(o.data.score).addClass("users-level"))
             // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name").html(o.profile.title || o.profile.name))
-            .on('click', function(e) {
+            .on('click', function (e) {
                 requestInvite($(e.currentTarget).attr('id').slice(12));
             });
     } else {
@@ -1075,7 +1076,7 @@ function userListBar(o, forInvite) {
             .append(getLevelImage(o.data.score).addClass("users-level"))
             // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name ellipse").html(o.profile.title || o.profile.name))
-            .on('click', function(e) {
+            .on('click', function (e) {
                 requestProfile($(e.currentTarget).attr('id').slice(11));
             });
     }
@@ -1122,7 +1123,7 @@ function roomListBar(o) {
     var opts = getOptions(o.mode, o.opts);
 
     $R = $("<div>").attr('id', "room-" + o.id).addClass("rooms-item")
-        .append($ch = $("<div>").addClass("rooms-channel channel-" + o.channel).on('click', function(e) {
+        .append($ch = $("<div>").addClass("rooms-channel channel-" + o.channel).on('click', function (e) {
             requestRoomInfo(o.id);
         }))
         .append($("<div>").addClass("rooms-number").html(o.id))
@@ -1134,7 +1135,7 @@ function roomListBar(o) {
             .append($("<div>").addClass("rooms-time").html(o.time + L['SECOND']))
         )
         .append($("<div>").addClass("rooms-lock").html(o.password ? "<i class='fa fa-lock'></i>" : "<i class='fa fa-unlock'></i>"))
-        .on('click', function(e) {
+        .on('click', function (e) {
             if (e.target == $ch.get(0)) return;
             tryJoin($(e.currentTarget).attr('id').slice(5));
         });
@@ -1239,7 +1240,7 @@ function updateRoom(gaming) {
                 .append($("<div>").addClass("room-user-title")
                     .append(getLevelImage(o.data.score).addClass("room-user-level"))
                     .append($bar = $("<div>").addClass("room-user-name").html(o.profile.title || o.profile.name))
-                ).on('click', function(e) {
+                ).on('click', function (e) {
                     requestProfile($(e.currentTarget).attr('id').slice(10));
                 })
             );
@@ -1275,7 +1276,7 @@ function updateRoom(gaming) {
 
 function onMasterSubJamsu() {
     notice(L['subJamsu']);
-    $data._jamsu = addTimeout(function() {
+    $data._jamsu = addTimeout(function () {
         send('leave');
         kkutuioAlert(L['masterJamsu']);
     }, 30000);
@@ -1391,7 +1392,7 @@ function renderGoods($target, preId, filter, equip, onClick) {
         obj: iGoods(i),
         value: $data.box[i]
     });
-    list.sort(function(a, b) {
+    list.sort(function (a, b) {
         return (a.obj.name < b.obj.name) ? -1 : 1;
     });
     for (i in list) {
@@ -1426,7 +1427,7 @@ function drawMyGoods(avGroup) {
     if (isAll) filter = true;
     else filter = (avGroup || "").split(',');
 
-    renderGoods($("#dress-goods"), 'dress', filter, equip, function(e) {
+    renderGoods($("#dress-goods"), 'dress', filter, equip, function (e) {
                 var $target = $(e.currentTarget);
                 var id = $target.attr('id').slice(6);
                 var item = iGoods(id);
@@ -1435,7 +1436,7 @@ function drawMyGoods(avGroup) {
                 if (e.ctrlKey) {
                     if ($target.hasClass("dress-equipped")) return fail(426);
                     if (!confirm(L['surePayback'] + commify(Math.round((item.cost || 0) * 0.2)) + L['ping'])) return;
-                    $.post("/payback/" + id, function(res) {
+                    $.post("/payback/" + id, function (res) {
                         if (res.error) return fail(res.error);
                         kkutuioAlert(L['painback']);
                         $data.box = res.box;
@@ -1450,12 +1451,12 @@ function drawMyGoods(avGroup) {
                     }
                     requestEquip(id, isLeft);
                 } else if (item.group == "CNS") {
-                    kkutuioConfirm(L['sureConsume'], function(resp) {
+                    kkutuioConfirm(L['sureConsume'], function (resp) {
                             if (!resp) return;
-                            $.post("/consume/" + id, function(res) {
+                            $.post("/consume/" + id, function (res) {
                                 if (res.exp) notice(L['obtainExp'] + ": " + commify(res.exp));
                                 if (res.money) notice(L['obtainMoney'] + ": " + commify(res.money));
-                                res.gain.forEach(function(item) {
+                                res.gain.forEach(function (item) {
                                     queueObtain(item);
                                 });
                                 $data.box = res.box;
@@ -1476,11 +1477,11 @@ function drawMyGoods(avGroup) {
                 if (part.substr(0, 3) == "BDG") part = "BDG";
                 var already = my.equip[part] == id;
 
-                kkutuioConfirm(L[already ? 'sureUnequip' : 'sureEquip'] + ": " + L["item_" + id], function(resp) {
+                kkutuioConfirm(L[already ? 'sureUnequip' : 'sureEquip'] + ": " + L["item_" + id], function (resp) {
                     if (resp) {
                         $.post("/equip/" + id, {
                             isLeft: isLeft
-                        }, function(res) {
+                        }, function (res) {
                             if (res.error) return fail(res.error);
                             $data.box = res.box;
                             my.equip = res.equip;
@@ -1506,7 +1507,7 @@ function drawMyGoods(avGroup) {
                 $cost.html("");
                 $stage.dialog.cfCompose.removeClass("cf-composable");
 
-                renderGoods($goods, 'cf', ['PIX', 'PIY', 'PIZ'], null, function(e) {
+                renderGoods($goods, 'cf', ['PIX', 'PIY', 'PIZ'], null, function (e) {
                     var $target = $(e.currentTarget);
                     var id = $target.attr('id').slice(3);
                     var bd = $data.box[id];
@@ -1538,7 +1539,7 @@ function drawMyGoods(avGroup) {
 
                     $tray.empty();
                     $(".cf-tray-selected").removeClass("cf-tray-selected");
-                    $data._tray.forEach(function(item) {
+                    $data._tray.forEach(function (item) {
                         gd = iGoods(item);
                         word += item.slice(4);
                         level += LEVEL[item.slice(1, 4)];
@@ -1553,7 +1554,7 @@ function drawMyGoods(avGroup) {
                     $rew.empty();
                     $stage.dialog.cfCompose.removeClass("cf-composable");
                     $cost.html("");
-                    tryDict(word, function(res) {
+                    tryDict(word, function (res) {
                         var blend = false;
 
                         if (res.error) {
@@ -1570,11 +1571,11 @@ function drawMyGoods(avGroup) {
                 }
 
                 function viewReward(text, level, blend) {
-                    $.get("/cf/" + text + "?l=" + level + "&b=" + (blend ? "1" : ""), function(res) {
+                    $.get("/cf/" + text + "?l=" + level + "&b=" + (blend ? "1" : ""), function (res) {
                         if (res.error) return fail(res.error);
 
                         $rew.empty();
-                        res.data.forEach(function(item) {
+                        res.data.forEach(function (item) {
                             var bd = iGoods(item.key);
                             var rt = (item.rate >= 1) ? L['cfRewAlways'] : ((item.rate * 100).toFixed(1) + '%');
 
@@ -1610,7 +1611,7 @@ function drawMyGoods(avGroup) {
                 var fr = data.data[0] ? data.data[0].rank : 0;
                 var page = (data.page || Math.floor(fr / 20)) + 1;
 
-                data.data.forEach(function(item, index) {
+                data.data.forEach(function (item, index) {
                     var profile = $data.users[item.id];
 
                     if (profile) profile = profile.profile.title || profile.profile.name;
@@ -1676,7 +1677,7 @@ function drawMyGoods(avGroup) {
                     var memo = $data.friends[id];
 
                     if ($data._friends[id].server) return fail(455);
-                    kkutuioConfirm(memo + "(#" + id.substr(0, 5) + ")\n" + L['friendSureRemove'], function(resp) {
+                    kkutuioConfirm(memo + "(#" + id.substr(0, 5) + ")\n" + L['friendSureRemove'], function (resp) {
                         if (!resp) return;
                         send('friendRemove', {
                             id: id
@@ -1697,7 +1698,7 @@ function drawMyGoods(avGroup) {
                 $("#ri-mode").html(L['mode' + MODE[o.mode]]);
                 $("#ri-round").html(o.round + ", " + o.time + L['SECOND']);
                 $("#ri-limit").html(o.players.length + " / " + o.limit);
-                o.players.forEach(function(p, i) {
+                o.players.forEach(function (p, i) {
                     var $p, $moremi;
                     var rd = o.readies[p] || {};
 
@@ -1802,7 +1803,7 @@ function drawMyGoods(avGroup) {
 
                 if (id != "AI") {
                     nick = $data.users[id].profile.title || $data.users[id].profile.name;
-                    kkutuioConfirm(nick + L['sureInvite'], function(resp) {
+                    kkutuioConfirm(nick + L['sureInvite'], function (resp) {
                         if (!resp) return;
                         send('invite', {
                             target: id
@@ -1861,7 +1862,7 @@ function drawMyGoods(avGroup) {
                 $stage.game.display.html(L['soon']);
                 playSound('game_start');
                 forkChat();
-                addTimeout(function() {
+                addTimeout(function () {
                     $stage.box.room.height(360).hide();
                     $stage.chat.scrollTop(999999999);
                 }, 500);
@@ -2188,7 +2189,7 @@ function drawMyGoods(avGroup) {
                 );
                 playSound('fail');
                 clearTimeout($data._fail);
-                $data._fail = addTimeout(function() {
+                $data._fail = addTimeout(function () {
                     $stage.game.display.html($data._char);
                 }, 1800);
             }
@@ -2205,7 +2206,7 @@ function drawMyGoods(avGroup) {
 
             function drawObtainedScore($uc, $sc) {
                 $uc.append($sc);
-                addTimeout(function() {
+                addTimeout(function () {
                     $sc.remove();
                 }, 2000);
 
@@ -2340,7 +2341,7 @@ function drawMyGoods(avGroup) {
 
                     row($sb, L['scoreOrigin'], orgX);
                     row($mb, L['moneyOrigin'], orgM);
-                    list.forEach(function(item) {
+                    list.forEach(function (item) {
                         var from = item.charAt(0);
                         var type = item.charAt(1);
                         var target = item.slice(2, 5);
@@ -2364,13 +2365,13 @@ function drawMyGoods(avGroup) {
                     return $R;
                 }
 
-                addTimeout(function() {
+                addTimeout(function () {
                     showDialog($stage.dialog.result);
                     if ($data._result) roundEndAnimation(true);
                     $stage.dialog.result.css('opacity', 0).animate({
                         opacity: 1
                     }, 500);
-                    addTimeout(function() {
+                    addTimeout(function () {
                         $data._coef = 0.05;
                     }, 500);
                 }, 2000);
@@ -2432,16 +2433,16 @@ function drawMyGoods(avGroup) {
                 var $body = $("#shop-shelf");
 
                 $body.html(L['LOADING']);
-                processShop(function(res) {
+                processShop(function (res) {
                     $body.empty();
                     if ($data.guest) res.error = 423;
                     if (res.error) {
                         $stage.menu.shop.trigger('click');
                         return fail(res.error);
                     }
-                    res.goods.sort(function(a, b) {
+                    res.goods.sort(function (a, b) {
                         return b.updatedAt - a.updatedAt;
-                    }).forEach(function(item, index, my) {
+                    }).forEach(function (item, index, my) {
                         if (item.cost < 0) return;
                         var url = iImage(false, item);
 
@@ -2503,7 +2504,7 @@ function drawMyGoods(avGroup) {
             function processShop(callback) {
                 var i;
 
-                $.get("/shop", function(res) {
+                $.get("/shop", function (res) {
                     $data.shop = {};
                     for (i in res.goods) {
                         $data.shop[res.goods[i]._id] = res.goods[i];
@@ -2548,7 +2549,7 @@ function drawMyGoods(avGroup) {
                 if (level < 1) return;
 
                 $("#Middle").css('padding-top', level);
-                addTimeout(function() {
+                addTimeout(function () {
                     $("#Middle").css('padding-top', 0);
                     addTimeout(vibrate, 50, level * 0.7);
                 }, 50);
@@ -2593,7 +2594,7 @@ function drawMyGoods(avGroup) {
                             .html(isRev ? text.charAt(len - j - 1) : text.charAt(j))
                         );
                         j++;
-                        addTimeout(function($l, snd) {
+                        addTimeout(function ($l, snd) {
                             var anim = {
                                 'margin-top': 0
                             };
@@ -2617,7 +2618,7 @@ function drawMyGoods(avGroup) {
                     j = "";
                     if (isRev)
                         for (i = 0; i < len; i++) {
-                            addTimeout(function(t) {
+                            addTimeout(function (t) {
                                 playSound(ta);
                                 if (t == $data.mission) {
                                     playSound('mission');
@@ -2630,7 +2631,7 @@ function drawMyGoods(avGroup) {
                         }
                     else
                         for (i = 0; i < len; i++) {
-                            addTimeout(function(t) {
+                            addTimeout(function (t) {
                                 playSound(ta);
                                 if (t == $data.mission) {
                                     playSound('mission');
@@ -2642,9 +2643,9 @@ function drawMyGoods(avGroup) {
                             }, Number(i) * sg / len, text[i]);
                         }
                 }
-                addTimeout(function() {
+                addTimeout(function () {
                     for (i = 0; i < 3; i++) {
-                        addTimeout(function(v) {
+                        addTimeout(function (v) {
                             if (isKKT) {
                                 if (v == 1) return;
                                 else playSound('kung');
@@ -2701,7 +2702,7 @@ function drawMyGoods(avGroup) {
                 /*val = mean;
 	if(theme) val = "<label class='history-theme-c'>&lt;" + theme + "&gt;</label> " + val;*/
 
-                wcs.forEach(function(item) {
+                wcs.forEach(function (item) {
                     if (wd[item]) return;
                     if (!L['class_' + item]) return;
                     wd[item] = true;
@@ -2724,34 +2725,34 @@ function drawMyGoods(avGroup) {
             function processWord(word, _mean, _theme, _wcs) {
                 if (!_mean || _mean.indexOf("＂") == -1) return processNormal(word, _mean);
                 var $R = $("<label>").addClass("word");
-                var means = _mean.split(/＂[0-9]+＂/).slice(1).map(function(m1) {
+                var means = _mean.split(/＂[0-9]+＂/).slice(1).map(function (m1) {
                     return (m1.indexOf("［") == -1) ? [
                         [m1]
-                    ] : m1.split(/［[0-9]+］/).slice(1).map(function(m2) {
+                    ] : m1.split(/［[0-9]+］/).slice(1).map(function (m2) {
                         return m2.split(/（[0-9]+）/).slice(1);
                     });
                 });
-                var types = _wcs ? _wcs.map(function(_wc) {
+                var types = _wcs ? _wcs.map(function (_wc) {
                     return L['class_' + _wc];
                 }) : [];
-                var themes = _theme ? _theme.split(',').map(function(_t) {
+                var themes = _theme ? _theme.split(',').map(function (_t) {
                     return L['theme_' + _t];
                 }) : [];
                 var ms = means.length > 1;
 
-                means.forEach(function(m1, x1) {
+                means.forEach(function (m1, x1) {
                     var $m1 = $("<label>").addClass("word-m1");
                     var m1s = m1.length > 1;
 
                     if (ms) $m1.append($("<label>").addClass("word-head word-m1-head").html(x1 + 1));
-                    m1.forEach(function(m2, x2) {
+                    m1.forEach(function (m2, x2) {
                         var $m2 = $("<label>").addClass("word-m2");
                         var m2l = m2.length;
                         var m2s = m2l > 1;
                         var tl = themes.splice(0, m2l);
 
                         if (m1s) $m2.append($("<label>").addClass("word-head word-m2-head").html(x2 + 1));
-                        m2.forEach(function(m3, x3) {
+                        m2.forEach(function (m3, x3) {
                             var $m3 = $("<label>").addClass("word-m3");
                             var _t = tl.shift();
 
@@ -2767,7 +2768,7 @@ function drawMyGoods(avGroup) {
                 });
 
                 function formMean(v) {
-                    return v.replace(/\$\$[^\$]+\$\$/g, function(item) {
+                    return v.replace(/\$\$[^\$]+\$\$/g, function (item) {
                             var txt = item.slice(2, item.length - 2)
                                 .replace(/\^\{([^\}]+)\}/g, "<sup>$1</sup>")
                                 .replace(/_\{([^\}]+)\}/g, "<sub>$1</sub>")
@@ -2851,7 +2852,7 @@ function drawMyGoods(avGroup) {
                     .append($("<h5>").addClass("room-head-time").html(room.time + L['SECOND']));
 
                 if (rule.opts.indexOf("ijp") != -1) {
-                    $rm.append($("<div>").addClass("expl").html("<h5>" + room.opts.injpick.map(function(item) {
+                    $rm.append($("<div>").addClass("expl").html("<h5>" + room.opts.injpick.map(function (item) {
                         return L["theme_" + item];
                     }) + "</h5>"));
                     global.expl($obj);
@@ -2861,7 +2862,7 @@ function drawMyGoods(avGroup) {
             function loadSounds(list, callback) {
                 $data._lsRemain = list.length;
 
-                list.forEach(function(v) {
+                list.forEach(function (v) {
                     getAudio(v.key, v.value, callback);
                 });
             }
@@ -2871,8 +2872,8 @@ function drawMyGoods(avGroup) {
 
                 req.open("GET", url);
                 req.responseType = "arraybuffer";
-                req.onload = function(e) {
-                    if (audioContext) audioContext.decodeAudioData(e.target.response, function(buf) {
+                req.onload = function (e) {
+                    if (audioContext) audioContext.decodeAudioData(e.target.response, function (buf) {
                         $sound[k] = buf;
                         done();
                     }, onErr);
@@ -2895,10 +2896,10 @@ function drawMyGoods(avGroup) {
 
                     this.audio = new Audio(url);
                     this.audio.load();
-                    this.start = function() {
+                    this.start = function () {
                         my.audio.play();
                     };
-                    this.stop = function() {
+                    this.stop = function () {
                         my.audio.currentTime = 0;
                         my.audio.pause();
                     };
@@ -2934,7 +2935,7 @@ function drawMyGoods(avGroup) {
                         src.buffer = audioContext.createBuffer(2, sound.length, audioContext.sampleRate);
                     } else {
                         src.buffer = sound;
-                        var gainNode = typeof(audioContext.createGain) == "function" ? audioContext.createGain() : null;
+                        var gainNode = typeof (audioContext.createGain) == "function" ? audioContext.createGain() : null;
                         if (gainNode) {
                             gainNode.gain.value = Number(volume) - 1;
                             gainNode.connect(audioContext.destination);
@@ -3018,10 +3019,10 @@ function drawMyGoods(avGroup) {
                     top: offset.top + ot,
                     left: offset.left + ol
                 });
-                addTimeout(function() {
+                addTimeout(function () {
                     $obj.animate({
                         'opacity': 0
-                    }, 500, function() {
+                    }, 500, function () {
                         $obj.remove();
                     });
                 }, 2500);
@@ -3051,7 +3052,7 @@ function drawMyGoods(avGroup) {
                     .append($("<div>").addClass("chat-stamp").text(time.toLocaleTimeString()))
                 );
                 if (timestamp) $bar.prepend($("<i>").addClass("fa fa-video-camera"));
-                $bar.on('click', function(e) {
+                $bar.on('click', function (e) {
                     requestProfile(profile.id);
                 });
                 $stage.chatLog.append($item = $item.clone());
@@ -3059,7 +3060,7 @@ function drawMyGoods(avGroup) {
 
                 if (link = msg.match(/https?:\/\/[\w\.\?\/&#%=-_\+]+/g)) {
                     msg = $msg.html();
-                    link.forEach(function(item) {
+                    link.forEach(function (item) {
                         msg = msg.replace(item, "[URL 차단됨]");
                     });
                     $msg.html(msg);
@@ -3255,11 +3256,11 @@ function drawMyGoods(avGroup) {
 
             function yell(msg) {
                 $stage.yell.show().css('opacity', 1).html(msg);
-                addTimeout(function() {
+                addTimeout(function () {
                     $stage.yell.animate({
                         'opacity': 0
                     }, 3000);
-                    addTimeout(function() {
+                    addTimeout(function () {
                         $stage.yell.hide();
                     }, 3000);
                 }, 1000);
