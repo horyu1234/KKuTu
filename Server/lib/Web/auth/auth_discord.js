@@ -24,8 +24,8 @@ module.exports.strategy = (process, MainDB, Ajae) => {
 
         $p.authType = "discord";
         $p.id = $p.authType + "-" + profile.id;
-        $p.name = profile.username;
-        $p.title = profile.username;
+        $p.name = profile.username ? profile.username.replace(/<[^>]*>/g, '') : undefined;
+        $p.title = profile.username ? profile.username.replace(/<[^>]*>/g, '') : undefined;
         $p.image = profile.avatar;
 
         process(req, accessToken, MainDB, $p, done);

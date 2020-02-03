@@ -20,10 +20,11 @@ module.exports.strategy = (process, MainDB, Ajae) => {
     return (req, accessToken, refreshToken, profile, done) => {
         const $p = {};
 
+        let name = (profile.name.familyName !== '' ? profile.name.familyName + ' ' : '') + profile.name.givenName;
         $p.authType = "google";
         $p.id = $p.authType + '-' + profile.id;
-        $p.name = (profile.name.familyName != '' ? profile.name.familyName+' ' : '')+profile.name.givenName;
-        $p.title = profile.nickname;
+        $p.name = name ? name.replace(/<[^>]*>/g, '') : undefined;
+        $p.title = profile.nickname ? profile.nickname.replace(/<[^>]*>/g, '') : undefined;
         $p.image = profile.photos[0].value;
 
         process(req, accessToken, MainDB, $p, done);

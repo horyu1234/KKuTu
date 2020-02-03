@@ -20,8 +20,8 @@ module.exports.strategy = (process, MainDB, Ajae) => {
 
         $p.authType = "kakao";
         $p.id = $p.authType + "-" + profile.id.toString();
-        $p.name = +profile.username;
-        $p.title = profile.displayName;
+        $p.name = profile.username ? profile.username.replace(/<[^>]*>/g, '') : undefined;
+        $p.title = profile.displayName ? profile.displayName.replace(/<[^>]*>/g, '') : undefined;
         $p.image = profile._json.properties.profile_image;
 
         process(req, accessToken, MainDB, $p, done);

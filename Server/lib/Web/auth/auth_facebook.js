@@ -22,8 +22,8 @@ module.exports.strategy = (process, MainDB, Ajae) => {
 
         $p.authType = "facebook";
         $p.id = $p.authType + '-' + profile.id;
-        $p.name = profile.displayName;
-        $p.title = profile.displayName;
+        $p.name = profile.displayName ? profile.displayName.replace(/<[^>]*>/g, '') : undefined;
+        $p.title = profile.displayName ? profile.displayName.replace(/<[^>]*>/g, '') : undefined;
         $p.image = "https://graph.facebook.com/" + profile.id + "/picture";
 
         /* 망할 셧다운제
