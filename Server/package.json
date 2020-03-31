@@ -16,5 +16,9 @@
     "electron": "^1.4.15",
     "electron-packager": "^8.5.1",
     "electron-pug": "^1.5.1"
+  },
+  "dependencies": {
+    "discord-webhook-node": "^1.0.6",
+    "node-cron": "^2.0.3"
   }
 }
