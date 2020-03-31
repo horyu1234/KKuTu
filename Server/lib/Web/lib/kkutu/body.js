@@ -1691,13 +1691,11 @@ function requestProfile(id) {
     $stage.dialog.profileDress.hide();
     $stage.dialog.profileWhisper.hide();
     $stage.dialog.profileHandover.hide();
-	$stage.dialog.profileReport.hide();
 
     if ($data.id == id) $stage.dialog.profileDress.show();
     else if (!o.robot) {
         $stage.dialog.profileShut.show();
         $stage.dialog.profileWhisper.show();
-		$stage.dialog.profileReport.show();
     }
     if ($data.room) {
         if ($data.id != id && $data.id == $data.room.master) {

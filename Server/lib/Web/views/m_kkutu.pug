@@ -296,26 +296,9 @@ block Middle
 			button#profile-whisper= L('whisper')
 			button#profile-shut= L('shut')
 			button#profile-kick= L('kick')
-			button#profile-report= L('singo')
 			button#profile-level= L('aiSetting')
 			button#profile-dress= L('dress')
 			button#profile-handover= L('handover')
-	+Dialog('ReportDialog', 350, 265, "끄투리오 유저 신고하기")
-		<b>1. 가장 적합한 신고 사유를 선택하여 주십시오.</b>
-		select#rsl(style='width:100%;margin-top:5px;margin-bottom:5px;')
-			option(disabled) 가장 적합한 신고 사유를 선택하여 주십시오.
-			option(selected) [#901] 호류 모욕
-			option [#902] 해티 모욕
-			option [#903] 명에회손
-			option [#904] 외않되
-			option [#905] 않이
-			option [#906] ㅘ샌즈
-			option [#907] ㅁㄴㅇㄹㄴㅇㄻㅇㄹ
-			option [#908] 기타 운영정책 위반 행위
-		<b>2. 신고 사유를 구체적으로 입력해 주십시오.</b>
-		textarea#rst(style="width:calc(100% - 12px);height:115px;margin-top:5px;",placeholder="신고 사유를 250자 이내로 자세히 입력해주세요. 자세하게 입력하실수록 빠른 처리가 가능해집니다.",maxlength=250)
-		div.dialog-bar.tail-button
-			button#report-ok 신고 접수
 	+Dialog('KickVoteDiag', 300, 160, L('kickVote'))
 		div.dialog-bar#kick-vote-text(style='text-align: center;')
 		div.dialog-bar(style='text-align: center;')= L('kickVoteNotice')
