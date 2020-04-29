@@ -28,6 +28,27 @@ if (Cluster.isMaster) {
     for (var i = 0; i < CPU; i++) {
         Cluster.fork({SERVER_NO_FORK: true, WS_KEY: i + 1});
     }
+	/*ReportSystem (hatty163) [S]*/
+	const fs = require('fs');
+	const webHook = require('discord-webhook-node');
+	const hook = new webHook.Webhook('Your Discord WebHook URI Here');
+
+	const cron = require('node-cron');
+	cron.schedule('*/30 * * * *', () => {
+		console.log('[REPORT] Excuting scheduled tasks...');
+		fs.access('./report.log', err => {
+			if (!err) {
+				console.log('[REPORT] Uploading file report.log...');
+				hook.info(`**${new Date().toLocaleString()}**`, '최근 30분간 인 게임 신고 내역 (${new Date().toLocaleString()})', '아래 신고 내역을 확인하시기 바랍니다.');
+				hook.sendFile('./report.log');
+				fs.truncate('./report.log', 0, function(){console.log('[REPORT] Clearing report.log...')});
+			} else {
+				console.log('[REPORT] File report.log does not exist. Creating a new file.');
+				fs.writeFile('./report.log', '');
+			}
+		});
+	});
+	/*ReportSystem (hatty163) [E]*/
     Cluster.on('exit', function (w) {
         console.log(`Worker ${w.process.pid} died`);
     });
