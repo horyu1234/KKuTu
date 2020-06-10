@@ -101,6 +101,7 @@ $(document).ready(function () {
             profileShut: $("#profile-shut"),
             profileHandover: $("#profile-handover"),
             profileKick: $("#profile-kick"),
+			profileReport: $("#profile-report"),
             profileLevel: $("#profile-level"),
             profileDress: $("#profile-dress"),
             profileWhisper: $("#profile-whisper"),
@@ -129,7 +130,9 @@ $(document).ready(function () {
             chatLog: $("#ChatLogDiag"),
             obtain: $("#ObtainDiag"),
             obtainOK: $("#obtain-ok"),
-            help: $("#HelpDiag")
+            help: $("#HelpDiag"),
+			report: $("#ReportDialog"),
+			reportOK: $("#report-ok")
         },
         box: {
             chat: $(".ChatBox"),
@@ -286,6 +289,27 @@ $(document).ready(function () {
         stopDrag();
     });
     // addInterval(checkInput, 1);
+	$stage.dialog.profileReport.on('click', function(e){
+		if($data.guest) {
+			alert("손님 계정은 인 게임 신고 기능을 이용하실 수 없습니다. 우측 상단 로그인 버튼을 클릭하여 로그인해 주세요.");
+			return;
+		}
+		var user = $data.users[$data._profiled];
+		var jsonObj = { id: user.id, reason: "" };
+		if(showDialog($stage.dialog.report)){
+	 		$data._report = jsonObj;
+		}
+ 	});
+	$stage.dialog.reportOK.on('click', function(e){
+		var rsl = [$("#rsl option:selected").text()];
+		rsl.push($("#rst").val());
+		if(rsl.length>0) {
+			send('report', { id: $data._report.id, reason: rsl.join() });
+			alert("신고가 접수되었습니다. 신고해 주셔서 감사합니다.");
+		}
+		delete $data._report;
+		$stage.dialog.report.hide();
+ 	});
     $stage.chatBtn.on('click', function (e) {
         checkInput();
 

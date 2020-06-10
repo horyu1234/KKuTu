@@ -591,6 +591,14 @@ function processClientRequest($c, msg) {
             if (!$c.friends[msg.id]) return;
             $c.removeFriend(msg.id);
             break;
+		/*ReportSystem (hatty163) [S]*/
+		case 'report':
+			// JLog.info("[DEBUG] Got Response: REPORT");
+			if(!msg.id || !msg.reason) return;
+			if(!GUEST_PERMISSION.report) if($c.guest) return;
+			File.appendFile('./report.log', `[${new Date().toLocaleString()}] User #${$c.id} reported ${msg.id} for ${msg.reason}\n`, function(){JLog.alert(`User #${$c.id} reported ${msg.id} for ${msg.reason}`)});			
+			break;
+		/*ReportSystem (hatty163) [E]*/
         case 'enter':
         case 'setRoom':
             if (!msg.title) stable = false;
