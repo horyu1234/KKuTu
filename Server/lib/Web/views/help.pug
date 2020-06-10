@@ -356,23 +356,43 @@ block Middle
 			table#box-exp-table
 				-
 					function getRequiredScore(lv){
-						return Math.round(
+						if(lv <= 240) return Math.round(
 							(!(lv%5)*0.3 + 1) * (!(lv%15)*0.4 + 1) * (!(lv%45)*0.5 + 1) * (
 								120 + Math.floor(lv/5)*60 + Math.floor(lv*lv/225)*120 + Math.floor(lv*lv/2025)*180
+							)
+						); else if(lv <= 360) return Math.round(
+							(!(lv%5)*0.3 + 1) * (!(lv%15)*0.4 + 1) * (!(lv%45)*0.5 + 1) * (
+								120 + Math.floor(lv/5)*100 + Math.floor(lv*lv/225)*200 + Math.floor(lv*lv/2025)*240
+							)
+						); else if(lv <= 480) return Math.round(
+							(!(lv%5)*0.3 + 1) * (!(lv%15)*0.4 + 1) * (!(lv%45)*0.5 + 1) * (
+								120 + Math.floor(lv/5)*140 + Math.floor(lv*lv/225)*280 + Math.floor(lv*lv/2025)*300
+							)
+						); else if(lv <= 600) return Math.round(
+							(!(lv%5)*0.3 + 1) * (!(lv%15)*0.4 + 1) * (!(lv%45)*0.5 + 1) * (
+								120 + Math.floor(lv/5)*180 + Math.floor(lv*lv/225)*360 + Math.floor(lv*lv/2025)*360
+							)
+						); else if(lv <= 720) return Math.round(
+							(!(lv%5)*0.3 + 1) * (!(lv%15)*0.4 + 1) * (!(lv%45)*0.5 + 1) * (
+								120 + Math.floor(lv/5)*220 + Math.floor(lv*lv/225)*420 + Math.floor(lv*lv/2025)*420
+							)
+						); else return Math.round(
+							(!(lv%5)*0.3 + 1) * (!(lv%15)*0.4 + 1) * (!(lv%45)*0.5 + 1) * (
+								120 + Math.floor(lv/5)*260 + Math.floor(lv*lv/225)*500 + Math.floor(lv*lv/2025)*480
 							)
 						);
 					}
 				thead: tr
-					td(style='width: 40px;') 계급장
+					// td(style='width: 40px;') 계급장
 					td 레벨
 					td 필요 경험치
 					td 총 경험치
 				tbody(style='text-align: center;')
-					- var MAX_LEVEL = 360;
+					- var MAX_LEVEL = 720;
 					- var curr, integ = 0;
 					- for(var lv=1; lv<=MAX_LEVEL; lv++)
 						tr
-							td: img(src='/img/kkutu/lv/lv' + zeroPadding(lv, 4) + '.png')
+							// td: img(src='/img/kkutu/lv/lv' + zeroPadding(lv, 4) + '.png')
 							td= lv
 							td= curr = (lv == MAX_LEVEL) ? "-" : getRequiredScore(lv)
 							td= (lv == MAX_LEVEL) ? "-" : integ += curr
