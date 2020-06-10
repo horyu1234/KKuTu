@@ -17,6 +17,7 @@
   "GOOGLE_RECAPTCHA_SECRET_KEY": "Your Google Recaptcha secret key Here",
   "CRYPTO_KEY": "Your Crypto Key Here",
   "IS_SECURED": false,
+  "WEBHOOK_URI": "Your WebHook URI Here",
   "SSL_OPTIONS": {
     "PRIVKEY": "Your SSL Private Key Here",
     "CERT": "Your SSL Certificate Here",

@@ -19,11 +19,13 @@
     "passport-facebook": "^2.1.1",
     "passport-github": "^1.1.0",
     "passport-google-oauth2": "^0.1.6",
-    "passport-kakao": "0.0.5",
+    "passport-kakao": "1.0.0",
     "passport-naver": "^1.0.6",
     "pg": "^6.1.2",
     "pg-escape": "^0.2.0",
     "pug": "^2.0.0-beta6",
-    "ws": "^1.1.1"
+    "ws": "^1.1.1",
+    "webhook-discord": "^3.6.0",
+    "node-cron": "^2.0.3"
   }
 }

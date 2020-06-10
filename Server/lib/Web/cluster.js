@@ -31,22 +31,30 @@ if (Cluster.isMaster) {
 	/*ReportSystem (hatty163) [S]*/
 	const fs = require('fs');
 	const webHook = require('discord-webhook-node');
-	const hook = new webHook.Webhook('Your Discord WebHook URI Here');
+	
+	const hook = new webHook.Webhook(GLOBAL['WEBHOOK_URI']);
 
 	const cron = require('node-cron');
 	cron.schedule('*/30 * * * *', () => {
-		console.log('[REPORT] Excuting scheduled tasks...');
-		fs.access('./report.log', err => {
-			if (!err) {
-				console.log('[REPORT] Uploading file report.log...');
-				hook.info(`**${new Date().toLocaleString()}**`, '최근 30분간 인 게임 신고 내역 (${new Date().toLocaleString()})', '아래 신고 내역을 확인하시기 바랍니다.');
-				hook.sendFile('./report.log');
-				fs.truncate('./report.log', 0, function(){console.log('[REPORT] Clearing report.log...')});
-			} else {
+		fs.stat('./report.log', function(err, stats){
+			if(err) {
 				console.log('[REPORT] File report.log does not exist. Creating a new file.');
 				fs.writeFile('./report.log', '');
+			} else if(stats["size"] == 0) {
+				console.log('[REPORT] report.log is empty. Skipping.');
+			} else {
+				console.log('[REPORT] Excuting scheduled tasks...');
+				fs.access('./report.log', err => {
+					console.log('[REPORT] Uploading file report.log...');
+					hook.info(`**${new Date().toLocaleString()}**`, '최근 30분간 인 게임 신고 내역', '아래 신고 내역을 확인하시기 바랍니다.');
+					hook.sendFile('./report.log');
+					fs.truncate('./report.log', 0, function(){console.log('[REPORT] Clearing report.log...')});
+				});
 			}
 		});
+	}, {
+		scheduled: true,
+		timezone: "Asia/Seoul"
 	});
 	/*ReportSystem (hatty163) [E]*/
     Cluster.on('exit', function (w) {
