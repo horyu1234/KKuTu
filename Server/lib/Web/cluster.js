@@ -31,7 +31,6 @@ if (Cluster.isMaster) {
 	/*ReportSystem (hatty163) [S]*/
 	const fs = require('fs');
 	const webHook = require('discord-webhook-node');
-	
 	const hook = new webHook.Webhook(GLOBAL['WEBHOOK_URI']);
 
 	const cron = require('node-cron');

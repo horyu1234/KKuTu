@@ -297,7 +297,7 @@ block Middle
 			div#ri-players(style='width: 100%;')
 		div.dialog-bar.tail-button
 			button#room-info-join= L('join')
-	+Dialog('ProfileDiag', 300, 365)
+	+Dialog('ProfileDiag', 300, 395)
 		div.dialog-bar.profile-head
 		div.dialog-bar
 			h4(style='width: 83px;')= L('place')
@@ -320,14 +320,12 @@ block Middle
 		<b>1. 가장 적합한 신고 사유를 선택하여 주십시오.</b>
 		select#rsl(style='width:100%;margin-top:5px;margin-bottom:5px;')
 			option(disabled) 가장 적합한 신고 사유를 선택하여 주십시오.
-			option(selected) [#901] 호류 모욕
-			option [#902] 해티 모욕
-			option [#903] 명에회손
-			option [#904] 외않되
-			option [#905] 않이
-			option [#906] ㅘ샌즈
-			option [#907] ㅁㄴㅇㄹㄴㅇㄻㅇㄹ
-			option [#908] 기타 운영정책 위반 행위
+			option(selected) [#100] 불건전한 채팅 (도배, 비방, 욕설, 정치적 발언 등)
+			option [#101] 비 정상적인 플레이 (승부 조작, 핵 사용 등)
+			option [#102] 부적절한 별명 또는 프로필 설명
+			option [#102] 홍보성 채팅
+			option [#103] 운영진 사칭
+			option [#104] 기타 운영정책 위반 행위
 		<b>2. 신고 사유를 구체적으로 입력해 주십시오.</b>
 		textarea#rst(style="width:calc(100% - 12px);height:115px;margin-top:5px;",placeholder="신고 사유를 250자 이내로 자세히 입력해주세요. 자세하게 입력하실수록 빠른 처리가 가능해집니다.",maxlength=250)
 		div.dialog-bar.tail-button
