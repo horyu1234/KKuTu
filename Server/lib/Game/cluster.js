@@ -21,6 +21,7 @@ var Const = require('../const');
 var JLog = require('../sub/jjlog');
 var SID = Number(process.argv[2]);
 var CPU = Number(process.argv[3]); //require("os").cpus().length;
+process.env['KKT_SV_TYPE'] = 'game' + SID;
 
 if (isNaN(SID)) {
     if (process.argv[2] == "test") {

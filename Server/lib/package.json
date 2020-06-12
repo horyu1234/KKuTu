@@ -26,6 +26,8 @@
     "pug": "^2.0.0-beta6",
     "ws": "^1.1.1",
     "webhook-discord": "^3.6.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.4.2",
     "node-cron": "^2.0.3"
   }
 }
