@@ -247,6 +247,7 @@ function onMessage(data) {
             if (data.test) alert(L['welcomeTestServer']);
             if (location.hash[1]) tryJoin(location.hash.slice(1));
             updateUI(undefined, true);
+            notice(L['welcomeMsg']);
             welcome();
             if (data.caj) checkAge();
             updateCommunity();

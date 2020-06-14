@@ -162,6 +162,7 @@
     "welcomeTestServer": "시범 서버에 오신 것을 환영합니다! \n 시범 서버는 사전 알림 없이 서버가 닫히거나 사라질 수 있습니다.",
     "loadLoader": "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i><span class='sr-only'>Loading...</span><br><br>",
     "loadRemain": "게임 불러오는 중... ",
+    "welcomeMsg": "로비 채팅에서의 친목성 대화는 금지하고 있으며 이는 제재 대상에 해당됩니다.<br>자유로운 대화를 원하실 경우, 방 생성 후 방 내에서 채팅을 이용해주시기 바랍니다.",
     "closed": "서버와의 연결이 종료되었습니다.",
     "error": "연결 중 문제가 발생했습니다!",
     "error_full": "서버가 수용할 수 있는 인원을 초과하였습니다. \n잠시 후 다시 시도해주세요.",
