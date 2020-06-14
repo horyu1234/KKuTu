@@ -14,20 +14,23 @@
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-uglify": "^2.1.0",
     "hangul-js": "^0.2.4",
+    "node-cron": "^2.0.3",
     "passport": "^0.4.0",
     "passport-discord": "^0.1.3",
     "passport-facebook": "^2.1.1",
     "passport-github": "^1.1.0",
     "passport-google-oauth2": "^0.1.6",
-    "passport-kakao": "1.0.0",
     "passport-naver": "^1.0.6",
     "pg": "^6.1.2",
     "pg-escape": "^0.2.0",
     "pug": "^2.0.0-beta6",
-    "ws": "^1.1.1",
+    "request-ip": "^2.1.3",
     "webhook-discord": "^3.6.0",
+    "ws": "^1.1.1"
+  },
+  "devDependencies": {
+    "passport-kakao": "^1.0.0",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^4.4.2",
-    "node-cron": "^2.0.3"
+    "winston-daily-rotate-file": "^4.4.2"
   }
 }

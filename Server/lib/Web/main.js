@@ -36,6 +36,7 @@ var passport = require('passport');
 var Const = require("../const");
 var https = require('https');
 var fs = require('fs');
+const requestIp = require('request-ip');
 
 var language = {
     'ko_KR': require("./lang/ko_KR.json"),
@@ -89,24 +90,27 @@ Server.use((req, res, next) => {
         next();
     }
 });
-/* use this if you want
 
+/* Start :: Anti Dos Request */
+Server.use(requestIp.mw());
 DDDoS = new DDDoS({
-	maxWeight: 6,
-	checkInterval: 10000,
-	rules: [{
-		regexp: "^/(cf|dict|gwalli)",
-		maxWeight: 20,
-		errorData: "429 Too Many Requests"
-	}, {
-		regexp: ".*",
-		errorData: "429 Too Many Requests"
-	}]
+    maxWeight: 10,
+    checkInterval: 10000,
+    rules: [{
+        regexp: "^/(cf|dict|gwalli|ranking)",
+        maxWeight: 30,
+        errorData: "429 Too Many Requests"
+    },
+        {
+            regexp: ".*",
+            errorData: "429 Too Many Requests"
+        }]
 });
-DDDoS.rules[0].logFunction = DDDoS.rules[1].logFunction = function(ip, path){
-	JLog.warn(`DoS from IP ${ip} on ${path}`);
+DDDoS.rules[0].logFunction = DDDoS.rules[1].logFunction = function (ip, path) {
+    JLog.warn(`DoS from IP ${ip} on ${path}`);
 };
-Server.use(DDDoS.express());*/
+Server.use(DDDoS.express('clientIp', 'path'));
+/* End :: Anti Dos Request */
 
 WebInit.init(Server, true);
 DB.ready = function () {

@@ -7,3 +7,4 @@ Server/lib/Web/public/js/**
 Server/lib/sub/auth.json
 Server/lib/sub/global.json
 node_modules/**
+.idea
