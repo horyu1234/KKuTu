@@ -295,6 +295,8 @@ exports.Client = function (socket, profile, sid) {
     });
     socket.on('message', function (msg) {
         var data, room = ROOM[my.place];
+        if (!my) return;
+        if (!msg) return;
 
         try {
             data = JSON.parse(msg);
