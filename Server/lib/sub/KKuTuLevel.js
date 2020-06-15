@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-const MAX_LEVEL = 360;
+const MAX_LEVEL = 720;
 let EXP = [];
 
 function getLevelScore(lv) {
