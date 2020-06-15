@@ -1003,7 +1003,6 @@ function userListBar(o, forInvite) {
 
     if (forInvite) {
         $R = $("<div>").attr('id', "invite-item-" + o.id).addClass("invite-item users-item")
-            .append($("<div>").addClass("jt-image users-image").css('background-image', "url('" + o.profile.image + "')"))
             .append(getLevelImage(o.data.score).addClass("users-level"))
             // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name").html(o.profile.title || o.profile.name))
@@ -1012,7 +1011,6 @@ function userListBar(o, forInvite) {
             });
     } else {
         $R = $("<div>").attr('id', "users-item-" + o.id).addClass("users-item")
-            .append($("<div>").addClass("jt-image users-image").css('background-image', "url('" + o.profile.image + "')"))
             .append(getLevelImage(o.data.score).addClass("users-level"))
             // .append($("<div>").addClass("jt-image users-from").css('background-image', "url('/img/kkutu/"+o.profile.type+".png')"))
             .append($("<div>").addClass("users-name ellipse").html(o.profile.title || o.profile.name))
