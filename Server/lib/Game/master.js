@@ -43,11 +43,13 @@ var T_USER = {};
 var SID;
 var WDIC = {};
 
+var allowGuestLobbyChat = true;
+
 const DEVELOP = exports.DEVELOP = global.test || false;
 const GUEST_PERMISSION = exports.GUEST_PERMISSION = {
     'create': true,
     'enter': true,
-    'talk': true,
+    'talk': false,
     'practice': true,
     'ready': true,
     'start': true,
@@ -133,12 +135,17 @@ function processAdmin(id, value) {
                 JLog.success("Dumping success.");
             });*/
             return null;
+        case "lobbychat":
+            if (!allowGuestLobbyChat) allowGuestLobbyChat = true;
+            else if (allowGuestLobbyChat) allowGuestLobbyChat = false;
+            JLog.log(`[DEBUG] blockGuestLobbyChat changed to ${allowGuestLobbyChat}`);
+            return null;
     }
     return value;
 }
 
 function checkTailUser(id, place, msg) {
-    var temp;
+    let temp;
 
     if (temp = T_USER[id]) {
         if (!DIC[temp]) {
@@ -551,7 +558,8 @@ function processClientRequest($c, msg) {
                     }
                 });
             } else {
-                $c.chat(msg.value);
+                if (!allowGuestLobbyChat && $c.place == 0) $c.send('yell', {value: "로비 채팅이 일시적으로 비활성화 되었습니다."});
+                else $c.chat(msg.value);
             }
             break;
         case 'friendAdd':
