@@ -17,6 +17,7 @@
  */
 
 var Cluster = require("cluster");
+var Const = require('../const');
 var CPU = Number(process.argv[2]); //require("os").cpus().length;
 process.env['KKT_SV_TYPE'] = 'web';
 
@@ -32,7 +33,7 @@ if (Cluster.isMaster) {
 	/*ReportSystem (hatty163) [S]*/
 	const fs = require('fs');
 	const webHook = require('discord-webhook-node');
-	const hook = new webHook.Webhook(GLOBAL['WEBHOOK_URI']);
+	const hook = new webHook.Webhook(Const.WEBHOOK_URI);
 
 	const cron = require('node-cron');
 	cron.schedule('*/30 * * * *', () => {

@@ -60,14 +60,13 @@ Server.set('view engine', "pug");
 Server.use(Express.static(__dirname + "/public"));
 Server.use(Parser.urlencoded({extended: true}));
 Server.use(Exession({
-    /* use only for redis-installed
+    /* use only for redis-installed */
 
     store: new Redission({
         client: Redis.createClient(),
         ttl: 3600 * 12
-    }),*/
-    secret: 'kkutu',
-    resave: false,
+    }),
+    secret: GLOBAL['REDIS_SECRET'],
     saveUninitialized: true
 }));
 Server.use(passport.initialize());
@@ -91,7 +90,7 @@ Server.use((req, res, next) => {
     }
 });
 
-/* Start :: Anti Dos Request */
+/* Start :: Anti Dos Request *
 Server.use(requestIp.mw());
 DDDoS = new DDDoS({
     maxWeight: 10,
@@ -110,7 +109,7 @@ DDDoS.rules[0].logFunction = DDDoS.rules[1].logFunction = function (ip, path) {
     JLog.warn(`DoS from IP ${ip} on ${path}`);
 };
 Server.use(DDDoS.express('clientIp', 'path'));
-/* End :: Anti Dos Request */
+* End :: Anti Dos Request */
 
 WebInit.init(Server, true);
 DB.ready = function () {
@@ -141,7 +140,7 @@ DB.ready = function () {
             }
         }
     });
-    Server.listen(80);
+    Server.listen(20000);
 
     if (Const.IS_SECURED) {
         const options = Secure();
@@ -216,7 +215,14 @@ function GameClient(id, url) {
 ROUTES.forEach(function (v) {
     require(`./routes/${v}`).run(Server, WebInit.page);
 });
-
+Server.use(function(req, res, next) {
+	res.header('Content-Security-Policy', "upgrade-insecure-requests");
+	res.header('X-Frame-Options', 'sameorigin');
+	res.header('X-XSS-Protection', '1; mode=block');
+	res.header('X-Download-Options', 'noopen');
+	res.header('X-Content-Type-Options', 'nosniff');
+	next();
+});
 Server.get("/", function (req, res) {
     const server = req.query.server;
 

@@ -18,6 +18,7 @@
   "CRYPTO_KEY": "Your Crypto Key Here",
   "IS_SECURED": false,
   "WEBHOOK_URI": "Your WebHook URI Here",
+  "REDIS_SECRET": "Your Redis Secret Here",
   "SSL_OPTIONS": {
     "PRIVKEY": "Your SSL Private Key Here",
     "CERT": "Your SSL Certificate Here",
