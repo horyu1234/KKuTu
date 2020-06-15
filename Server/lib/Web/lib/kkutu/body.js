@@ -2718,9 +2718,10 @@ function loadSounds(list, callback) {
 }
 
 function getAudio(k, url, cb) {
-    var req = new XMLHttpRequest();
+    var audioCdnUrl = 'https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public';
 
-    req.open("GET", url);
+    var req = new XMLHttpRequest();
+    req.open("GET", audioCdnUrl + url);
     req.responseType = "arraybuffer";
     req.onload = function (e) {
         if (audioContext) audioContext.decodeAudioData(e.target.response, function (buf) {
