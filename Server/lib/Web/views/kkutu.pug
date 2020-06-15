@@ -55,7 +55,7 @@ block CSS
 block Jungle
 	span#PUBLIC= PUBLIC ? "true" : undefined
 	// span#PORT= locals.PORT
-	span#URL= `${locals.PROTOCOL}://${locals.HOST}:${locals.PORT}/${locals._crypted}`
+	span#URL= `wss://kkutu.io:${locals.PORT}/${locals._crypted}`
 	span#MOREMI_PART= locals.MOREMI_PART.join(',')
 	span#AVAIL_EQUIP= locals.AVAIL_EQUIP.join(',')
 	span#RULE= JSON.stringify(locals.RULE)
@@ -478,7 +478,7 @@ block Middle
 		button#ChatBtn= L('send')
 	+Product('TLXFQZ')
 		ins.kakao_ad_area(style='display:none;', data-ad-unit='DAN-trtl9mlv6ipg', data-ad-width='728', data-ad-height='90')
-		script(type='text/javascript', src='//t1.daumcdn.net/adfit/static/ad.min.js', async='')
+		script(type='text/javascript', src='https://t1.daumcdn.net/kas/static/ba.min.js', async='')
 
 block Bottom
 	div.bottom-legal!= L('License')
