@@ -78,7 +78,7 @@ Server.use((req, res, next) => {
     next();
 });
 Server.use((req, res, next) => {
-    if (false) {
+    if (Const.FORCE_USE_HTTPS) {
         if (req.protocol === 'http') {
             let url = 'https://' + req.get('host') + req.path;
             res.status(302).redirect(url);
@@ -143,7 +143,7 @@ DB.ready = function () {
     Server.listen(Const.HTTP_PORT);
 
     if (Const.IS_HTTP_SECURED) {
-        const options = Secure();
+        const options = Secure(false);
         https.createServer(options, Server).listen(Const.HTTPS_PORT);
     }
 };

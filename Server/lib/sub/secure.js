@@ -19,17 +19,20 @@
 const Const = require('../const');
 const File = require('fs');
 
-module.exports = () => {
+module.exports = (isWS) => {
+    const SSL_OPTIONS = isWS ? Const.WS_SSL_OPTIONS : Const.HTTP_SSL_OPTIONS;
     const options = {};
-    if (Const.SSL_OPTIONS.isPFX === true) {
-        options.pfx = File.readFileSync(Const.SSL_OPTIONS.PFX);
-        options.passphrase = Const.SSL_OPTIONS.PFXPass;
+
+    if (SSL_OPTIONS.isPFX === true) {
+        options.pfx = File.readFileSync(SSL_OPTIONS.PFX);
+        options.passphrase = SSL_OPTIONS.PFXPass;
     } else {
-        options.key = File.readFileSync(Const.SSL_OPTIONS.PRIVKEY);
-        options.cert = File.readFileSync(Const.SSL_OPTIONS.CERT);
-        if (Const.SSL_OPTIONS.isCA === true) {
-            options.ca = File.readFileSync(Const.SSL_OPTIONS.CA);
+        options.key = File.readFileSync(SSL_OPTIONS.PRIVKEY);
+        options.cert = File.readFileSync(SSL_OPTIONS.CERT);
+        if (SSL_OPTIONS.isCA === true) {
+            options.ca = File.readFileSync(SSL_OPTIONS.CA);
         }
     }
+
     return options;
 }

@@ -18,11 +18,21 @@
   "CRYPTO_KEY": "Your Crypto Key Here",
   "HTTP_PORT": 80,
   "HTTPS_PORT": 443,
+  "FORCE_USE_HTTPS": false,
   "IS_HTTP_SECURED": false,
   "IS_WS_SECURED": false,
   "WEBHOOK_URI": "Your WebHook URI Here",
   "REDIS_SECRET": "Your Redis Secret Here",
-  "SSL_OPTIONS": {
+  "HTTP_SSL_OPTIONS": {
+    "PRIVKEY": "Your SSL Private Key Here",
+    "CERT": "Your SSL Certificate Here",
+    "CA": "Your SSL CA-Bundle Here",
+    "PFX": "Your PFX Bundle Here",
+    "PFXPass": "Your PFX Passphrase here",
+    "isPFX": false,
+    "isCA": false
+  },
+  "WS_SSL_OPTIONS": {
     "PRIVKEY": "Your SSL Private Key Here",
     "CERT": "Your SSL Certificate Here",
     "CA": "Your SSL CA-Bundle Here",
