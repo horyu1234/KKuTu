@@ -44,13 +44,13 @@ block Subject
 	title= L('title')
 
 block JS
-	script(type='text/javascript', src='/js/core.min.js')
-	script(type='text/javascript', src='/js/in_game_kkutu.min.js')
-	script(src='/js/kawaiii.min.js')
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/core.min.js?v=' + L('VERSION'))
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/in_game_kkutu.min.js?v=' + L('VERSION'))
+	script(src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/kawaiii.min.js?v=' + L('VERSION'))
 	script(src='https://www.google.com/recaptcha/api.js')
 
 block CSS
-	link(rel='stylesheet', href='/css/in_game_kkutu_shop.css')
+	link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/kkutuio@latest/css/in_game_kkutu_shop.css?v=' + L('VERSION'))
 
 block Jungle
 	span#PUBLIC= PUBLIC ? "true" : undefined

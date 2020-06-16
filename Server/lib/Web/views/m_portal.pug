@@ -20,11 +20,11 @@ block Subject
 	title= L('title')
 
 block CSS
-	link(rel='stylesheet', href='/css/in_game_kkutu.css')
-	link(rel='stylesheet', href='/css/in_portal.css')
+	link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/kkutuio@latest/css/in_game_kkutu.css?v=' + L('VERSION'))
+	link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/kkutuio@latest/css/in_portal.css?v=' + L('VERSION'))
 
 block JS
-	script(type='text/javascript', src='/js/in_portal.min.js')
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/in_portal.min.js?v=' + L('VERSION'))
 
 block Middle
 	+separator(5)
@@ -39,7 +39,6 @@ block Middle
 			div.jjoDisplayBar(style='float: left; margin-top: -30px; width: 325px; height: 85px;')
 				button#game-start.jjo-display= L('gameStart')
 	div#menu-bar(style='float: left; margin: 10px 0px 10px calc(50% - 136px); width: 100%;')
-		a(target='_blank', href='//play.google.com/store/apps/details?id=com.horyu1234.kkutu', style='background-color: #A4C639;')= '안드로이드 앱'
 		a(target='_blank', href='//discord.gg/4yXhwdW', style='background-color: #7289DA;')= '공식 디스코드'
 	div(style='float: left; margin-left: calc(50% - 160px);')
 		div.server-list-box

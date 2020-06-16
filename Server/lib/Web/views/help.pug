@@ -24,8 +24,8 @@ mixin Img(name, w, h)
 		img(src=path)
 
 block JS
-	script(type='text/javascript', src='/js/jquery.js')
-	script(type='text/javascript', src='/js/in_game_kkutu_help.min.js')
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js')
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/in_game_kkutu_help.min.js?v=' + L('VERSION'))
 
 block CSS
 	link(rel='stylesheet', href='/css/in_game_kkutu_help.css')

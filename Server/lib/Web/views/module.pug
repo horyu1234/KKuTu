@@ -75,19 +75,19 @@ mixin separator(len)
 
 mixin PageHead(min)
 	if !min
-		link(rel='stylesheet', href=(locals.mobile && !locals.as_pc) ? '/css/m_style.css' : '/css/style.css')
-		link(rel='stylesheet', href='/css/fa.css')
-		link(rel='stylesheet', href='/css/expl.css')
-	script(type='text/javascript', src='/js/jquery.js')
+		link(rel='stylesheet', href=(locals.mobile && !locals.as_pc) ? 'https://cdn.jsdelivr.net/npm/kkutuio@latest/css/m_style.css?v=' + L('VERSION') : 'https://cdn.jsdelivr.net/npm/kkutuio@latest/css/style.css?v=' + L('VERSION'))
+		link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css')
+		link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/kkutuio@latest/css/expl.css?v=' + L('VERSION'))
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js')
 	script(type='text/javascript', src='/language/' + locals.page.replace("/", "_") + '/' + locals.lang)
 
-	script(type='text/javascript', src='/js/global.min.js')
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/global.min.js?v=' + L('VERSION'))
 	if !min
-		script(type='text/javascript', src='/js/facebook.js')
+		script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/facebook.js?v=' + L('VERSION'))
 	if block
 		block
-	link(rel='stylesheet', href='/css/in_' + locals.page.replace("/", "_") + '.css')
-	script(type='text/javascript', src='/js/in_' + locals.page.replace("/", "_") + '.min.js')
+	link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/kkutuio@latest/css/in_' + locals.page.replace("/", "_") + '.css?v=' + L('VERSION'))
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/in_' + locals.page.replace("/", "_") + '.min.js?v=' + L('VERSION'))
 
 mixin SearchBox(arg1, arg2)
 	meta(name='description', content=L('meta_desc', arg1, arg2))
