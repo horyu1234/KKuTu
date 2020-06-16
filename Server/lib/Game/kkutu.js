@@ -34,7 +34,7 @@ var channel = process.env['CHANNEL'] || 0;
 var kkutuLevel = require("../sub/KKuTuLevel");
 
 const NUM_SLAVES = 4;
-const GUEST_IMAGE = "/img/kkutu/guest.png";
+const GUEST_IMAGE = "https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/kkutu/guest.png";
 const MAX_OKG = 18;
 const PER_OKG = 600000;
 

@@ -123,7 +123,7 @@
 }
 
 .server-people > .graph-bar {
-    background-image: url(/img/blue_gauge.png);
+    background-image: url('https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/blue_gauge.png');
 }
 
 .server-people > label {
