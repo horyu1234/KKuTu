@@ -16,7 +16,10 @@
   "GOOGLE_RECAPTCHA_SITE_KEY": "Your Google Recaptcha site key Here",
   "GOOGLE_RECAPTCHA_SECRET_KEY": "Your Google Recaptcha secret key Here",
   "CRYPTO_KEY": "Your Crypto Key Here",
-  "IS_SECURED": false,
+  "HTTP_PORT": 80,
+  "HTTPS_PORT": 443,
+  "IS_HTTP_SECURED": false,
+  "IS_WS_SECURED": false,
   "WEBHOOK_URI": "Your WebHook URI Here",
   "REDIS_SECRET": "Your Redis Secret Here",
   "SSL_OPTIONS": {

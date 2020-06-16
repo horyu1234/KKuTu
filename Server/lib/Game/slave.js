@@ -24,8 +24,7 @@ var Secure = require('../sub/secure');
 var Server;
 var HTTPS_Server;
 
-Const.IS_SECURED = true;
-if (Const.IS_SECURED) {
+if (Const.IS_WS_SECURED) {
     const options = Secure();
     HTTPS_Server = https.createServer(options)
         .listen(global.test ? (Const.TEST_PORT + 416) : process.env['KKUTU_PORT']);

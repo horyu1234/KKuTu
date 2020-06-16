@@ -140,24 +140,23 @@ DB.ready = function () {
             }
         }
     });
-    Server.listen(20000);
+    Server.listen(Const.HTTP_PORT);
 
-    if (Const.IS_SECURED) {
+    if (Const.IS_HTTP_SECURED) {
         const options = Secure();
-        https.createServer(options, Server).listen(443);
+        https.createServer(options, Server).listen(Const.HTTPS_PORT);
     }
 };
 Const.MAIN_PORTS.forEach(function (v, i) {
     const KEY = process.env['WS_KEY'];
 
     let protocol;
-    if (Const.IS_SECURED) {
+    if (Const.IS_WS_SECURED) {
         protocol = 'wss';
     } else {
         protocol = 'ws';
     }
-	
-	protocol = 'wss';
+
     gameServers[i] = new GameClient(KEY, `${protocol}://127.0.0.2:${v}/${KEY}`);
 });
 

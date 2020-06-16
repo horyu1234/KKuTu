@@ -302,8 +302,7 @@ exports.init = function (_SID, CHAN) {
 
         MainDB.users.update(['server', SID]).set(['server', ""]).on();
 
-        Const.IS_SECURED = true;
-        if (Const.IS_SECURED) {
+        if (Const.IS_WS_SECURED) {
             const options = Secure();
             HTTPS_Server = https.createServer(options)
                 .listen(global.test ? (Const.TEST_PORT + 416) : process.env['KKUTU_PORT']);
