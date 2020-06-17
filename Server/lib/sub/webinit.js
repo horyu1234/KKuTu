@@ -56,7 +56,6 @@ function page(req, res, file, data) {
     } else {
         req.session.createdAt = new Date();
     }
-    var addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress || "";
     var sid = req.session.id || "";
 
     data.published = global.isPublic;
@@ -85,7 +84,14 @@ function page(req, res, file, data) {
         data.page = file;
     }
 
-    JLog.log(`${addr}@${sid.slice(0, 10)} ${data.page}, ${JSON.stringify(req.params)}`);
+    let ipTxt = req.connection.remoteAddress.replace('::ffff:', '');
+    const forwardedIps = req.headers['x-forwarded-for'];
+    if (forwardedIps) {
+        ipTxt += ' <Forwarded - ' + forwardedIps + '>';
+    }
+
+    JLog.log(`${ipTxt} @ ${sid.slice(0, 5)}   ${data.page}   ${JSON.stringify(req.params)}`);
+
     res.render(data.page, data, function (err, html) {
         if (err) res.send(err.toString());
         else res.send(html);
