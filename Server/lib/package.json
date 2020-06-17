@@ -14,6 +14,7 @@
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-uglify": "^2.1.0",
     "hangul-js": "^0.2.4",
+    "helmet": "^3.23.1",
     "node-cron": "^2.0.3",
     "passport": "^0.4.0",
     "passport-discord": "^0.1.3",

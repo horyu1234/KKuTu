@@ -37,6 +37,7 @@ var Const = require("../const");
 var https = require('https');
 var fs = require('fs');
 const requestIp = require('request-ip');
+const helmet = require('helmet');
 
 var language = {
     'ko_KR': require("./lang/ko_KR.json"),
@@ -59,6 +60,12 @@ Server.set('views', __dirname + "/views");
 Server.set('view engine', "pug");
 Server.use(Express.static(__dirname + "/public"));
 Server.use(Parser.urlencoded({extended: true}));
+Server.use(helmet.hidePoweredBy());
+const sixtyDaysInSeconds = 5184000
+Server.use(helmet.hsts({
+    maxAge: sixtyDaysInSeconds,
+    includeSubDomains: false
+}));
 Server.use(Exession({
     /* use only for redis-installed */
 
