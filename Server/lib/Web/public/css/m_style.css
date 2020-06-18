@@ -79,7 +79,7 @@ span {
     font-size: 15px;
     text-align: center;
     color: #47330D;
-    background-image: url('https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/topbg.png');
+    background-image: url('https://cdn.jsdelivr.net/npm/kkutuio@latest/img/topbg.png');
     background-color: #DEAF56;
     transition: all 200ms ease;
 }
@@ -370,7 +370,7 @@ span {
     width: 100%;
     height: 30px;
     box-shadow: 0px 2px 2px #111111;
-    background-image: url('https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/topbg.png');
+    background-image: url('https://cdn.jsdelivr.net/npm/kkutuio@latest/img/topbg.png');
     z-index: 1;
 }
 

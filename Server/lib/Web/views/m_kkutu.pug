@@ -72,8 +72,8 @@ block Middle
 	- var VERSION = L('version') + " (모바일)";
 	- var nick = SESSION.profile ? (SESSION.profile.title || SESSION.profile.name) : null;
 	div#Intro
-		img#intro(src='https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/kkutu/m_intro.png')
-		//- img#intro-start(src='https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/kkutu/intro_start.gif')
+		img#intro(src='https://cdn.jsdelivr.net/npm/kkutuio@latest/img/kkutu/m_intro.png')
+		//- img#intro-start(src='https://cdn.jsdelivr.net/npm/kkutuio@latest/img/kkutu/intro_start.gif')
 		div#version= VERSION
 		div#intro-text= L('LOADING')
 	div.kkutu-menu
@@ -382,9 +382,9 @@ block Middle
 				input#cw-q-input(placeholder=L('inputHere'), style='width: 313px; height: 20px; font-size: 15px;')
 				div.cw-q-body
 			div.jjoriping
-				img.jjoObj.jjoEyeL(src='https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/jjoeyeL.png')
-				img.jjoObj.jjoNose(src='https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/jjonose.png')
-				img.jjoObj.jjoEyeR(src='https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/jjoeyeR.png')
+				img.jjoObj.jjoEyeL(src='https://cdn.jsdelivr.net/npm/kkutuio@latest/img/jjoeyeL.png')
+				img.jjoObj.jjoNose(src='https://cdn.jsdelivr.net/npm/kkutuio@latest/img/jjonose.png')
+				img.jjoObj.jjoEyeR(src='https://cdn.jsdelivr.net/npm/kkutuio@latest/img/jjoeyeR.png')
 				div.jjoDisplayBar
 					div.jjo-display
 					+GraphBar('jjo-turn-time')

@@ -17,7 +17,7 @@
 extends ./ext
 
 mixin Img(name, w, h)
-	- var path = "https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/kkutu/help/" + name + ".png";
+	- var path = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/kkutu/help/" + name + ".png";
 	- if(h)
 		img(src=path, width=w, height=h)
 	- else
@@ -380,7 +380,7 @@ block Middle
 					- var curr, integ = 0;
 					- for(var lv=1; lv<=MAX_LEVEL; lv++)
 						tr
-							// td: img(src='https://cdn.jsdelivr.net/gh/horyu1234/KKuTu@v4.5.4/Server/lib/Web/public/img/kkutu/lv/lv' + zeroPadding(lv, 4) + '.png')
+							// td: img(src='https://cdn.jsdelivr.net/npm/kkutuio@latest/img/kkutu/lv/lv' + zeroPadding(lv, 4) + '.png')
 							td= lv
 							td= curr = (lv == MAX_LEVEL) ? "-" : getRequiredScore(lv)
 							td= (lv == MAX_LEVEL) ? "-" : integ += curr
