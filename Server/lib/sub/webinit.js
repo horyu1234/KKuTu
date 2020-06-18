@@ -87,10 +87,16 @@ function page(req, res, file, data) {
     let ipTxt = req.connection.remoteAddress.replace('::ffff:', '');
     const forwardedIps = req.headers['x-forwarded-for'];
     if (forwardedIps) {
-        ipTxt += ' <Forwarded - ' + forwardedIps + '>';
+        ipTxt += ` <Forwarded - ${forwardedIps}>`;
     }
 
-    JLog.log(`${ipTxt} @ ${sid.slice(0, 5)}   ${data.page}   ${JSON.stringify(req.params)}`);
+    const blockedText = forwardedIps ? '   **포워딩된 요청 차단됨' : '';
+    JLog.log(`${ipTxt} @ ${sid.slice(0, 5)}   ${data.page}   ${JSON.stringify(req.params)}${blockedText}`);
+
+    if (forwardedIps) {
+        res.send('429 Too Many Requests');
+        return;
+    }
 
     res.render(data.page, data, function (err, html) {
         if (err) res.send(err.toString());
