@@ -84,10 +84,8 @@ function page(req, res, file, data) {
         data.page = file;
     }
 
-    let ipTxt = req.connection.remoteAddress;
-    if (ipTxt !== undefined && ipTxt.hasOwnProperty('replace')) {
-        ipTxt = ipTxt.replace('::ffff:', '');
-    }
+    let ipTxt = req.connection.remoteAddress + '';
+    ipTxt = ipTxt.replace('::ffff:', '');
 
     const forwardedIps = req.headers['x-forwarded-for'];
     if (forwardedIps) {
