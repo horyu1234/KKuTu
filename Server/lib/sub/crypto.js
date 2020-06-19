@@ -1,14 +1,25 @@
 const crypto = require('crypto');
 
+const IV_LENGTH = 16; // For AES, this is always 16
+
 exports.encrypt = function (text, key) {
-    const cipher = crypto.createCipher('aes-256-cbc', key);
-    let encipheredContent = cipher.update(text, 'utf8', 'hex');
-    encipheredContent += cipher.final('hex');
-    return encipheredContent;
+    let iv = crypto.randomBytes(IV_LENGTH);
+    let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+    let encrypted = cipher.update(text);
+
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+
+    return iv.toString('hex') + ':' + encrypted.toString('hex');
 };
+
 exports.decrypt = function (text, key) {
-    const decipher = crypto.createDecipher('aes-256-cbc', key);
-    let decipheredPlaintext = decipher.update(text, 'hex', 'utf8');
-    decipheredPlaintext += decipher.final('utf8');
-    return decipheredPlaintext;
+    let textParts = text.split(':');
+    let iv = Buffer.from(textParts.shift(), 'hex');
+    let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
+    let decrypted = decipher.update(encryptedText);
+
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+    return decrypted.toString();
 };
