@@ -81,6 +81,32 @@ function processAdmin(id, value) {
         return p2;
     });
     switch (cmd) {
+        case "delroom":
+            if (temp = ROOM[value]) {
+                for(var i in ROOM[value].players){
+                    var $c = DIC[ROOM[value].players[i]];
+                    if($c) {
+                        $c.send('yell', {value: "관리자에 의하여 접속 중이시던 방이 해체되었습니다."});
+                        $c.send('roomStuck');
+                    }
+                }
+                delete ROOM[value];
+            }
+            return null;
+        case "roomtitle":
+            var q = value.trim().split(" ");
+            if (temp = ROOM[q[0]]) {
+                temp.title = q[1];
+                KKuTu.publish('room', { target: id, room:temp.getData(), modify: true }, temp.password);
+            }
+            return null;
+        case "nick":
+            MainDB.users.update([ '_id', value ]).set([ 'nick', '바른닉네임' + value.replace(/[^0-9]/g, "").substring(0,4) ]).on();
+            if(temp = DIC[value]){
+                temp.socket.send('{"type":"error","code":410}');
+                temp.socket.close();
+            }
+            return null;
         case "yell":
             KKuTu.publish('yell', {value: value});
             return null;
