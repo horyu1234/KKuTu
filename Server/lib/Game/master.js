@@ -49,7 +49,7 @@ const DEVELOP = exports.DEVELOP = global.test || false;
 const GUEST_PERMISSION = exports.GUEST_PERMISSION = {
     'create': true,
     'enter': true,
-    'talk': false,
+    'talk': true,
     'practice': true,
     'ready': true,
     'start': true,
