@@ -702,12 +702,18 @@ $(document).ready(function () {
         var i, k, opts = {
             injpick: $data._injpick
         };
+		var roomTitle = $("#room-title").val().trim() || $("#room-title").attr('placeholder').trim(),
+		
         for (i in OPTIONS) {
             k = OPTIONS[i].name.toLowerCase();
             opts[k] = $("#room-" + k).is(':checked');
         }
+		if(roomTitle.match(BAD)) {
+			alert("방 제목에 사용 불가능한 문자가 포함되어 있습니다.");
+			return;
+		}
         send($data.typeRoom, {
-            title: $("#room-title").val().trim() || $("#room-title").attr('placeholder').trim(),
+            title: roomTitle,
             password: $("#room-pw").val(),
             limit: $("#room-limit").val(),
             mode: $("#room-mode").val(),
@@ -835,6 +841,10 @@ $(document).ready(function () {
     });
     $stage.dialog.dressOK.on('click', function (e) {
         $(e.currentTarget).attr('disabled', true);
+		if($("#dress-nickname").val().match(BAD)) {
+			alert("닉네임에 사용 불가능한 문자가 포함되어 있습니다.");
+			return;
+		}
         $.post("/exordial", {data: $("#dress-exordial").val(), nick: $("#dress-nickname").val()}, function (res) {
             $stage.dialog.dressOK.attr('disabled', false);
             if (res.error) return fail(res.error);
