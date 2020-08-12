@@ -60,7 +60,7 @@ exports.roundReady = function () {
     if (my.game.round <= my.round) {
         DB.kkutu[my.rule.lang].find(['_id', conf.reg], ['hit', {$gte: 1}], conf.add).limit(1234).on(function ($docs) {
             $docs.sort(function (a, b) {
-                return Math.random() < 0.5;
+                return Math.random() - 0.5;
             });
             while (w = $docs.shift()) {
                 words.push(w._id);
@@ -178,6 +178,6 @@ function getBoard(words, len) {
     while (sl++ < len) str.push("　");
 
     return str.sort(function () {
-        return Math.random() < 0.5;
+        return Math.random() - 0.5;
     }).join("");
 }
