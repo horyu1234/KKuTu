@@ -1651,7 +1651,7 @@ function requestProfile(id) {
         .append($("<div>").addClass("profile-head-item")
             .append(getImage("/img/kkutu/"+(o.profile.id.toString().split("-")[0])+".png").addClass("profile-image"))
             .append($("<div>").addClass("profile-title ellipse").html(o.profile.title || o.profile.name)
-                .append($("<label>").addClass("profile-tag").html(" #" + o.id.toString().substr(0, 5)))
+                // .append($("<label>").addClass("profile-tag").html(" #" + o.id.toString().substr(0, 5)))
             )
         )
         .append($("<div>").addClass("profile-head-item")
