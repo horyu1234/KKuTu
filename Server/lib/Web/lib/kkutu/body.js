@@ -1626,7 +1626,7 @@ function requestRoomInfo(id) {
 
     $data._roominfo = id;
     $("#RoomInfoDiag .dialog-title").html(id + L['sRoomInfo']);
-    $("#ri-title").html((o.password ? "<i class='fa fa-lock'></i>&nbsp;" : "") + o.title);
+    $("#ri-title").html((o.password ? "<i class='fa fa-lock'></i>&nbsp;" : "") + o.title.replace(/<.*?>/gi, ''));
     $("#ri-mode").html(L['mode' + MODE[o.mode]]);
     $("#ri-round").html(o.round + ", " + o.time + L['SECOND']);
     $("#ri-limit").html(o.players.length + " / " + o.limit);
