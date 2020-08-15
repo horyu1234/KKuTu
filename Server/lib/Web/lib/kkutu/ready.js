@@ -105,6 +105,7 @@ $(document).ready(function () {
             profileLevel: $("#profile-level"),
             profileDress: $("#profile-dress"),
             profileWhisper: $("#profile-whisper"),
+            profileCopy: $("#profile-copy"),
             kickVote: $("#KickVoteDiag"),
             kickVoteY: $("#kick-vote-yes"),
             kickVoteN: $("#kick-vote-no"),

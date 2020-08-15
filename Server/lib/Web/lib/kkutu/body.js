@@ -1649,7 +1649,7 @@ function requestProfile(id) {
     $("#ProfileDiag .dialog-title").html((o.profile.title || o.profile.name) + L['sProfile']);
     $(".profile-head").empty().append($pi = $("<div>").addClass("moremi profile-moremi"))
         .append($("<div>").addClass("profile-head-item")
-            .append(getImage(o.profile.image).addClass("profile-image"))
+            .append(getImage("/img/kkutu/"+(o.profile.id.toString().split("-")[0])+".png").addClass("profile-image"))
             .append($("<div>").addClass("profile-title ellipse").html(o.profile.title || o.profile.name)
                 .append($("<label>").addClass("profile-tag").html(" #" + o.id.toString().substr(0, 5)))
             )
@@ -1691,12 +1691,19 @@ function requestProfile(id) {
     $stage.dialog.profileWhisper.hide();
     $stage.dialog.profileHandover.hide();
 	$stage.dialog.profileReport.hide();
+    $stage.dialog.profileCopy.hide();
 
     if ($data.id == id) $stage.dialog.profileDress.show();
     else if (!o.robot) {
         $stage.dialog.profileShut.show();
         $stage.dialog.profileWhisper.show();
 		$stage.dialog.profileReport.show();
+    }
+    if(!o.robot){
+        $stage.dialog.profileCopy.show();
+        $stage.dialog.profileCopy.attr("data-clipboard-text", o.id.toString());
+        var idCopyBtn = document.getElementById("profile-copy");
+        var clipboard = new Clipboard(idCopyBtn);
     }
     if ($data.room) {
         if ($data.id != id && $data.id == $data.room.master) {
