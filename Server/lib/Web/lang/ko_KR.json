@@ -244,6 +244,7 @@
     "globalWin": "통산",
     "whisper": "귓속말",
     "handover": "방장 인계",
+    "copy": "ID 복사",
     "sureHandover": "방장을 인계하시겠습니까?",
     "connectToRoom": "방과 연결하는 중...",
     "ctrCancel": "연결 취소",

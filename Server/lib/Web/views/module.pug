@@ -88,6 +88,7 @@ mixin PageHead(min)
 		block
 	link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/kkutuio@latest/css/in_' + locals.page.replace("/", "_") + '.css?v=' + L('VERSION'))
 	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/kkutuio@latest/js/in_' + locals.page.replace("/", "_") + '.min.js?v=' + L('VERSION'))
+	script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js')
 
 mixin SearchBox(arg1, arg2)
 	meta(name='description', content=L('meta_desc', arg1, arg2))
