@@ -1666,11 +1666,17 @@ function requestProfile(id) {
         return;
     }
     $("#ProfileDiag .dialog-title").html((o.profile.title || o.profile.name) + L['sProfile']);
+
+    // TODO 차후 o 객체에 존재하는 필드로 게스트 여부 판단. 현재 임시 핫픽스
+    var idString = o.id.toString();
+    var isGuest = idString.includes('guest__');
+    var profileImageUrl = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/auth/" + (isGuest ? "guest.png" : o.profile.id.toString().split("-")[0] + ".png");
+    var displayId = isGuest ? idString : idString.split("-")[1].substr(0, 5);
     $(".profile-head").empty().append($pi = $("<div>").addClass("moremi profile-moremi"))
         .append($("<div>").addClass("profile-head-item")
-            .append(getImage("/img/kkutu/"+(o.profile.id.toString().split("-")[0])+".png").addClass("profile-image"))
+            .append(getImage(profileImageUrl).addClass("profile-image"))
             .append($("<div>").addClass("profile-title ellipse").html(o.profile.title || o.profile.name)
-                .append($("<label>").addClass("profile-tag").html(" #" + o.id.toString().split("-")[1].substr(0, 5)))
+                .append($("<label>").addClass("profile-tag").html(" #" + displayId))
             )
         )
         .append($("<div>").addClass("profile-head-item")
@@ -1720,7 +1726,7 @@ function requestProfile(id) {
     }
     if(!o.robot){
         $stage.dialog.profileCopy.show();
-        $stage.dialog.profileCopy.attr("data-clipboard-text", o.id.toString());
+        $stage.dialog.profileCopy.attr("data-clipboard-text", idString);
         var idCopyBtn = document.getElementById("profile-copy");
         var clipboard = new Clipboard(idCopyBtn);
     }
