@@ -1025,7 +1025,26 @@ function userListBar(o, forInvite) {
 
 function addonNickname($R, o) {
     if (o.equip['NIK']) $R.addClass("x-" + o.equip['NIK']);
-    if (o.equip['BDG'] == "b1_gm") $R.addClass("x-gm");
+	switch(o.equip['BDG']) {
+		case 'b1_gm':
+			$R.addClass('x-gm');
+			break;
+		case 'b1_mod':
+			$R.addClass('x-mod');
+			break;
+		case 'b1_word':
+			$R.addClass('x-word');
+			break;
+		case 'b1_minwon':
+			$R.addClass('x-minwon');
+			break;
+		case 'b1_dev':
+			$R.addClass('x-dev');
+			break;
+		case 'b1_media':
+			$R.addClass('x-media');
+			break;
+	}
 }
 
 function updateRoomList(refresh) {
@@ -1607,7 +1626,7 @@ function requestRoomInfo(id) {
 
     $data._roominfo = id;
     $("#RoomInfoDiag .dialog-title").html(id + L['sRoomInfo']);
-    $("#ri-title").html((o.password ? "<i class='fa fa-lock'></i>&nbsp;" : "") + o.title);
+    $("#ri-title").html((o.password ? "<i class='fa fa-lock'></i>&nbsp;" : "") + o.title.replace(/<.*?>/gi, ''));
     $("#ri-mode").html(L['mode' + MODE[o.mode]]);
     $("#ri-round").html(o.round + ", " + o.time + L['SECOND']);
     $("#ri-limit").html(o.players.length + " / " + o.limit);
@@ -1647,11 +1666,17 @@ function requestProfile(id) {
         return;
     }
     $("#ProfileDiag .dialog-title").html((o.profile.title || o.profile.name) + L['sProfile']);
+
+    // TODO 차후 o 객체에 존재하는 필드로 게스트 여부 판단. 현재 임시 핫픽스
+    var idString = o.id.toString();
+    var isGuest = idString.includes('guest__');
+    var profileImageUrl = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/auth/" + (isGuest ? "guest.png" : o.profile.id.toString().split("-")[0] + ".png");
+    var displayId = isGuest ? idString : idString.split("-")[1].substr(0, 5);
     $(".profile-head").empty().append($pi = $("<div>").addClass("moremi profile-moremi"))
         .append($("<div>").addClass("profile-head-item")
-            .append(getImage("/img/kkutu/"+(o.profile.id.toString().split("-")[0])+".png").addClass("profile-image"))
+            .append(getImage(profileImageUrl).addClass("profile-image"))
             .append($("<div>").addClass("profile-title ellipse").html(o.profile.title || o.profile.name)
-                .append($("<label>").addClass("profile-tag").html(" #" + o.id.toString().split("-")[1].substr(0, 5)))
+                .append($("<label>").addClass("profile-tag").html(" #" + displayId))
             )
         )
         .append($("<div>").addClass("profile-head-item")
@@ -1701,7 +1726,7 @@ function requestProfile(id) {
     }
     if(!o.robot){
         $stage.dialog.profileCopy.show();
-        $stage.dialog.profileCopy.attr("data-clipboard-text", o.id.toString());
+        $stage.dialog.profileCopy.attr("data-clipboard-text", idString);
         var idCopyBtn = document.getElementById("profile-copy");
         var clipboard = new Clipboard(idCopyBtn);
     }
