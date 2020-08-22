@@ -1670,7 +1670,7 @@ function requestProfile(id) {
     // TODO 차후 o 객체에 존재하는 필드로 게스트 여부 판단. 현재 임시 핫픽스
     var idString = o.id.toString();
     var isGuest = idString.includes('guest__');
-    var profileImageUrl = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/auth/" + (isGuest ? "guest.png" : o.profile.id.toString().split("-")[0] + ".png");
+    var profileImageUrl = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/auth/" + ((o.robot || isGuest) ? "guest.png" : o.profile.id.toString().split("-")[0] + ".png");
     var displayId = isGuest ? idString : idString.split("-")[1].substr(0, 5);
     $(".profile-head").empty().append($pi = $("<div>").addClass("moremi profile-moremi"))
         .append($("<div>").addClass("profile-head-item")
