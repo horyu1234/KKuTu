@@ -1667,9 +1667,9 @@ function requestProfile(id) {
     }
     $("#ProfileDiag .dialog-title").html((o.profile.title || o.profile.name) + L['sProfile']);
 
-    var idString = o.id.toString() || "robot";
+    var idString = o.id.toString() || "robot__robot";
     var profileImageUrl = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/auth/" + ((o.robot || o.guest) ? "guest.png" : idString.split("-")[0] + ".png");
-    var displayId = o.guest ? idString.substr(7,5) : idString.split("-")[1].substr(0, 5);
+    var displayId = (o.robot || o.guest) ? idString.substr(7,5) : idString.split("-")[1].substr(0, 5);
     $(".profile-head").empty().append($pi = $("<div>").addClass("moremi profile-moremi"))
         .append($("<div>").addClass("profile-head-item")
             .append(getImage(profileImageUrl).addClass("profile-image"))
