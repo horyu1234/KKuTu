@@ -1667,11 +1667,9 @@ function requestProfile(id) {
     }
     $("#ProfileDiag .dialog-title").html((o.profile.title || o.profile.name) + L['sProfile']);
 
-    // TODO 차후 o 객체에 존재하는 필드로 게스트 여부 판단. 현재 임시 핫픽스
-    var idString = o.id.toString();
-    var isGuest = idString.includes('guest__');
-    var profileImageUrl = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/auth/" + (isGuest ? "guest.png" : o.profile.id.toString().split("-")[0] + ".png");
-    var displayId = isGuest ? idString : idString.split("-")[1].substr(0, 5);
+    var idString = o.id.toString() || "robot";
+    var profileImageUrl = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/auth/" + ((o.robot || o.guest) ? "guest.png" : idString.split("-")[0] + ".png");
+    var displayId = o.guest ? idString.substr(7,5) : idString.split("-")[1].substr(0, 5);
     $(".profile-head").empty().append($pi = $("<div>").addClass("moremi profile-moremi"))
         .append($("<div>").addClass("profile-head-item")
             .append(getImage(profileImageUrl).addClass("profile-image"))
