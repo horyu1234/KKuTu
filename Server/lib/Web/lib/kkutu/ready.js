@@ -703,7 +703,7 @@ $(document).ready(function () {
         var i, k, opts = {
             injpick: $data._injpick
         };
-		var roomTitle = $("#room-title").val().trim() || $("#room-title").attr('placeholder').trim(),
+		var roomTitle = $("#room-title").val().trim() || $("#room-title").attr('placeholder').trim();
 		
         for (i in OPTIONS) {
             k = OPTIONS[i].name.toLowerCase();
