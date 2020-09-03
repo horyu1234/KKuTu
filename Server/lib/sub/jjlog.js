@@ -21,6 +21,7 @@ const transport = new (winston.transports.DailyRotateFile)({
 	zippedArchive: true,
 	maxSize: '20m',
 	maxFiles: '14d',
+	tailable: true,
 	format: combine(
 		label({ label: serverType }),
 		logFormat
