@@ -29,6 +29,8 @@ var Const = require("../const");
 var JLog = require('../sub/jjlog');
 var Secure = require('../sub/secure');
 var Recaptcha = require('../sub/recaptcha');
+
+const geoIp = require('geoip-country');
 const { Webhook, MessageBuilder } = require('discord-webhook-node');
 const reportDiscordWebHook = new Webhook(Const.WEBHOOK_URI);
 
@@ -404,6 +406,11 @@ exports.init = function (_SID, CHAN) {
                         $c.socket.close();
                         return;
                     }
+					if(geoIp.lookup($c.remoteAddress)['country'] != 'KR') {
+						$c.sendError(449);
+						$c.socket.close();
+						return;
+					}
                 }
                 if ($c.isAjae === null) {
                     $c.sendError(441);
