@@ -406,7 +406,8 @@ exports.init = function (_SID, CHAN) {
                         $c.socket.close();
                         return;
                     }
-					if(geoIp.lookup($c.remoteAddress)['country'] != 'KR') {
+					var clientIp = geoIp.lookup($c.remoteAddress)['country'];
+					if(clientIp) if(clientIp != 'KR') {
 						$c.sendError(449);
 						$c.socket.close();
 						return;
