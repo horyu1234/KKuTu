@@ -18,6 +18,7 @@
 
 var GLOBAL = require("./sub/global.json");
 
+exports.KKUTU_CLASSIC_COUNT = 0;
 exports.KKUTU_MAX = 400;
 exports.MAIN_PORTS = GLOBAL.MAIN_PORTS;
 exports.TEST_PORT = 4040;

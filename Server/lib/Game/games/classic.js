@@ -18,8 +18,11 @@
 
 var Const = require('../../const');
 var Lizard = require('../../sub/lizard');
+var JLog = require('../../sub/jjlog');
 var DB;
 var DIC;
+let SUBMIT_WORD_CACHE = {'ko': {}, 'en': {}};
+let WISH_WORD_CACHE = {'ko': {}, 'en': {}};
 
 const ROBOT_START_DELAY = [1200, 800, 400, 200, 0];
 const ROBOT_TYPE_COEF = [1250, 750, 500, 250, 0];
@@ -33,6 +36,26 @@ const NIEUN_TO_IEUNG = [4455, 4461, 4466, 4469];
 exports.init = function (_DB, _DIC) {
     DB = _DB;
     DIC = _DIC;
+
+    const identityNum = ++Const.KKUTU_CLASSIC_COUNT;
+    JLog.info(`[${identityNum}] 단어 데이터를 메모리에 저장합니다...`)
+    DB.kkutu['ko'].find(['type', Const.KOR_GROUP]).on($res => {
+        for (let resIndex in $res) {
+            const data = $res[resIndex];
+            SUBMIT_WORD_CACHE['ko'][data['_id']] = data;
+        }
+
+        JLog.info(`[${identityNum}] ${Object.keys(SUBMIT_WORD_CACHE['ko']).length} 개의 한국어 단어 데이터를 메모리에 불러왔습니다.`)
+    });
+
+    DB.kkutu['en'].find(['_id', Const.ENG_ID]).on($res => {
+        for (let resIndex in $res) {
+            const data = $res[resIndex];
+            SUBMIT_WORD_CACHE['en'][data['_id']] = data;
+        }
+
+        JLog.info(`[${identityNum}] ${Object.keys(SUBMIT_WORD_CACHE['en']).length} 개의 영어 단어 데이터를 메모리에 불러왔습니다.`)
+    });
 };
 exports.getTitle = function () {
     var R = new Lizard.Tail();
@@ -322,9 +345,11 @@ exports.submit = function (client, text) {
         }
     }
 
-    DB.kkutu[l].findOne(['_id', text],
-        (l == "ko") ? ['type', Const.KOR_GROUP] : ['_id', Const.ENG_ID]
-    ).on(onDB);
+    if (SUBMIT_WORD_CACHE[l].hasOwnProperty(text)) {
+        onDB(SUBMIT_WORD_CACHE[l][text]);
+    } else {
+        onDB(null);
+    }
 };
 exports.getScore = function (text, delay, ignoreMission) {
     var my = this;
@@ -425,6 +450,15 @@ exports.readyRobot = function (robot) {
 
     function getWish(char) {
         var R = new Lizard.Tail();
+
+        if (WISH_WORD_CACHE[my.rule.lang].hasOwnProperty(char)) {
+            R.go({char: char, length: WISH_WORD_CACHE[my.rule.lang][char]});
+        } else {
+            DB.kkutu[my.rule.lang].find(['_id', new RegExp(isRev ? `.${char}$` : `^${char}.`)]).limit(10).on($res => {
+                WISH_WORD_CACHE[my.rule.lang][char] = $res.length;
+                R.go({char: char, length: $res.length});
+            });
+        }
 
         DB.kkutu[my.rule.lang].find(['_id', new RegExp(isRev ? `.${char}$` : `^${char}.`)]).limit(10).on(function ($res) {
             R.go({char: char, length: $res.length});

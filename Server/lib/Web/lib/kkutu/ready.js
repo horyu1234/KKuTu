@@ -306,7 +306,6 @@ $(document).ready(function () {
 		rsl.push($("#rst").val());
 		if(rsl.length>0) {
 			send('report', { id: $data._report.id, reason: rsl.join() });
-			alert("신고가 접수되었습니다. 신고해 주셔서 감사합니다.");
 		}
 		delete $data._report;
 		$stage.dialog.report.hide();

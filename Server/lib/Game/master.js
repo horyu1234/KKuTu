@@ -29,6 +29,8 @@ var Const = require("../const");
 var JLog = require('../sub/jjlog');
 var Secure = require('../sub/secure');
 var Recaptcha = require('../sub/recaptcha');
+const { Webhook, MessageBuilder } = require('discord-webhook-node');
+const reportDiscordWebHook = new Webhook(Const.WEBHOOK_URI);
 
 var MainDB;
 
@@ -624,14 +626,29 @@ function processClientRequest($c, msg) {
             if (!$c.friends[msg.id]) return;
             $c.removeFriend(msg.id);
             break;
-		/*ReportSystem (hatty163) [S]*/
-		case 'report':
-			// JLog.info("[DEBUG] Got Response: REPORT");
-			if(!msg.id || !msg.reason) return;
-			if(!GUEST_PERMISSION.report) if($c.guest) return;
-			File.appendFile('./report.log', `[${new Date().toLocaleString()}] User #${$c.id} reported ${msg.id} for ${msg.reason}\n`, function(){JLog.alert(`User #${$c.id} reported ${msg.id} for ${msg.reason}`)});			
-			break;
-		/*ReportSystem (hatty163) [E]*/
+        /*ReportSystem (hatty163) [S]*/
+        case 'report':
+            // JLog.info("[DEBUG] Got Response: REPORT");
+            if (!msg.id || !msg.reason) return;
+            if (!GUEST_PERMISSION.report) if ($c.guest) return;
+
+            const embed = new MessageBuilder()
+                .setTitle('유저 신고')
+                .setDescription('인게임에서 유저 신고가 접수되었습니다.')
+                .setColor(14423100)
+                .addField('제보자 ID', $c.id, false)
+                .addField('대상 ID', msg.id, false)
+                .addField('사유', msg.reason, false)
+                .setTimestamp();
+
+            reportDiscordWebHook.send(embed).then(() => {
+                $c.send('yell', {value: "끄투리오에 신고가 정상 접수되었습니다."});
+                JLog.alert(`User #${$c.id} reported ${msg.id} for ${msg.reason}`);
+            }).catch(err => {
+                JLog.error(`신고 내용을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+            });
+            break;
+        /*ReportSystem (hatty163) [E]*/
         case 'enter':
         case 'setRoom':
             if (!msg.title) stable = false;

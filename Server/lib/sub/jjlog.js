@@ -1,12 +1,18 @@
 // Created by hatty163 (admin@hatty163.kr)
 
 const winston = require('winston');
+const moment = require('moment');
 require('winston-daily-rotate-file');
 
 const serverType = process.env['KKT_SV_TYPE'] === undefined ? "game" : process.env['KKT_SV_TYPE'];
-const { combine, timestamp, label, printf } = winston.format;
-const logFormat = printf(({ level, message, label, timestamp }) => {
-	return `${timestamp} [${label}] ${level}: ${message}`;
+const { combine, label, printf } = winston.format;
+
+const currentLocalTime = () => {
+	return moment().format('YYYY-MM-DD HH:mm:ss');
+};
+
+const logFormat = printf(({ level, message, label}) => {
+	return `${currentLocalTime()} [${label}] ${level}: ${message}`;
 });
 
 const transport = new (winston.transports.DailyRotateFile)({
@@ -15,9 +21,9 @@ const transport = new (winston.transports.DailyRotateFile)({
 	zippedArchive: true,
 	maxSize: '20m',
 	maxFiles: '14d',
+	tailable: true,
 	format: combine(
 		label({ label: serverType }),
-		timestamp(),
 		logFormat
 	)
 });
