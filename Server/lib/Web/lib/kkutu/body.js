@@ -1656,7 +1656,7 @@ function requestRoomInfo(id) {
 }
 
 function requestProfile(id) {
-    var o = $data.users[id] || $data.robots[id];
+    var o = $data.users[id] || $data.robots[id] || $data.users["guest__"+id];
     var $rec = $("#profile-record").empty();
     var $pi, $ex;
     var i;
