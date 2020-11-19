@@ -1316,7 +1316,7 @@ exports.Room = function (room, channel) {
         for (i in my.players) {
             o = DIC[my.players[i]];
             if (!o) continue;
-            if (o.cameWhenGaming) {
+            if (o.cameWhenGaming || i > 7) {
                 o.cameWhenGaming = false;
                 if (o.form == "O") {
                     o.sendError(428);
