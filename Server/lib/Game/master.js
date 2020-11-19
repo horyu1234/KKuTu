@@ -98,8 +98,9 @@ function processAdmin(id, value) {
         case "roomtitle":
             var q = value.trim().split(" ");
             if (temp = ROOM[q[0]]) {
-                temp.title = q[1];
-                KKuTu.publish('room', { target: id, room:temp.getData(), modify: true }, temp.password);
+                temp = temp.getData()
+                temp.title = q[1].join(" ");
+                KKuTu.publish('room', { target: id, room: temp, modify: true }, temp.password);
             }
             return null;
         case "nick":
