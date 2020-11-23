@@ -1096,8 +1096,8 @@ function roomListBar(o) {
         .append($("<div>").addClass("rooms-limit").html(o.players.length + " / " + o.limit))
         .append($("<div>").width(270)
             .append($("<div>").addClass("rooms-mode").html(opts.join(" / ").toString()))
-            .append($("<div>").addClass("rooms-round").html(Messages['kkutu.js.rounds'] + " " + o.round))
-            .append($("<div>").addClass("rooms-time").html(o.time + Messages['kkutu.js.second']))
+            .append($("<div>").addClass("rooms-round").html(L['rounds'] + " " + o.round))
+            .append($("<div>").addClass("rooms-time").html(o.time + L['SECOND']))
         )
         .append($("<div>").addClass("rooms-lock").html(o.password ? "<i class='fa fa-lock'></i>" : "<i class='fa fa-unlock'></i>"))
         .on('click', function (e) {
@@ -1635,8 +1635,8 @@ function requestRoomInfo(id) {
     $data._roominfo = id;
     $("#RoomInfoDiag .dialog-title").html(id + L['sRoomInfo']);
     $("#ri-title").html((o.password ? "<i class='fa fa-lock'></i>&nbsp;" : "") + o.title.replace(/<.*?>/gi, ''));
-    $("#ri-mode").html(L['mode' + MODE[o.mode]]);
-    $("#ri-round").html(o.round + ", " + o.time + L['SECOND']);
+    $("#ri-mode").html(Messages[`game.mode.${MODE[o.mode]}.name`]);
+    $("#ri-round").html(o.round + ", " + o.time + L['?ECOND']);
     $("#ri-limit").html(o.players.length + " / " + o.limit);
     o.players.forEach(function (p, i) {
         var $p, $moremi;
@@ -1653,6 +1653,10 @@ function requestRoomInfo(id) {
             .append($p = $("<div>").addClass("ellipse rip-title").html(p.profile.title || p.profile.name))
             .append($("<div>").addClass("rip-team team-" + rd.t).html($("#team-" + rd.t).html()))
             .append($("<div>").addClass("rip-form").html(L['pform_' + rd.f]))
+            .on("click", (e) => {
+                if(!p.profile.id) return;
+                requestProfile(p.profile.id);
+            })
         );
         if (p.id == o.master) $p.prepend($("<label>").addClass("rip-master").html("[" + L['master'] + "]&nbsp;"));
         $p.prepend(getLevelImage(p.data.score).addClass("profile-level rip-level"));
