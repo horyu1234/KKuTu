@@ -1082,26 +1082,24 @@ function updateRoomList(refresh) {
 }
 
 function roomListBar(o) {
-    var $R, $ch, $num;
+    var $R, $ch;
     var opts = getOptions(o.mode, o.opts);
 
     $R = $("<div>").attr('id', "room-" + o.id).addClass("rooms-item")
         .append($ch = $("<div>").addClass("rooms-channel channel-" + o.channel).on('click', function (e) {
             requestRoomInfo(o.id);
         }))
-        .append($num = $("<div>").addClass("rooms-number").html(o.id).on('click', function (e) {
-            requestRoomInfo(o.id);
-        }))
+        .append($("<div>").addClass("rooms-number").html(o.id))
         .append($("<div>").addClass("rooms-title ellipse").text(badWords(o.title)))
         .append($("<div>").addClass("rooms-limit").html(o.players.length + " / " + o.limit))
         .append($("<div>").width(270)
             .append($("<div>").addClass("rooms-mode").html(opts.join(" / ").toString()))
-            .append($("<div>").addClass("rooms-round").html(Messages['kkutu.js.rounds'] + " " + o.round))
-            .append($("<div>").addClass("rooms-time").html(o.time + Messages['kkutu.js.second']))
+            .append($("<div>").addClass("rooms-round").html(L['rounds'] + " " + o.round))
+            .append($("<div>").addClass("rooms-time").html(o.time + L['SECOND']))
         )
         .append($("<div>").addClass("rooms-lock").html(o.password ? "<i class='fa fa-lock'></i>" : "<i class='fa fa-unlock'></i>"))
         .on('click', function (e) {
-            if (e.target == $ch.get(0) || $num.get(0)) return;
+            if (e.target == $ch.get(0)) return;
             tryJoin($(e.currentTarget).attr('id').slice(5));
         });
     if (o.gaming) $R.addClass("rooms-gaming");
