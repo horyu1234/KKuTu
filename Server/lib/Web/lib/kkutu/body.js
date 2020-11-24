@@ -649,14 +649,8 @@ function runCommand(cmd) {
 function sendWhisper(target, text) {
     if (text.length) {
         $data._whisper = target;
-        for(u in $data.users){
-            if($data.users[u].profile.title == target){
-                actualUser = $data.users[u].profile;
-                break;
-            }
-        }
         send('talk', {whisper: target, value: text}, true);
-        chat({title: "→" + target, id: actualUser.id}, text, true);
+        chat({title: "→" + target}, text, true);
     }
 }
 
