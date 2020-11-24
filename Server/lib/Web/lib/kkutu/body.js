@@ -1719,7 +1719,7 @@ function requestProfile(id) {
         }
         renderMoremi($pi, o.equip);
     }
-    $data._profiled = (o.guest && !$data.users[id]) ? "guest__"+id : id;
+    $data._profiled = id;
     $stage.dialog.profileKick.hide();
     $stage.dialog.profileShut.hide();
     $stage.dialog.profileDress.hide();
