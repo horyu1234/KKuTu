@@ -1101,7 +1101,7 @@ function roomListBar(o) {
         )
         .append($("<div>").addClass("rooms-lock").html(o.password ? "<i class='fa fa-lock'></i>" : "<i class='fa fa-unlock'></i>"))
         .on('click', function (e) {
-            if (e.target == $ch.get(0) || e.target == $num.get(0)) return;
+            if (e.target == $ch.get(0) || $num.get(0)) return;
             tryJoin($(e.currentTarget).attr('id').slice(5));
         });
     if (o.gaming) $R.addClass("rooms-gaming");
