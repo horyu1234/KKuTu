@@ -68,6 +68,8 @@ const ENABLE_FORM = exports.ENABLE_FORM = ["S", "J"];
 const MODE_LENGTH = exports.MODE_LENGTH = Const.GAME_TYPE.length;
 const PORT = process.env['KKUTU_PORT'];
 
+const UserNickChange = require("../sub/UserNickChange");
+
 process.on('uncaughtException', function (err) {
     var text = `:${PORT} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}\n`;
 
@@ -727,6 +729,13 @@ function processClientRequest($c, msg) {
         */
         case 'test':
             checkTailUser($c.id, $c.place, msg);
+            break;
+        case 'nickChange':
+            if ($c.guest) return;
+            
+            UserNickChange.processUserNickChange($c.id, msg.value, function(code) {
+                $c.sendError(code);
+            });
             break;
         default:
             break;
