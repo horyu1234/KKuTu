@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-﻿var Const = require('../../const');
+var Const = require('../../const');
 var Lizard = require('../../sub/lizard');
 var DB;
 var DIC;
