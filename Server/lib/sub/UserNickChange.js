@@ -65,9 +65,7 @@ function processUserNickChange(userId, userNick, callback) {
             }
         })
 
-        DB.users.update(['_id', userId]).set({ 'nickname': userNick }).on()
-        DB.users.update(['_id', userId]).set({ 'meanableNick': meanableNick }).on()
-        DB.users.update(['_id', userId]).set({ 'lastModifiedNickAt': date }).on()
+        DB.users.update(['_id', userId]).set([ 'nickname', userNick ], [ 'meanableNick', meanableNick ], [ 'lastModifiedNickAt', date ]).on()
 
         JLog.info(`[NICK] ${userId}님이 닉네임을 변경하였습니다. 기존: ${currentNick} / 신규: ${userNick}`)
 
