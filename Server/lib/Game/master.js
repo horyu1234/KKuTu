@@ -31,7 +31,7 @@ var Secure = require('../sub/secure');
 var Recaptcha = require('../sub/recaptcha');
 
 const geoIp = require('geoip-country');
-const { Webhook, MessageBuilder } = require('discord-webhook-node');
+const {Webhook, MessageBuilder} = require('discord-webhook-node');
 const reportDiscordWebHook = new Webhook(Const.WEBHOOK_URI);
 
 var MainDB;
@@ -89,9 +89,9 @@ function processAdmin(id, value) {
     switch (cmd) {
         case "delroom":
             if (temp = ROOM[value]) {
-                for(var i in ROOM[value].players){
+                for (var i in ROOM[value].players) {
                     var $c = DIC[ROOM[value].players[i]];
-                    if($c) {
+                    if ($c) {
                         $c.send('yell', {value: "관리자에 의하여 접속 중이시던 방이 해체되었습니다."});
                         $c.send('roomStuck');
                     }
@@ -103,12 +103,12 @@ function processAdmin(id, value) {
             var q = value.trim().split(" ");
             if (temp = ROOM[q[0]]) {
                 temp.title = q[1];
-                KKuTu.publish('room', { target: id, room:temp.getData(), modify: true }, temp.password);
+                KKuTu.publish('room', {target: id, room: temp.getData(), modify: true}, temp.password);
             }
             return null;
         case "nick":
-            MainDB.users.update([ '_id', value ]).set([ 'nick', '바른닉네임' + value.replace(/[^0-9]/g, "").substring(0,4) ]).on();
-            if(temp = DIC[value]){
+            MainDB.users.update(['_id', value]).set(['nick', '바른닉네임' + value.replace(/[^0-9]/g, "").substring(0, 4)]).on();
+            if (temp = DIC[value]) {
                 temp.socket.send('{"type":"error","code":410}');
                 temp.socket.close();
             }
@@ -732,8 +732,7 @@ function processClientRequest($c, msg) {
             break;
         case 'nickChange':
             if ($c.guest) return;
-            
-            UserNickChange.processUserNickChange($c.id, msg.value, function(code) {
+            UserNickChange.processUserNickChange($c, msg.value, function (code) {
                 $c.sendError(code);
             });
             break;

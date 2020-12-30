@@ -3,6 +3,7 @@
  */
 const JLog = require('./jjlog');
 const DB = require('../Web/db');
+const KKuTu = require("../Game/kkutu");
 
 const nickConf = require('./nick.json');
 
@@ -16,7 +17,8 @@ const nickMax = nickConf.nick['max'];
 
 const term = nickConf.nick['term'] * 24 * 60 * 60 * 1000;
 
-const processUserNickChange = (userId, userNick, callback) => {
+const processUserNickChange = ($c, userNick, callback) => {
+    const userId = $c.id;
     if (!userId || !userNick) {
         callback(400);
         return
@@ -74,6 +76,9 @@ const processUserNickChange = (userId, userNick, callback) => {
             JLog.info(`[NICK] ${userId}님이 닉네임을 변경하였습니다. 기존: ${currentNick} / 신규: ${userNick}`);
 
             callback(630);
+
+            $c.profile.title = userNick;
+            KKuTu.publish('nickUpdate', {user: $c.getData()});
         })
     })
 }
