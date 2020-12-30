@@ -1316,15 +1316,13 @@ exports.Room = function (room, channel) {
         for (i in my.players) {
             o = DIC[my.players[i]];
             if (!o) continue;
-            if (o.cameWhenGaming) {
-                o.cameWhenGaming = false;
-                if (o.form == "O") {
-                    o.sendError(428);
-                    o.leave();
-                    continue;
-                }
-                o.setForm("J");
+            o.cameWhenGaming = false;
+            if (o.form == "O") {
+                o.sendError(428);
+                o.leave();
+                continue;
             }
+            o.setForm("J");
         }
         for (i in my.game.seq) {
             o = DIC[my.game.seq[i]] || my.game.seq[i];
