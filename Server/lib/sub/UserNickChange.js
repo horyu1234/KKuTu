@@ -20,12 +20,12 @@ const term = nickConf.nick['term'] * 24 * 60 * 60 * 1000;
 const processUserNickChange = ($c, userNick, callback) => {
     const userId = $c.id;
     if (!userId || !userNick) {
-        callback(400);
+        callback(600);
         return
     }
 
     const length = userNick.length
-    if (length < nickMin || length > nickMax || length === 0) {
+    if (length < nickMin || length > nickMax || length === 0 || isBlank(userNick)) {
         callback(600);
         return
     }
@@ -88,6 +88,10 @@ const isChangeableNickname = (nickChangeTime) => {
     return nickChangeTime === undefined
         || isNaN(number)
         || number + term < Date.now();
+}
+
+const isBlank = (str) => {
+    return (!str || /^\s*$/.test(str));
 }
 
 exports.processUserNickChange = processUserNickChange;
