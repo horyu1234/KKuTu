@@ -164,7 +164,6 @@ exports.Robot = function (target, place, level) {
         }
     };
     my.chat = function (msg, code) {
-	if(my.guest) return my.send('chat', { notice: true, code: 401 });
         my.publish('chat', {value: msg});
     };
     my.setLevel(level);
@@ -435,6 +434,7 @@ exports.Client = function (socket, profile, sid) {
             return;
         }
 
+		if(my.guest) return my.send('chat', { notice: true, code: 401 });
         my.publish('chat', {value: msg, notice: code ? true : false, code: code});
 
         function makeBlockChatMessage(block) {

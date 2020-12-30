@@ -29,6 +29,8 @@ var Const = require("../const");
 var JLog = require('../sub/jjlog');
 var Secure = require('../sub/secure');
 var Recaptcha = require('../sub/recaptcha');
+
+const geoIp = require('geoip-country');
 const { Webhook, MessageBuilder } = require('discord-webhook-node');
 const reportDiscordWebHook = new Webhook(Const.WEBHOOK_URI);
 
@@ -404,6 +406,17 @@ exports.init = function (_SID, CHAN) {
                         $c.socket.close();
                         return;
                     }
+					
+					var userIp = $c.socket.upgradeReq.connection.remoteAddress;
+					var lookuped = geoIp.lookup(userIp);
+					var geoCountry = lookuped ? lookuped['country'] : 'NONE'
+					
+					if(geoCountry !== 'KR') {
+						JLog.info(`해외에서 손님으로 접속을 시도하였습니다. 아이피: ${userIp} 국가: ${geoCountry}`)
+						$c.sendError(449);
+						$c.socket.close();
+						return;
+					}
                 }
                 if ($c.isAjae === null) {
                     $c.sendError(441);
