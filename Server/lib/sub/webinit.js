@@ -92,12 +92,12 @@ function page(req, res, file, data) {
         ipTxt += ` <Forwarded - ${forwardedIps}>`;
     }
 
-    const blockedText = forwardedIps ? '   **포워딩된 요청 차단됨' : '';
-    JLog.log(`${ipTxt} @ ${sid.slice(0, 5)}   ${data.page}   ${JSON.stringify(req.params)}${blockedText}`);
+    //const blockedText = forwardedIps ? '   **포워딩된 요청 차단됨' : '';
+    JLog.log(`${ipTxt} @ ${sid.slice(0, 5)}   ${data.page}   ${JSON.stringify(req.params)}`);
 
     if (forwardedIps) {
-        res.send('429 Too Many Requests');
-        return;
+        //res.send('429 Too Many Requests');
+        //return;
     }
 
     res.render(data.page, data, function (err, html) {

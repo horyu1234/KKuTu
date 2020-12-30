@@ -68,6 +68,8 @@ const ENABLE_FORM = exports.ENABLE_FORM = ["S", "J"];
 const MODE_LENGTH = exports.MODE_LENGTH = Const.GAME_TYPE.length;
 const PORT = process.env['KKUTU_PORT'];
 
+const UserNickChange = require("../sub/UserNickChange");
+
 process.on('uncaughtException', function (err) {
     var text = `:${PORT} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}\n`;
 
@@ -406,12 +408,17 @@ exports.init = function (_SID, CHAN) {
                         $c.socket.close();
                         return;
                     }
-					var clientIp = geoIp.lookup($c.remoteAddress)['country'];
-					if(clientIp) if(clientIp != 'KR') {
-						$c.sendError(449);
-						$c.socket.close();
-						return;
-					}
+
+                    var userIp = $c.socket.upgradeReq.connection.remoteAddress;
+                    var lookuped = geoIp.lookup(userIp);
+                    var geoCountry = lookuped ? lookuped['country'] : 'NONE'
+
+                    if (geoCountry !== 'KR') {
+                        JLog.info(`해외에서 손님으로 접속을 시도하였습니다. 아이피: ${userIp} 국가: ${geoCountry}`)
+                        $c.sendError(449);
+                        $c.socket.close();
+                        return;
+                    }
                 }
                 if ($c.isAjae === null) {
                     $c.sendError(441);
@@ -722,6 +729,13 @@ function processClientRequest($c, msg) {
         */
         case 'test':
             checkTailUser($c.id, $c.place, msg);
+            break;
+        case 'nickChange':
+            if ($c.guest) return;
+            
+            UserNickChange.processUserNickChange($c.id, msg.value, function(code) {
+                $c.sendError(code);
+            });
             break;
         default:
             break;
