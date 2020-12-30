@@ -18,6 +18,8 @@ const nickMax = nickConf.nick['max'];
 const term = nickConf.nick['term'] * 24 * 60 * 60 * 1000;
 
 const processUserNickChange = ($c, userNick, callback) => {
+    userNick = userNick.trim();
+
     const userId = $c.id;
     if (!userId || !userNick) {
         callback(600);
