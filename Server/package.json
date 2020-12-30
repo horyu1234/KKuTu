@@ -3,22 +3,10 @@
   "version": "2.5.0",
   "description": "Rule the words! KKuTu Online Server",
   "main": "main.js",
-  "scripts": {
-    "start": "electron ."
-  },
   "repository": "https://github.com/JJoriping/KKuTu",
   "keywords": [
     "kkutu"
   ],
   "author": "JJoriping",
-  "license": "GPL-3.0",
-  "devDependencies": {
-    "electron": "^1.4.15",
-    "electron-packager": "^8.5.1",
-    "electron-pug": "^1.5.1"
-  },
-  "dependencies": {
-    "discord-webhook-node": "^1.0.6",
-    "node-cron": "^2.0.3"
-  }
+  "license": "AGPL-3.0"
 }
