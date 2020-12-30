@@ -49,29 +49,32 @@ const processUserNickChange = (userId, userNick, callback) => {
         const date = Date.now();
 
         if (currentNick === userNick) {
-            callback(610)
+            callback(610);
             return;
         }
 
         if (!!$body.isLimitModifyNick) {
-            callback(611)
+            callback(611);
             return;
         }
 
         if (!isChangeableNickname($body.lastModifiedNickAt)) {
-            callback(612)
+            callback(612);
             return;
         }
 
         DB.users.findOne(['meanableNick', meanableNick]).on(function ($body) {
-            if ($body) callback(620);
+            if ($body) {
+                callback(620);
+                return;
+            }
+
+            DB.users.update(['_id', userId]).set(['nickname', userNick], ['meanableNick', meanableNick], ['lastModifiedNickAt', date]).on();
+
+            JLog.info(`[NICK] ${userId}님이 닉네임을 변경하였습니다. 기존: ${currentNick} / 신규: ${userNick}`);
+
+            callback(630);
         })
-
-        DB.users.update(['_id', userId]).set(['nickname', userNick], ['meanableNick', meanableNick], ['lastModifiedNickAt', date]).on();
-
-        JLog.info(`[NICK] ${userId}님이 닉네임을 변경하였습니다. 기존: ${currentNick} / 신규: ${userNick}`);
-
-        callback(630);
     })
 }
 
