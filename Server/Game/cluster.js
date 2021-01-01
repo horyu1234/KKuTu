@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Cluster = require("cluster");
+var Cluster = require("Server/Game/cluster");
 var Const = require('../const');
 var JLog = require('../sub/jjlog');
 var SID = Number(process.argv[2]);

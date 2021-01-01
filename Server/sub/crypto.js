@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require('Server/sub/crypto');
 
 const IV_LENGTH = 16; // For AES, this is always 16
 

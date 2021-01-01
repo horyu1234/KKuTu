@@ -39,7 +39,7 @@ var Master = require('./master');
 var KKuTu = require('./kkutu');
 var Crypto = require("../sub/crypto");
 var Lizard = require('../sub/lizard');
-var MainDB = require('../Web/db');
+var MainDB = require('../sub/db');
 var JLog = require('../sub/jjlog');
 var GLOBAL = require('../sub/global.json');
 

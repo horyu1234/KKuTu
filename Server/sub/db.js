@@ -19,14 +19,14 @@
 const LANG = ["ko", "en"];
 
 var PgPool = require("pg").Pool;
-var GLOBAL = require("../sub/global.json");
-var JLog = require("../sub/jjlog");
-var Collection = require("../sub/collection");
-var Pub = require("../sub/checkpub");
-var Lizard = require("../sub/lizard");
-const ConnectionLog = require("../sub/ConnectionLog");
-const UserBlockModule = require("../sub/UserBlockModule");
-const VendorDBMigration = require("../sub/VendorDBMigration");
+var GLOBAL = require("./global.json");
+var JLog = require("./jjlog");
+var Collection = require("./collection");
+var Pub = require("./checkpub");
+var Lizard = require("./lizard");
+const ConnectionLog = require("./ConnectionLog");
+const UserBlockModule = require("./UserBlockModule");
+const VendorDBMigration = require("./VendorDBMigration");
 
 const FAKE_REDIS_FUNC = () => {
     var R = new Lizard.Tail();

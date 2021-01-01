@@ -1,7 +1,7 @@
 /**
  * Created by horyu1234 on 2018-02-09.
  */
-const JLog = require('../sub/jjlog');
+const JLog = require('./jjlog');
 
 let database;
 

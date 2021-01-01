@@ -17,7 +17,7 @@
  */
 
 var GUEST_PERMISSION;
-var Cluster = require("cluster");
+var Cluster = require("Server/Game/cluster");
 var Const = require('../const');
 var Lizard = require('../sub/lizard');
 var JLog = require('../sub/jjlog');

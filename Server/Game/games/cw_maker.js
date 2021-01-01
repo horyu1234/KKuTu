@@ -17,7 +17,7 @@
  */
 
 var Prompt = require('prompt');
-var DB = require('../../Web/db');
+var DB = require('../../sub/db');
 var Const = require('../../const');
 var Lizard = require('../../sub/lizard');
 var LANG = 'ko';

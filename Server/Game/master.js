@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Cluster = require("cluster");
+var Cluster = require("Server/Game/cluster");
 var File = require('fs');
 var WebSocket = require('ws');
 var https = require('https');
@@ -328,7 +328,7 @@ Cluster.on('message', function (worker, msg) {
 });
 exports.init = function (_SID, CHAN) {
     SID = _SID;
-    MainDB = require('../Web/db');
+    MainDB = require('../sub/db');
     MainDB.ready = function () {
         JLog.success("Master DB is ready.");
 

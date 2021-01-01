@@ -1,6 +1,6 @@
 const MIGRATION_TABLE_NAME = 'users_migration';
-const JLog = require('../sub/jjlog');
-const crypto = require('crypto');
+const JLog = require('./jjlog');
+const crypto = require('Server/sub/crypto');
 
 let database;
 
