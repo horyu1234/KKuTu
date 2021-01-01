@@ -17,9 +17,9 @@
  */
 
 exports.all = function (tails) {
-    var R = new exports.Tail([]);
-    var left = tails.length;
-    var i;
+    const R = new exports.Tail([]);
+    let left = tails.length;
+    let i;
 
     if (left == 0) R.go(true);
     else for (i in tails) {
@@ -36,8 +36,8 @@ exports.all = function (tails) {
 };
 
 exports.Tail = function (res) {
-    var callback, value = undefined;
-    var _i;
+    let callback, value = undefined;
+    let _i;
 
     this.returns = res;
     this.go = function (data) {

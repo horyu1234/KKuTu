@@ -15,34 +15,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+const Const = require('../../const');
+const Lizard = require('../../sub/lizard');
+let DB;
+let DIC;
 
-var Const = require('../../const');
-var Lizard = require('../../sub/lizard');
-var DB;
-var DIC;
-
-var ROBOT_SEEK_DELAY = [5000, 3000, 1500, 700, 100];
-var ROBOT_CATCH_RATE = [0.05, 0.2, 0.4, 0.6, 0.99];
-var ROBOT_TYPE_COEF = [2000, 1200, 800, 300, 0];
+const ROBOT_SEEK_DELAY = [5000, 3000, 1500, 700, 100];
+const ROBOT_CATCH_RATE = [0.05, 0.2, 0.4, 0.6, 0.99];
+const ROBOT_TYPE_COEF = [2000, 1200, 800, 300, 0];
 
 exports.init = function (_DB, _DIC) {
     DB = _DB;
     DIC = _DIC;
 };
 exports.getTitle = function () {
-    var R = new Lizard.Tail();
-    var my = this;
-    var means = [];
-    var mdb = [];
+    const R = new Lizard.Tail();
+    const my = this;
+    const means = [];
+    const mdb = [];
 
     my.game.started = false;
     DB.kkutu_cw[my.rule.lang].find().on(function ($box) {
-        var answers = {};
-        var boards = [];
-        var maps = [];
-        var left = my.round;
-        var pick, pi, i, j;
-        var mParser = [];
+        const answers = {};
+        const boards = [];
+        const maps = [];
+        let left = my.round;
+        let pick, pi, i, j;
+        const mParser = [];
 
         while (left) {
             pick = $box[pi = Math.floor(Math.random() * $box.length)];
@@ -76,14 +75,14 @@ exports.getTitle = function () {
     });
 
     function getMeaning(round, bItem) {
-        var R = new Lizard.Tail();
-        var word = bItem[4];
-        var x = Number(bItem[0]), y = Number(bItem[1]);
+        const R = new Lizard.Tail();
+        const word = bItem[4];
+        let x = Number(bItem[0]), y = Number(bItem[1]);
 
         DB.kkutu[my.rule.lang].findOne(['_id', word]).on(function ($doc) {
             if (!$doc) return R.go(null);
-            var rk = `${x},${y}`;
-            var i, o;
+            let rk = `${x},${y}`;
+            let i, o;
 
             means[round][`${rk},${bItem[2]}`] = o = {
                 count: 0,
@@ -109,7 +108,7 @@ exports.getTitle = function () {
     return R;
 };
 exports.roundReady = function () {
-    var my = this;
+    const my = this;
 
     if (!my.game.started) {
         my.game.started = true;
@@ -123,7 +122,7 @@ exports.roundReady = function () {
     }
 };
 exports.turnStart = function () {
-    var my = this;
+    const my = this;
 
     my.game.late = false;
     my.game.roundAt = (new Date()).getTime();
@@ -139,7 +138,7 @@ exports.turnStart = function () {
 };
 
 function turnHint() {
-    var my = this;
+    const my = this;
 
     my.byMaster('turnHint', {
         hint: my.game.hint[my.game.meaned++]
@@ -147,18 +146,18 @@ function turnHint() {
 }
 
 exports.turnEnd = function () {
-    var my = this;
-    var i;
+    const my = this;
+    let i;
 
     my.game.late = true;
     my.byMaster('turnEnd', {});
     my.game._rrt = setTimeout(my.roundReady, 2500);
 };
 exports.submit = function (client, text, data) {
-    var my = this;
-    var obj, score, mbjs, mbj, jx, jy, v;
-    var play = (my.game.seq ? my.game.seq.includes(client.id) : false) || client.robot;
-    var i, j, key;
+    const my = this;
+    let obj, score, mbjs, mbj, jx, jy, v;
+    const play = (my.game.seq ? my.game.seq.includes(client.id) : false) || client.robot;
+    let i, j, key;
 
     if (!my.game.boards) return;
     if (!my.game.answers) return;
@@ -203,10 +202,10 @@ exports.submit = function (client, text, data) {
     }
 };
 exports.getScore = function (text, delay) {
-    var my = this;
-    var rank = my.game.hum - my.game.primary + 3;
-    var tr = 1 - delay / my.game.roundTime;
-    var score = (rank * rank * 3) * (0.5 + 0.5 * tr);
+    const my = this;
+    const rank = my.game.hum - my.game.primary + 3;
+    const tr = 1 - delay / my.game.roundTime;
+    const score = (rank * rank * 3) * (0.5 + 0.5 * tr);
 
     return Math.round(score * my.game.themeBonus);
 };

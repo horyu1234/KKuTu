@@ -15,20 +15,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+const Const = require('../../const');
+const TYL = require('./typing_const');
+const Lizard = require('../../sub/lizard');
+let DB;
+let DIC;
 
-var Const = require('../../const');
-var TYL = require('./typing_const');
-var Lizard = require('../../sub/lizard');
-var DB;
-var DIC;
-
-var LIST_LENGTH = 180;
-var DOUBLE_VOWELS = [9, 10, 11, 14, 15, 16, 19];
-var DOUBLE_TAILS = [3, 5, 6, 9, 10, 11, 12, 13, 14, 15, 18];
+const LIST_LENGTH = 180;
+const DOUBLE_VOWELS = [9, 10, 11, 14, 15, 16, 19];
+const DOUBLE_TAILS = [3, 5, 6, 9, 10, 11, 12, 13, 14, 15, 18];
 
 function traverse(func) {
-    var my = this;
-    var i, o;
+    const my = this;
+    let i, o;
 
     for (i in my.game.seq) {
         if (!(o = DIC[my.game.seq[i]])) continue;
@@ -42,9 +41,9 @@ exports.init = function (_DB, _DIC) {
     DIC = _DIC;
 };
 exports.getTitle = function () {
-    var R = new Lizard.Tail();
-    var my = this;
-    var i, j;
+    const R = new Lizard.Tail();
+    const my = this;
+    let i, j;
 
     if (my.opts.proverb) pick(TYL.PROVERBS[my.rule.lang]);
     else DB.kkutu[my.rule.lang].find(['_id', /^.{2,5}$/], ['hit', {$gte: 1}]).limit(416).on(function ($res) {
@@ -54,9 +53,9 @@ exports.getTitle = function () {
     });
 
     function pick(list) {
-        var data = [];
-        var len = list.length;
-        var arr;
+        const data = [];
+        const len = list.length;
+        let arr;
 
         for (i = 0; i < my.round; i++) {
             arr = [];
@@ -75,8 +74,8 @@ exports.getTitle = function () {
     return R;
 };
 exports.roundReady = function () {
-    var my = this;
-    var scores = {};
+    const my = this;
+    const scores = {};
 
     if (!my.game.lists) return;
 
@@ -97,7 +96,7 @@ exports.roundReady = function () {
     }
 };
 exports.turnStart = function () {
-    var my = this;
+    const my = this;
 
     my.game.late = false;
     traverse.call(my, function (o) {
@@ -109,9 +108,9 @@ exports.turnStart = function () {
     my.byMaster('turnStart', {roundTime: my.game.roundTime}, true);
 };
 exports.turnEnd = function () {
-    var my = this;
-    var spl = {};
-    var sv;
+    const my = this;
+    const spl = {};
+    let sv;
 
     my.game.late = true;
     traverse.call(my, function (o) {
@@ -126,8 +125,8 @@ exports.turnEnd = function () {
     my.game._rrt = setTimeout(my.roundReady, (my.game.round == my.round) ? 3000 : 10000);
 };
 exports.submit = function (client, text) {
-    var my = this;
-    var score;
+    const my = this;
+    let score;
 
     if (!client.game) return;
 
@@ -150,9 +149,10 @@ exports.submit = function (client, text) {
     if (!my.game.clist[++client.game.index]) client.game.index = 0;
 };
 exports.getScore = function (text) {
-    var my = this;
-    var i, len = text.length;
-    var r = 0, s, t;
+    const my = this;
+    let i;
+    const len = text.length;
+    let r = 0, s, t;
 
     switch (my.rule.lang) {
         case 'ko':

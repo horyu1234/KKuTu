@@ -15,14 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-var WebSocket = require('ws');
-var File = require('fs');
-var Const = require("../const");
-var https = require('https');
-var Secure = require('../sub/secure');
-var Server;
-var HTTPS_Server;
+const WebSocket = require('ws');
+const File = require('fs');
+const Const = require("../const");
+const https = require('https');
+const Secure = require('../sub/secure');
+let Server;
+let HTTPS_Server;
 
 if (Const.IS_WS_SECURED) {
     const options = Secure(true);
@@ -35,18 +34,18 @@ if (Const.IS_WS_SECURED) {
         perMessageDeflate: false
     });
 }
-var Master = require('./master');
-var KKuTu = require('./kkutu');
-var Crypto = require("../sub/crypto");
-var Lizard = require('../sub/lizard');
-var MainDB = require('../sub/db');
-var JLog = require('../sub/jjlog');
-var GLOBAL = require('../sub/global.json');
+const Master = require('./master');
+const KKuTu = require('./kkutu');
+const Crypto = require("../sub/crypto");
+const Lizard = require('../sub/lizard');
+const MainDB = require('../sub/db');
+const JLog = require('../sub/jjlog');
+const GLOBAL = require('../sub/global.json');
 
-var DIC = {};
-var DNAME = {};
-var ROOM = {};
-var RESERVED = {};
+const DIC = {};
+const DNAME = {};
+const ROOM = {};
+const RESERVED = {};
 
 const CHAN = process.env['CHANNEL'];
 const DEVELOP = Master.DEVELOP;
@@ -58,9 +57,9 @@ const MODE_LENGTH = Master.MODE_LENGTH;
 JLog.info(`<< KKuTu Server:${Server.options.port} >>`);
 
 process.on('uncaughtException', function (err) {
-    var text = `:${process.env['KKUTU_PORT']} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}`;
+    const text = `:${process.env['KKUTU_PORT']} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}`;
 
-    for (var i in DIC) {
+    for (let i in DIC) {
         DIC[i].send('dying');
     }
     File.appendFile("../KKUTU_ERROR.log", text, function (res) {
@@ -104,8 +103,8 @@ MainDB.ready = function () {
     KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION);
 };
 Server.on('connection', function (socket) {
-    var chunk = socket.upgradeReq.url.slice(1).split('&')
-    var key;
+    const chunk = socket.upgradeReq.url.slice(1).split('&');
+    let key;
     // 토큰 복호화
     try {
         key = Crypto.decrypt(chunk[0], GLOBAL.CRYPTO_KEY);
@@ -113,13 +112,14 @@ Server.on('connection', function (socket) {
         key = ".";
     }
     // 토큰 값 검사
-    var pattern = /^[0-9a-zA-Z_-]{32}$/;
+    const pattern = /^[0-9a-zA-Z_-]{32}$/;
     if (!pattern.test(key)) {
         socket.close();
         return;
     }
-    var reserve = RESERVED[key] || {}, room;
-    var $c;
+    const reserve = RESERVED[key] || {};
+    let room;
+    let $c;
 
     socket.on('error', function (err) {
         JLog.warn("Error on #" + key + " on ws: " + err.toString());
@@ -181,9 +181,9 @@ Server.on('error', function (err) {
     JLog.warn("Error on ws: " + err.toString());
 });
 KKuTu.onClientMessage = function ($c, msg) {
-    var stable = true;
-    var temp;
-    var now = (new Date()).getTime();
+    let stable = true;
+    let temp;
+    const now = (new Date()).getTime();
 
     if (!msg) return;
 

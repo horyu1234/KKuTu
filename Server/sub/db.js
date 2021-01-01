@@ -18,18 +18,18 @@
 
 const LANG = ["ko", "en"];
 
-var PgPool = require("pg").Pool;
-var GLOBAL = require("./global.json");
-var JLog = require("./jjlog");
-var Collection = require("./collection");
-var Pub = require("./checkpub");
-var Lizard = require("./lizard");
+const PgPool = require("pg").Pool;
+const GLOBAL = require("./global.json");
+const JLog = require("./jjlog");
+const Collection = require("./collection");
+const Pub = require("./checkpub");
+const Lizard = require("./lizard");
 const ConnectionLog = require("./ConnectionLog");
 const UserBlockModule = require("./UserBlockModule");
 const VendorDBMigration = require("./VendorDBMigration");
 
 const FAKE_REDIS_FUNC = () => {
-    var R = new Lizard.Tail();
+    const R = new Lizard.Tail();
 
     R.go({});
     return R;
@@ -42,8 +42,8 @@ const FAKE_REDIS = {
 };
 
 Pub.ready = function (isPub) {
-    var Redis = require("redis").createClient();
-    var Pg = new PgPool({
+    const Redis = require("redis").createClient();
+    const Pg = new PgPool({
         user: GLOBAL.PG_USER,
         password: GLOBAL.PG_PASS,
         port: GLOBAL.PG_PORT,
@@ -65,11 +65,11 @@ Pub.ready = function (isPub) {
                 JLog.error("Error when connect to PostgreSQL server: " + err.toString());
                 return;
             }
-            var redisAgent = noRedis ? null : new Collection.Agent("Redis", Redis);
-            var mainAgent = new Collection.Agent("Postgres", pgMain);
+            const redisAgent = noRedis ? null : new Collection.Agent("Redis", Redis);
+            const mainAgent = new Collection.Agent("Postgres", pgMain);
 
-            var DB = exports;
-            var i;
+            const DB = exports;
+            let i;
 
             DB.kkutu = {};
             DB.kkutu_cw = {};

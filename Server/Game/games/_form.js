@@ -15,12 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-var Const = require('../../const');
-var Lizard = require('../../sub/lizard');
-var DB;
-var DIC;
-var ROOM;
+const Lizard = require('../../sub/lizard');
+let DB;
+let DIC;
+let ROOM;
 
 exports.init = function (_DB, _DIC, _ROOM) {
     DB = _DB;
@@ -28,29 +26,29 @@ exports.init = function (_DB, _DIC, _ROOM) {
     ROOM = _ROOM;
 };
 exports.getTitle = function () {
-    var R = new Lizard.Tail();
-    var my = this;
+    const R = new Lizard.Tail();
+    const my = this;
 
     return R;
 };
 exports.roundReady = function () {
-    var my = this;
+    const my = this;
 
 };
 exports.turnStart = function () {
-    var my = this;
+    const my = this;
 
 };
 exports.turnEnd = function () {
-    var my = this;
+    const my = this;
 
 };
 exports.submit = function (client, text, data) {
-    var my = this;
+    const my = this;
 
 };
 exports.getScore = function (text, delay) {
-    var my = this;
+    const my = this;
 
 
     return 0;

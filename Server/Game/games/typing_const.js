@@ -15,8 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-var File = require('fs');
+const File = require('fs');
 
 exports.PROVERBS = {
     'ko': [],
@@ -25,10 +24,10 @@ exports.PROVERBS = {
 
 File.readFile(`${__dirname}/../../data/proverbs.txt`, function (err, res) {
     if (err) throw Error(err.toString());
-    var db = res.toString().split('~~~');
+    const db = res.toString().split('~~~');
 
     db.forEach(function (item) {
-        var lang = item.slice(0, 2);
+        const lang = item.slice(0, 2);
 
         exports.PROVERBS[lang] = item.slice(3).split('\r\n');
     });

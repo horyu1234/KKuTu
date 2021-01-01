@@ -15,39 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-var Cluster = require("cluster");
-var File = require('fs');
-var WebSocket = require('ws');
-var https = require('https');
-var HTTPS_Server;
+const Cluster = require("cluster");
+const File = require('fs');
+const WebSocket = require('ws');
+const https = require('https');
+let HTTPS_Server;
 // var Heapdump = require("heapdump");
-var KKuTu = require('./kkutu');
-var Crypto = require("../sub/crypto");
-var GLOBAL = require("../sub/global.json");
-var Const = require("../const");
-var JLog = require('../sub/jjlog');
-var Secure = require('../sub/secure');
-var Recaptcha = require('../sub/recaptcha');
+const KKuTu = require('./kkutu');
+const Crypto = require("../sub/crypto");
+const GLOBAL = require("../sub/global.json");
+const Const = require("../const");
+const JLog = require('../sub/jjlog');
+const Secure = require('../sub/secure');
+const Recaptcha = require('../sub/recaptcha');
 
 const geoIp = require('geoip-country');
 const {Webhook, MessageBuilder} = require('discord-webhook-node');
 const reportDiscordWebHook = new Webhook(Const.WEBHOOK_URI);
 
-var MainDB;
+let MainDB;
 
-var Server;
-var DIC = {};
-var DNAME = {};
-var ROOM = {};
+let Server;
+const DIC = {};
+const DNAME = {};
+const ROOM = {};
 
-var T_ROOM = {};
-var T_USER = {};
+const T_ROOM = {};
+const T_USER = {};
 
-var SID;
-var WDIC = {};
+let SID;
+const WDIC = {};
 
-var allowGuestLobbyChat = true;
+let allowGuestLobbyChat = true;
 
 const DEVELOP = exports.DEVELOP = global.test || false;
 const GUEST_PERMISSION = exports.GUEST_PERMISSION = {
@@ -71,7 +70,7 @@ const PORT = process.env['KKUTU_PORT'];
 const UserNickChange = require("../sub/UserNickChange");
 
 process.on('uncaughtException', function (err) {
-    var text = `:${PORT} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}\n`;
+    const text = `:${PORT} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}\n`;
 
     File.appendFile("/jjolol/KKUTU_ERROR.log", text, function (res) {
         JLog.error(`ERROR OCCURRED ON THE MASTER!`);
@@ -90,7 +89,7 @@ function processAdmin(id, value) {
         case "delroom":
             if (temp = ROOM[value]) {
                 for (var i in ROOM[value].players) {
-                    var $c = DIC[ROOM[value].players[i]];
+                    const $c = DIC[ROOM[value].players[i]];
                     if ($c) {
                         $c.send('yell', {value: "관리자에 의하여 접속 중이시던 방이 해체되었습니다."});
                         $c.send('roomStuck');
@@ -100,7 +99,7 @@ function processAdmin(id, value) {
             }
             return null;
         case "roomtitle":
-            var q = value.trim().split(" ");
+            const q = value.trim().split(" ");
             if (temp = ROOM[q[0]]) {
                 temp.title = q[1];
                 KKuTu.publish('room', {target: id, room: temp.getData(), modify: true}, temp.password);
@@ -190,12 +189,14 @@ function checkTailUser(id, place, msg) {
 
 function narrateFriends(id, friends, stat) {
     if (!friends) return;
-    var fl = Object.keys(friends);
+    const fl = Object.keys(friends);
 
     if (!fl.length) return;
 
     MainDB.users.find(['_id', {$in: fl}], ['server', /^\w+$/]).limit(['server', true]).on(function ($fon) {
-        var i, sf = {}, s;
+        let i;
+        const sf = {};
+        let s;
 
         for (i in $fon) {
             if (!sf[s = $fon[i].server]) sf[s] = [];
@@ -215,7 +216,7 @@ function narrateFriends(id, friends, stat) {
 }
 
 Cluster.on('message', function (worker, msg) {
-    var temp;
+    let temp;
 
     switch (msg.type) {
         case "admin":
@@ -283,7 +284,7 @@ Cluster.on('message', function (worker, msg) {
                 JLog.warn(`Wrong room-go id=${msg.id}&target=${msg.target}`);
                 if (ROOM[msg.id] && ROOM[msg.id].players) {
                     // 이 때 수동으로 지워준다.
-                    var x = ROOM[msg.id].players.indexOf(msg.target);
+                    const x = ROOM[msg.id].players.indexOf(msg.target);
 
                     if (x != -1) {
                         ROOM[msg.id].players.splice(x, 1);
@@ -312,7 +313,7 @@ Cluster.on('message', function (worker, msg) {
         case "room-expired":
             if (msg.create && ROOM[msg.id]) {
                 for (var i in ROOM[msg.id].players) {
-                    var $c = DIC[ROOM[msg.id].players[i]];
+                    const $c = DIC[ROOM[msg.id].players[i]];
 
                     if ($c) $c.send('roomStuck');
                 }
@@ -346,7 +347,7 @@ exports.init = function (_SID, CHAN) {
             });
         }
         Server.on('connection', function (socket) {
-            var key;
+            let key;
             // 토큰 복호화
             if (socket.upgradeReq.headers.host.match(/^127\.0\.0\.2:/)) {
                 key = socket.upgradeReq.url.slice(1);
@@ -357,13 +358,13 @@ exports.init = function (_SID, CHAN) {
                     key = ".";
                 }
                 // 토큰 값 검사
-                var pattern = /^[0-9a-zA-Z_-]{32}$/;
+                const pattern = /^[0-9a-zA-Z_-]{32}$/;
                 if (!pattern.test(key)) {
                     socket.send(`{ "type": "error", "code": "400" }`);
                     return;
                 }
             }
-            var $c;
+            let $c;
 
             socket.on('error', function (err) {
                 JLog.warn("Error on #" + key + " on ws: " + err.toString());
@@ -409,9 +410,9 @@ exports.init = function (_SID, CHAN) {
                         return;
                     }
 
-                    var userIp = $c.socket.upgradeReq.connection.remoteAddress;
-                    var lookuped = geoIp.lookup(userIp);
-                    var geoCountry = lookuped ? lookuped['country'] : 'NONE'
+                    const userIp = $c.socket.upgradeReq.connection.remoteAddress;
+                    const lookuped = geoIp.lookup(userIp);
+                    const geoCountry = lookuped ? lookuped['country'] : 'NONE';
 
                     if (geoCountry !== 'KR') {
                         JLog.info(`해외에서 손님으로 접속을 시도하였습니다. 아이피: ${userIp} 국가: ${geoCountry}`)
@@ -559,9 +560,9 @@ function logConnection($c, fingerprint2) {
 }
 
 function processClientRequest($c, msg) {
-    var stable = true;
-    var temp;
-    var now = (new Date()).getTime();
+    let stable = true;
+    let temp;
+    const now = (new Date()).getTime();
 
     if (!msg) return;
 

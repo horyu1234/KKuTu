@@ -15,17 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-var DB = require("../sub/db");
-var len = Number(process.argv[2] || 10);
+const DB = require("../sub/db");
+const len = Number(process.argv[2] || 10);
 
 DB.ready = function () {
-    var rank = 0;
-    var phit = 0;
+    let rank = 0;
+    let phit = 0;
 
     DB.kkutu['ko'].find(['hit', {$gt: 0}]).sort(['hit', -1]).limit(len).on(function ($res) {
-        var i, $o, c;
-        var res = [];
+        let i, $o, c;
+        const res = [];
 
         for (i in $res) {
             $o = $res[i];

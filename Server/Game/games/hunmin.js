@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-var Const = require('../../const');
-var Lizard = require('../../sub/lizard');
-var DB;
-var DIC;
+const Const = require('../../const');
+const Lizard = require('../../sub/lizard');
+let DB;
+let DIC;
 
 const ROBOT_START_DELAY = [1200, 800, 400, 200, 0];
 const ROBOT_TYPE_COEF = [1250, 750, 500, 250, 0];
@@ -33,8 +32,8 @@ exports.init = function (_DB, _DIC) {
     DIC = _DIC;
 };
 exports.getTitle = function () {
-    var R = new Lizard.Tail();
-    var my = this;
+    const R = new Lizard.Tail();
+    const my = this;
 
     my.game.done = [];
     setTimeout(function () {
@@ -43,7 +42,7 @@ exports.getTitle = function () {
     return R;
 };
 exports.roundReady = function () {
-    var my = this;
+    const my = this;
 
     clearTimeout(my.game.turnTimer);
     my.game.round++;
@@ -64,9 +63,9 @@ exports.roundReady = function () {
     }
 };
 exports.turnStart = function (force) {
-    var my = this;
-    var speed;
-    var si;
+    const my = this;
+    let speed;
+    let si;
 
     if (!my.game.chain) return;
     my.game.roundTime = Math.min(my.game.roundTime, Math.max(10000, 150000 - my.game.chain.length * 1500));
@@ -90,9 +89,9 @@ exports.turnStart = function (force) {
     }
 };
 exports.turnEnd = function () {
-    var my = this;
-    var target = DIC[my.game.seq[my.game.turn]] || my.game.seq[my.game.turn];
-    var score;
+    const my = this;
+    const target = DIC[my.game.seq[my.game.turn]] || my.game.seq[my.game.turn];
+    let score;
 
     if (my.game.loading) {
         my.game.turnTimer = setTimeout(my.turnEnd, 100);
@@ -117,10 +116,12 @@ exports.turnEnd = function () {
     clearTimeout(my.game.robotTimer);
 };
 exports.submit = function (client, text, data) {
-    var score, l = 'ko', t;
-    var my = this;
-    var tv = (new Date()).getTime();
-    var mgt = my.game.seq[my.game.turn];
+    let score;
+    const l = 'ko';
+    let t;
+    const my = this;
+    const tv = (new Date()).getTime();
+    const mgt = my.game.seq[my.game.turn];
 
     if (!mgt) return;
     if (!mgt.robot) if (mgt != client.id) return;
@@ -184,10 +185,10 @@ exports.submit = function (client, text, data) {
     }
 };
 exports.getScore = function (text, delay, ignoreMission) {
-    var my = this;
-    var tr = 1 - delay / my.game.turnTime;
-    var score = Const.getPreScore(text, my.game.chain, tr);
-    var arr;
+    const my = this;
+    const tr = 1 - delay / my.game.turnTime;
+    let score = Const.getPreScore(text, my.game.chain, tr);
+    let arr;
 
     if (!ignoreMission) if (arr = text.match(new RegExp(my.game.mission, "g"))) {
         score += score * 0.5 * arr.length;
@@ -196,10 +197,10 @@ exports.getScore = function (text, delay, ignoreMission) {
     return Math.round(score);
 };
 exports.readyRobot = function (robot) {
-    var my = this;
-    var level = robot.level;
-    var delay = ROBOT_START_DELAY[level];
-    var w, text;
+    const my = this;
+    const level = robot.level;
+    let delay = ROBOT_START_DELAY[level];
+    let w, text;
 
     getAuto.call(my, my.game.theme, 2).then(function (list) {
         if (list.length) {
@@ -238,20 +239,20 @@ function isChainable(text, theme) {
 }
 
 function toRegex(theme) {
-    var arg = theme.split('').map(toRegexText).join('');
+    const arg = theme.split('').map(toRegexText).join('');
 
     return new RegExp(`^(${arg})$`);
 }
 
 function toRegexText(item) {
-    var c = item.charCodeAt();
-    var a = 44032 + 588 * (c - 4352), b = a + 587;
+    const c = item.charCodeAt();
+    const a = 44032 + 588 * (c - 4352), b = a + 587;
 
     return `[\\u${a.toString(16)}-\\u${b.toString(16)}]`;
 }
 
 function getMission(theme) {
-    var flag;
+    let flag;
 
     if (!theme) return;
     if (Math.random() < 0.5) flag = 0;
@@ -266,14 +267,14 @@ function getAuto(theme, type) {
         1 존재 여부
         2 단어 목록
     */
-    var my = this;
-    var R = new Lizard.Tail();
-    var bool = type == 1;
+    const my = this;
+    const R = new Lizard.Tail();
+    const bool = type == 1;
 
-    var aqs = [['_id', toRegex(theme)]];
-    var aft;
-    var raiser;
-    var lst = false;
+    const aqs = [['_id', toRegex(theme)]];
+    let aft;
+    let raiser;
+    const lst = false;
 
     if (!my.opts.injeong) aqs.push(['flag', {'$nand': Const.KOR_FLAG.INJEONG}]);
     if (my.opts.loanword) aqs.push(['flag', {'$nand': Const.KOR_FLAG.LOANWORD}]);
@@ -305,8 +306,8 @@ function getAuto(theme, type) {
 }
 
 function getTheme(len, ex) {
-    var res = "";
-    var c, d;
+    let res = "";
+    let c, d;
 
     while (len > 0) {
         c = String.fromCharCode(HUNMIN_LIST[Math.floor(Math.random() * HUNMIN_LIST.length)]);

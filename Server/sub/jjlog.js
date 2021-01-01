@@ -38,17 +38,18 @@ let logger = winston.createLogger({
 const colors = require('colors');
 
 function callLog(text){
-	var date = new Date();
-	var o = {
-		year: 1900 + date.getYear(),
-		month: date.getMonth() + 1,
-		date: date.getDate(),
-		hour: date.getHours(),
-		minute: date.getMinutes(),
-		second: date.getSeconds()
-	}, i;
+    const date = new Date();
+    const o = {
+        year: 1900 + date.getYear(),
+        month: date.getMonth() + 1,
+        date: date.getDate(),
+        hour: date.getHours(),
+        minute: date.getMinutes(),
+        second: date.getSeconds()
+    };
+    let i;
 
-	for(i in o){
+    for(i in o){
 		if(o[i] < 10) o[i] = "0"+o[i];
 		else o[i] = o[i].toString();
 	}
