@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Cluster = require("Server/Game/cluster");
+var Cluster = require("cluster");
 var File = require('fs');
 var WebSocket = require('ws');
 var https = require('https');
