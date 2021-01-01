@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Const = require('../../const');
-var TYL = require('./typing_const');
-var Lizard = require('../../sub/lizard');
+const Const = require('../../const');
+const TYL = require('./typing_const');
+const Lizard = require('../../sub/lizard');
 var DB;
 var DIC;
 

@@ -18,7 +18,7 @@
 
 const DEBUG = true;
 
-var _Escape = require("pg-escape");
+const _Escape = require("pg-escape");
 var Escape = function (str) {
     var i = 1;
     var args = arguments;
@@ -45,8 +45,8 @@ var Escape = function (str) {
         }
     });
 };
-var Lizard = require('./lizard');
-var JLog = require('./jjlog');
+const Lizard = require('./lizard');
+const JLog = require('./jjlog');
 
 // (JSON ENDPOINT) KEY
 _Escape.asSKey = function (val) {

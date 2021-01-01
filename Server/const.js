@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var GLOBAL = require("./sub/global.json");
+const GLOBAL = require("./sub/global.json");
 
 exports.KKUTU_CLASSIC_COUNT = 0;
 exports.KKUTU_MAX = 400;

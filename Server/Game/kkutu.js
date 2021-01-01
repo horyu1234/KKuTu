@@ -17,11 +17,11 @@
  */
 
 var GUEST_PERMISSION;
-var Cluster = require("cluster");
-var Const = require('../const');
-var Lizard = require('../sub/lizard');
-var JLog = require('../sub/jjlog');
-// 망할 셧다운제 var Ajae = require("../sub/ajae");
+const Cluster = require("cluster");
+const Const = require('../const');
+const Lizard = require('../sub/lizard');
+const JLog = require('../sub/jjlog');
+// 망할 셧다운제 const Ajae = require("../sub/ajae");
 var DB;
 var SHOP;
 var DIC;
@@ -31,7 +31,7 @@ var Rule;
 var guestProfiles = [];
 var CHAN;
 var channel = process.env['CHANNEL'] || 0;
-var kkutuLevel = require("../sub/KKuTuLevel");
+const kkutuLevel = require("../sub/KKuTuLevel");
 
 const NUM_SLAVES = 4;
 const GUEST_IMAGE = "https://cdn.jsdelivr.net/npm/kkutuio@latest/img/kkutu/guest.png";

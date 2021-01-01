@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Const = require('../../const');
-var Lizard = require('../../sub/lizard');
-var JLog = require('../../sub/jjlog');
+const Const = require('../../const');
+const Lizard = require('../../sub/lizard');
+const JLog = require('../../sub/jjlog');
 var DB;
 var DIC;
 let SUBMIT_WORD_CACHE = {'ko': {}, 'en': {}};

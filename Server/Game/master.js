@@ -16,19 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Cluster = require("cluster");
-var File = require('fs');
-var WebSocket = require('ws');
-var https = require('https');
+const Cluster = require("cluster");
+const File = require('fs');
+const WebSocket = require('ws');
+const https = require('https');
 var HTTPS_Server;
-// var Heapdump = require("heapdump");
-var KKuTu = require('./kkutu');
-var Crypto = require("../sub/crypto");
-var GLOBAL = require("../sub/global.json");
-var Const = require("../const");
-var JLog = require('../sub/jjlog');
-var Secure = require('../sub/secure');
-var Recaptcha = require('../sub/recaptcha');
+// const Heapdump = require("heapdump");
+const KKuTu = require('./kkutu');
+const Crypto = require("../sub/crypto");
+const GLOBAL = require("../sub/global.json");
+const Const = require("../const");
+const JLog = require('../sub/jjlog');
+const Secure = require('../sub/secure');
+const Recaptcha = require('../sub/recaptcha');
 
 const geoIp = require('geoip-country');
 const {Webhook, MessageBuilder} = require('discord-webhook-node');

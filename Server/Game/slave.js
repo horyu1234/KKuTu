@@ -16,11 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var WebSocket = require('ws');
-var File = require('fs');
-var Const = require("../const");
-var https = require('https');
-var Secure = require('../sub/secure');
+const WebSocket = require('ws');
+const File = require('fs');
+const Const = require("../const");
+const https = require('https');
+const Secure = require('../sub/secure');
 var Server;
 var HTTPS_Server;
 
@@ -35,13 +35,13 @@ if (Const.IS_WS_SECURED) {
         perMessageDeflate: false
     });
 }
-var Master = require('./master');
-var KKuTu = require('./kkutu');
-var Crypto = require("../sub/crypto");
-var Lizard = require('../sub/lizard');
-var MainDB = require('../sub/db');
-var JLog = require('../sub/jjlog');
-var GLOBAL = require('../sub/global.json');
+const Master = require('./master');
+const KKuTu = require('./kkutu');
+const Crypto = require("../sub/crypto");
+const Lizard = require('../sub/lizard');
+const MainDB = require('../sub/db');
+const JLog = require('../sub/jjlog');
+const GLOBAL = require('../sub/global.json');
 
 var DIC = {};
 var DNAME = {};

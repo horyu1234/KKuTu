@@ -16,9 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Cluster = require("cluster");
-var Const = require('../const');
-var JLog = require('../sub/jjlog');
+const Cluster = require("cluster");
+const Const = require('../const');
+const JLog = require('../sub/jjlog');
 var SID = Number(process.argv[2]);
 var CPU = Number(process.argv[3]); //require("os").cpus().length;
 process.env['KKT_SV_TYPE'] = 'game';

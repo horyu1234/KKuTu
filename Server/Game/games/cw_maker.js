@@ -16,10 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var Prompt = require('prompt');
-var DB = require('../../sub/db');
-var Const = require('../../const');
-var Lizard = require('../../sub/lizard');
+const Prompt = require('prompt');
+const DB = require('../../sub/db');
+const Const = require('../../const');
+const Lizard = require('../../sub/lizard');
 var LANG = 'ko';
 
 Prompt.start();

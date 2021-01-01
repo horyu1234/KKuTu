@@ -18,12 +18,12 @@
 
 const LANG = ["ko", "en"];
 
-var PgPool = require("pg").Pool;
-var GLOBAL = require("./global.json");
-var JLog = require("./jjlog");
-var Collection = require("./collection");
-var Pub = require("./checkpub");
-var Lizard = require("./lizard");
+const PgPool = require("pg").Pool;
+const GLOBAL = require("./global.json");
+const JLog = require("./jjlog");
+const Collection = require("./collection");
+const Pub = require("./checkpub");
+const Lizard = require("./lizard");
 const ConnectionLog = require("./ConnectionLog");
 const UserBlockModule = require("./UserBlockModule");
 const VendorDBMigration = require("./VendorDBMigration");
@@ -42,7 +42,7 @@ const FAKE_REDIS = {
 };
 
 Pub.ready = function (isPub) {
-    var Redis = require("redis").createClient();
+    const Redis = require("redis").createClient();
     var Pg = new PgPool({
         user: GLOBAL.PG_USER,
         password: GLOBAL.PG_PASS,

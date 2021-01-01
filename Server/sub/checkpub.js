@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var File = require("fs");
+const File = require("fs");
 
 global.isPublic = false;
 
