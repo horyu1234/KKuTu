@@ -605,7 +605,7 @@ function getChar(text) {
         case 'KAP':
             return text.charAt(0);
     }
-};
+}
 
 function getSubChar(char) {
     var my = this;

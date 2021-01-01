@@ -199,7 +199,7 @@ exports.readyRobot = function (robot) {
             robot._timer = setTimeout(my.turnRobot, delay, robot, text);
             robot._delay = delay;
             break;
-        } else continue;
+        }
     }
 };
 

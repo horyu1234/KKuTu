@@ -271,8 +271,7 @@ function getBoard(lang) {
             if (board[k]) {
                 arg.push(board[k].chain);
                 reg += board[k].char;
-            }
-            else reg += ".";
+            } else reg += ".";
             p[m[2]]++;
         }
         if (regCache[reg]) {
