@@ -1613,6 +1613,12 @@ function getRewards(mode, score, bonus, rank, all, ss) {
         rw.together = true;
     }
     rw.score += bonus;
+
+    // 핑/경험치 이벤트 활성화 시 아래를 변경할 것
+    // rw.score *= 2;
+    // rw.money *= 2;
+    // ===========================================
+
     rw.score = rw.score || 0;
     rw.money = rw.money || 0;
 
