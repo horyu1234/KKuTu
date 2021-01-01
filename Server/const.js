@@ -15,7 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-const GLOBAL = require("./sub/global.json");
+
+var GLOBAL = require("./sub/global.json");
 
 exports.KKUTU_CLASSIC_COUNT = 0;
 exports.KKUTU_MAX = 400;

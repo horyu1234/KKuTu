@@ -15,10 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-const Const = require('../../const');
-const Lizard = require('../../sub/lizard');
-let DB;
-let DIC;
+
+var Const = require('../../const');
+var Lizard = require('../../sub/lizard');
+var DB;
+var DIC;
 
 const LANG_STATS = {
     'ko': {
@@ -38,8 +39,8 @@ exports.init = function (_DB, _DIC) {
     DIC = _DIC;
 };
 exports.getTitle = function () {
-    const R = new Lizard.Tail();
-    const my = this;
+    var R = new Lizard.Tail();
+    var my = this;
 
     setTimeout(function () {
         R.go("①②③④⑤⑥⑦⑧⑨⑩");
@@ -47,11 +48,11 @@ exports.getTitle = function () {
     return R;
 };
 exports.roundReady = function () {
-    const my = this;
-    const words = [];
-    const conf = LANG_STATS[my.rule.lang];
-    let len = conf.len;
-    let i, w;
+    var my = this;
+    var words = [];
+    var conf = LANG_STATS[my.rule.lang];
+    var len = conf.len;
+    var i, w;
 
     clearTimeout(my.game.turnTimer);
     my.game.round++;
@@ -82,7 +83,7 @@ exports.roundReady = function () {
     }
 };
 exports.turnStart = function () {
-    const my = this;
+    var my = this;
 
     my.game.late = false;
     my.game.roundAt = (new Date()).getTime();
@@ -92,7 +93,7 @@ exports.turnStart = function () {
     }, true);
 };
 exports.turnEnd = function () {
-    const my = this;
+    var my = this;
 
     my.game.late = true;
 
@@ -100,9 +101,9 @@ exports.turnEnd = function () {
     my.game._rrt = setTimeout(my.roundReady, 3000);
 };
 exports.submit = function (client, text, data) {
-    const my = this;
-    const play = (my.game.seq ? my.game.seq.includes(client.id) : false) || client.robot;
-    let score, i;
+    var my = this;
+    var play = (my.game.seq ? my.game.seq.includes(client.id) : false) || client.robot;
+    var score, i;
 
     if (!my.game.words) return;
     if (!text) return;
@@ -117,9 +118,9 @@ exports.submit = function (client, text, data) {
     DB.kkutu[my.rule.lang].findOne(['_id', text]).limit(['_id', true]).on(function ($doc) {
         if (!my.game.board) return;
 
-        let newBoard = my.game.board;
-        let _newBoard = newBoard;
-        let wl;
+        var newBoard = my.game.board;
+        var _newBoard = newBoard;
+        var wl;
 
         if ($doc) {
             wl = $doc._id.split('');
@@ -165,14 +166,14 @@ exports.submit = function (client, text, data) {
     }*/
 };
 exports.getScore = function (text, delay) {
-    const my = this;
+    var my = this;
 
     return Math.round(Math.pow(text.length - 1, 1.6) * 8);
 };
 
 function getBoard(words, len) {
-    const str = words.join("").split("");
-    let sl = str.length;
+    var str = words.join("").split("");
+    var sl = str.length;
 
     while (sl++ < len) str.push("　");
 

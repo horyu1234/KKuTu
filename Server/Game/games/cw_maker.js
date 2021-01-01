@@ -15,15 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-const Prompt = require('prompt');
-const DB = require('../../sub/db');
-const Const = require('../../const');
-const Lizard = require('../../sub/lizard');
-const LANG = 'ko';
+
+var Prompt = require('prompt');
+var DB = require('../../sub/db');
+var Const = require('../../const');
+var Lizard = require('../../sub/lizard');
+var LANG = 'ko';
 
 Prompt.start();
 DB.ready = function () {
-    let i;
+    var i;
 
     for (i in MAPS) {
         MC[MAPS[i].name] = 0;
@@ -32,7 +33,7 @@ DB.ready = function () {
         });
     }
     DB.kkutu_cw[LANG].find().on(function ($res) {
-        let j, lis, q;
+        var j, lis, q;
 
         for (i in $res) {
             MC[$res[i].map]++;
@@ -47,8 +48,8 @@ DB.ready = function () {
 
     function doMining() {
         getBoard(LANG).then(function (data) {
-            let j, o, s, t;
-            const res = [];
+            var j, o, s, t;
+            var res = [];
 
             console.log(data.map.name, "\n  0 1 2 3 4 5 6 7");
             for (i = 0; i < 8; i++) {
@@ -231,7 +232,7 @@ function getMap() {
     /* 희소 행렬 표기법
         [ x, y, 세로?, 길이 ]
     */
-    let i, li, lv = 99999999;
+    var i, li, lv = 99999999;
 
     for (i in MAPS) {
         if (lv > MC[MAPS[i].name]) {
@@ -243,21 +244,21 @@ function getMap() {
 }
 
 function getBoard(lang) {
-    const R = new Lizard.Tail();
-    const MEAN = ['mean', new RegExp("^.{9}[^=→][^\.]{15}")];
-    const NO_BUL = new RegExp("^(500|210|120|10)$");
-    const board = {};
-    const proc = [];
-    const map = getMap();
-    const queue = map.queue.slice(0);
-    const regCache = {};
+    var R = new Lizard.Tail();
+    var MEAN = ['mean', new RegExp("^.{9}[^=→][^\.]{15}")];
+    var NO_BUL = new RegExp("^(500|210|120|10)$");
+    var board = {};
+    var proc = [];
+    var map = getMap();
+    var queue = map.queue.slice(0);
+    var regCache = {};
 
     function process() {
-        let i, m = queue.shift();
-        const arg = [];
-        let reg = "";
-        let p, k;
-        const mapLen = queue.length;
+        var i, m = queue.shift();
+        var arg = [];
+        var reg = "";
+        var p, k;
+        var mapLen = queue.length;
 
         console.log("[PROCESS] QUEUE: " + mapLen);
         if (!m) {
@@ -295,9 +296,9 @@ function getBoard(lang) {
         });
 
         function onDBFound($doc) {
-            const obj = {};
-            const pick = $doc; // hit 순으로 하나씩 뽑자.
-            let j, l, n;
+            var obj = {};
+            var pick = $doc; // hit 순으로 하나씩 뽑자.
+            var j, l, n;
 
             if (pick && !words.includes(pick._id)) {
                 obj.word = pick._id;

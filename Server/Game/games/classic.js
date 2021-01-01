@@ -15,11 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-const Const = require('../../const');
-const Lizard = require('../../sub/lizard');
-const JLog = require('../../sub/jjlog');
-let DB;
-let DIC;
+
+var Const = require('../../const');
+var Lizard = require('../../sub/lizard');
+var JLog = require('../../sub/jjlog');
+var DB;
+var DIC;
 let SUBMIT_WORD_CACHE = {'ko': {}, 'en': {}};
 let WISH_WORD_CACHE = {'ko': {}, 'en': {}};
 
@@ -57,11 +58,11 @@ exports.init = function (_DB, _DIC) {
     });
 };
 exports.getTitle = function () {
-    const R = new Lizard.Tail();
-    const my = this;
-    const l = my.rule;
-    let EXAMPLE;
-    let eng, ja;
+    var R = new Lizard.Tail();
+    var my = this;
+    var l = my.rule;
+    var EXAMPLE;
+    var eng, ja;
 
     if (!l) {
         R.go("undefinedd");
@@ -102,7 +103,7 @@ exports.getTitle = function () {
             (l.lang == "ko") ? ['type', Const.KOR_GROUP] : ['_id', Const.ENG_ID]
             // '$where', eng+"this._id.length == " + Math.max(2, my.round) + " && this.hit <= " + h
         ).limit(20).on(function ($md) {
-            let list;
+            var list;
 
             if ($md.length) {
                 list = shuffle($md);
@@ -120,10 +121,9 @@ exports.getTitle = function () {
     }
 
     function checkTitle(title) {
-        const R = new Lizard.Tail();
-        let i;
-        const list = [];
-        let len;
+        var R = new Lizard.Tail();
+        var i, list = [];
+        var len;
 
         /* 부하가 너무 걸린다면 주석을 풀자.
         R.go(true);
@@ -149,7 +149,7 @@ exports.getTitle = function () {
     return R;
 };
 exports.roundReady = function () {
-    const my = this;
+    var my = this;
     if (!my.game.title) return;
 
     clearTimeout(my.game.turnTimer);
@@ -174,9 +174,9 @@ exports.roundReady = function () {
     }
 };
 exports.turnStart = function (force) {
-    const my = this;
-    let speed;
-    let si;
+    var my = this;
+    var speed;
+    var si;
 
     if (!my.game.chain) return;
     my.game.roundTime = Math.min(my.game.roundTime, Math.max(10000, 150000 - my.game.chain.length * 1500));
@@ -206,9 +206,9 @@ exports.turnStart = function (force) {
     }
 };
 exports.turnEnd = function () {
-    const my = this;
-    let target;
-    let score;
+    var my = this;
+    var target;
+    var score;
 
     if (!my.game.seq) return;
     target = DIC[my.game.seq[my.game.turn]] || my.game.seq[my.game.turn];
@@ -238,10 +238,10 @@ exports.turnEnd = function () {
     clearTimeout(my.game.robotTimer);
 };
 exports.submit = function (client, text) {
-    let score, l, t;
-    const my = this;
-    const tv = (new Date()).getTime();
-    const mgt = my.game.seq[my.game.turn];
+    var score, l, t;
+    var my = this;
+    var tv = (new Date()).getTime();
+    var mgt = my.game.seq[my.game.turn];
 
     if (!mgt) return;
     if (!mgt.robot) if (mgt != client.id) return;
@@ -255,9 +255,9 @@ exports.submit = function (client, text) {
 
     function onDB($doc) {
         if (!my.game.chain) return;
-        const preChar = getChar.call(my, text);
-        const preSubChar = getSubChar.call(my, preChar);
-        const firstMove = my.game.chain.length < 1;
+        var preChar = getChar.call(my, text);
+        var preSubChar = getSubChar.call(my, preChar);
+        var firstMove = my.game.chain.length < 1;
 
         function preApproved() {
             function approved() {
@@ -325,9 +325,9 @@ exports.submit = function (client, text) {
     }
 
     function isChainable() {
-        const type = Const.GAME_TYPE[my.mode];
-        const char = my.game.char, subChar = my.game.subChar;
-        const l = char.length;
+        var type = Const.GAME_TYPE[my.mode];
+        var char = my.game.char, subChar = my.game.subChar;
+        var l = char.length;
 
         if (!text) return false;
         if (text.length <= l) return false;
@@ -352,9 +352,9 @@ exports.submit = function (client, text) {
     }
 };
 exports.getScore = function (text, delay, ignoreMission) {
-    const my = this;
-    const tr = 1 - delay / my.game.turnTime;
-    let score, arr;
+    var my = this;
+    var tr = 1 - delay / my.game.turnTime;
+    var score, arr;
 
     if (!text || !my.game.chain || !my.game.dic) return 0;
     score = Const.getPreScore(text, my.game.chain, tr);
@@ -367,13 +367,13 @@ exports.getScore = function (text, delay, ignoreMission) {
     return Math.round(score);
 };
 exports.readyRobot = function (robot) {
-    const my = this;
-    const level = robot.level;
-    let delay = ROBOT_START_DELAY[level];
-    const ended = {};
-    let w, text, i;
-    let lmax;
-    const isRev = Const.GAME_TYPE[my.mode] == "KAP";
+    var my = this;
+    var level = robot.level;
+    var delay = ROBOT_START_DELAY[level];
+    var ended = {};
+    var w, text, i;
+    var lmax;
+    var isRev = Const.GAME_TYPE[my.mode] == "KAP";
 
     getAuto.call(my, my.game.char, my.game.subChar, 2).then(function (list) {
         if (list.length) {
@@ -393,7 +393,7 @@ exports.readyRobot = function (robot) {
                             ended[w].push(list[i]);
                         }
                         getWishList(Object.keys(ended)).then(function (key) {
-                            const v = ended[key];
+                            var v = ended[key];
 
                             if (!v) denied();
                             else pickList(v);
@@ -429,9 +429,9 @@ exports.readyRobot = function (robot) {
     }
 
     function getWishList(list) {
-        const R = new Lizard.Tail();
-        const wz = [];
-        let res;
+        var R = new Lizard.Tail();
+        var wz = [];
+        var res;
 
         for (i in list) wz.push(getWish(list[i]));
         Lizard.all(wz).then(function ($res) {
@@ -449,7 +449,7 @@ exports.readyRobot = function (robot) {
     }
 
     function getWish(char) {
-        const R = new Lizard.Tail();
+        var R = new Lizard.Tail();
 
         if (WISH_WORD_CACHE[my.rule.lang].hasOwnProperty(char)) {
             R.go({char: char, length: WISH_WORD_CACHE[my.rule.lang][char]});
@@ -468,7 +468,7 @@ exports.readyRobot = function (robot) {
 };
 
 function getMission(l) {
-    const arr = (l == "ko") ? Const.MISSION_ko : Const.MISSION_en;
+    var arr = (l == "ko") ? Const.MISSION_ko : Const.MISSION_en;
 
     if (!arr) return "-";
     return arr[Math.floor(Math.random() * arr.length)];
@@ -480,13 +480,13 @@ function getAuto(char, subc, type) {
         1 존재 여부
         2 단어 목록
     */
-    const my = this;
-    const R = new Lizard.Tail();
-    const gameType = Const.GAME_TYPE[my.mode];
-    let adv, adc;
-    const key = gameType + "_" + keyByOptions(my.opts);
-    const MAN = DB.kkutu_manner[my.rule.lang];
-    const bool = type == 1;
+    var my = this;
+    var R = new Lizard.Tail();
+    var gameType = Const.GAME_TYPE[my.mode];
+    var adv, adc;
+    var key = gameType + "_" + keyByOptions(my.opts);
+    var MAN = DB.kkutu_manner[my.rule.lang];
+    var bool = type == 1;
 
     adc = char + (subc ? ("|" + subc) : "");
     switch (gameType) {
@@ -519,9 +519,9 @@ function getAuto(char, subc, type) {
     });
 
     function produce() {
-        const aqs = [['_id', new RegExp(adv)]];
-        let aft;
-        let lst;
+        var aqs = [['_id', new RegExp(adv)]];
+        var aft;
+        var lst;
 
         if (!my.opts.injeong) aqs.push(['flag', {'$nand': Const.KOR_FLAG.INJEONG}]);
         if (my.rule.lang == "ko") {
@@ -573,7 +573,7 @@ function getAuto(char, subc, type) {
 }
 
 function keyByOptions(opts) {
-    const arr = [];
+    var arr = [];
 
     if (opts.injeong) arr.push('X');
     if (opts.loanword) arr.push('L');
@@ -582,8 +582,7 @@ function keyByOptions(opts) {
 }
 
 function shuffle(arr) {
-    let i;
-    const r = [];
+    var i, r = [];
 
     for (i in arr) r.push(arr[i]);
     r.sort(function (a, b) {
@@ -594,7 +593,7 @@ function shuffle(arr) {
 }
 
 function getChar(text) {
-    const my = this;
+    var my = this;
 
     switch (Const.GAME_TYPE[my.mode]) {
         case 'EKT':
@@ -609,11 +608,11 @@ function getChar(text) {
 };
 
 function getSubChar(char) {
-    const my = this;
-    let r;
-    const c = char.charCodeAt();
-    let k;
-    let ca, cb, cc;
+    var my = this;
+    var r;
+    var c = char.charCodeAt();
+    var k;
+    var ca, cb, cc;
 
     switch (Const.GAME_TYPE[my.mode]) {
         case "EKT":

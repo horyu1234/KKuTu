@@ -15,11 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-const Cluster = require("cluster");
-const Const = require('../const');
-const JLog = require('../sub/jjlog');
-const SID = Number(process.argv[2]);
-let CPU = Number(process.argv[3]); //require("os").cpus().length;
+
+var Cluster = require("cluster");
+var Const = require('../const');
+var JLog = require('../sub/jjlog');
+var SID = Number(process.argv[2]);
+var CPU = Number(process.argv[3]); //require("os").cpus().length;
 process.env['KKT_SV_TYPE'] = 'game';
 
 if (isNaN(SID)) {
@@ -36,9 +37,8 @@ if (isNaN(CPU)) {
     process.exit(1);
 }
 if (Cluster.isMaster) {
-    const channels = {};
-    let chan;
-    let i;
+    var channels = {}, chan;
+    var i;
 
     for (i = 0; i < CPU; i++) {
         chan = i + 1;

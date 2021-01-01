@@ -15,22 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-const Const = require('../../const');
-const Lizard = require('../../sub/lizard');
-let DB;
-let DIC;
 
-const ROBOT_CATCH_RATE = [0.1, 0.3, 0.5, 0.7, 0.99];
-const ROBOT_TYPE_COEF = [2000, 1200, 800, 300, 0];
-const robotTimers = {};
+var Const = require('../../const');
+var Lizard = require('../../sub/lizard');
+var DB;
+var DIC;
+
+var ROBOT_CATCH_RATE = [0.1, 0.3, 0.5, 0.7, 0.99];
+var ROBOT_TYPE_COEF = [2000, 1200, 800, 300, 0];
+var robotTimers = {};
 
 exports.init = function (_DB, _DIC) {
     DB = _DB;
     DIC = _DIC;
 };
 exports.getTitle = function () {
-    const R = new Lizard.Tail();
-    const my = this;
+    var R = new Lizard.Tail();
+    var my = this;
 
     my.game.done = [];
     setTimeout(function () {
@@ -39,8 +40,8 @@ exports.getTitle = function () {
     return R;
 };
 exports.roundReady = function () {
-    const my = this;
-    const ijl = my.opts.injpick.length;
+    var my = this;
+    var ijl = my.opts.injpick.length;
 
     clearTimeout(my.game.qTimer);
     clearTimeout(my.game.hintTimer);
@@ -72,8 +73,8 @@ exports.roundReady = function () {
     }
 };
 exports.turnStart = function () {
-    const my = this;
-    let i;
+    var my = this;
+    var i;
 
     if (!my.game.answer) return;
 
@@ -99,7 +100,7 @@ exports.turnStart = function () {
 };
 
 function turnHint() {
-    const my = this;
+    var my = this;
 
     my.byMaster('turnHint', {
         hint: my.game.hint[my.game.meaned++]
@@ -107,7 +108,7 @@ function turnHint() {
 }
 
 exports.turnEnd = function () {
-    const my = this;
+    var my = this;
 
     if (my.game.answer) {
         my.game.late = true;
@@ -118,12 +119,12 @@ exports.turnEnd = function () {
     my.game._rrt = setTimeout(my.roundReady, 2500);
 };
 exports.submit = function (client, text) {
-    const my = this;
-    let score, t, i;
-    const $ans = my.game.answer;
-    const now = (new Date()).getTime();
-    const play = (my.game.seq ? my.game.seq.includes(client.id) : false) || client.robot;
-    const gu = my.game.giveup ? my.game.giveup.includes(client.id) : true;
+    var my = this;
+    var score, t, i;
+    var $ans = my.game.answer;
+    var now = (new Date()).getTime();
+    var play = (my.game.seq ? my.game.seq.includes(client.id) : false) || client.robot;
+    var gu = my.game.giveup ? my.game.giveup.includes(client.id) : true;
 
     if (!my.game.winner) return;
     if (my.game.winner.indexOf(client.id) == -1
@@ -175,18 +176,18 @@ exports.submit = function (client, text) {
     }
 };
 exports.getScore = function (text, delay) {
-    const my = this;
-    const rank = my.game.hum - my.game.primary + 3;
-    const tr = 1 - delay / my.game.roundTime;
-    const score = 6 * Math.pow(rank, 1.4) * (0.5 + 0.5 * tr);
+    var my = this;
+    var rank = my.game.hum - my.game.primary + 3;
+    var tr = 1 - delay / my.game.roundTime;
+    var score = 6 * Math.pow(rank, 1.4) * (0.5 + 0.5 * tr);
 
     return Math.round(score * my.game.themeBonus);
 };
 exports.readyRobot = function (robot) {
-    const my = this;
-    const level = robot.level;
-    let delay, text;
-    let i;
+    var my = this;
+    var level = robot.level;
+    var delay, text;
+    var i;
 
     if (!my.game.answer) return;
     clearTimeout(robot._timer);
@@ -203,11 +204,10 @@ exports.readyRobot = function (robot) {
 };
 
 function getConsonants(word, lucky) {
-    let R = "";
-    let i;
-    const len = word.length;
-    let c;
-    const rv = [];
+    var R = "";
+    var i, len = word.length;
+    var c;
+    var rv = [];
 
     lucky = lucky || 0;
     while (lucky > 0) {
@@ -229,9 +229,9 @@ function getConsonants(word, lucky) {
 }
 
 function getHint($ans) {
-    const R = [];
-    const h1 = $ans.mean.replace(new RegExp($ans._id, "g"), "★");
-    let h2;
+    var R = [];
+    var h1 = $ans.mean.replace(new RegExp($ans._id, "g"), "★");
+    var h2;
 
     R.push(h1);
     do {
@@ -243,17 +243,17 @@ function getHint($ans) {
 }
 
 function getAnswer(theme, nomean) {
-    const my = this;
-    const R = new Lizard.Tail();
-    const args = [['_id', {$nin: my.game.done}]];
+    var my = this;
+    var R = new Lizard.Tail();
+    var args = [['_id', {$nin: my.game.done}]];
 
     args.push(['theme', new RegExp("(,|^)(" + theme + ")(,|$)")]);
     args.push(['type', Const.KOR_GROUP]);
     args.push(['flag', {$lte: 7}]);
     DB.kkutu['ko'].find.apply(my, args).on(function ($res) {
         if (!$res) return R.go(null);
-        let pick;
-        let len = $res.length;
+        var pick;
+        var len = $res.length;
 
         if (!len) return R.go(null);
         do {

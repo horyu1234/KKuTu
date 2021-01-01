@@ -18,15 +18,15 @@
 
 const DEBUG = true;
 
-const _Escape = require("pg-escape");
-const Escape = function (str) {
-    const i = 1;
-    const args = arguments;
+var _Escape = require("pg-escape");
+var Escape = function (str) {
+    var i = 1;
+    var args = arguments;
 
     return str.replace(/%([%sILQkKV])/g, function (_, type) {
         if ('%' == type) return '%';
 
-        const arg = args[i++];
+        var arg = args[i++];
         switch (type) {
             case 's':
                 return _Escape.string(arg);
@@ -45,12 +45,12 @@ const Escape = function (str) {
         }
     });
 };
-const Lizard = require('./lizard');
-const JLog = require('./jjlog');
+var Lizard = require('./lizard');
+var JLog = require('./jjlog');
 
 // (JSON ENDPOINT) KEY
 _Escape.asSKey = function (val) {
-    let c;
+    var c;
 
     if (val.indexOf(".") == -1) return _Escape.asKey(val);
     c = val.split('.').map(function (item, x) {
@@ -62,12 +62,12 @@ _Escape.asSKey = function (val) {
 // KEY
 _Escape.asKey = function (val) {
     if (val.indexOf(".") == -1) {
-        const v = _Escape.ident(val);
+        var v = _Escape.ident(val);
 
         if (v.charAt(0) == "\"") return v;
         else return "\"" + v + "\"";
     }
-    const ar = val.split('.'), aEnd = ar.pop();
+    var ar = val.split('.'), aEnd = ar.pop();
 
     return ar.map(function (item, x) {
         return x ? `'${_Escape.literal(item)}'` : _Escape.ident(item);
@@ -75,7 +75,7 @@ _Escape.asKey = function (val) {
 };
 // VALUE
 _Escape.asValue = function (val) {
-    const type = typeof val;
+    var type = typeof val;
 
     if (val instanceof Array) return _Escape.literal("{" + val.join(',') + "}");
     if (type == 'number') return val;
@@ -85,14 +85,13 @@ _Escape.asValue = function (val) {
 
 global.getType = function (obj) {
     if (obj === undefined) return "";
-    const s = obj.constructor.toString();
+    var s = obj.constructor.toString();
 
     return s.slice(9, s.indexOf("("));
 };
 
 function query(_q) {
-    let i;
-    const res = [];
+    var i, res = [];
 
     for (i in _q) if (_q[i]) res.push(_q[i]);
 
@@ -100,8 +99,7 @@ function query(_q) {
 }
 
 function oQuery(_q) {
-    let i;
-    const res = [];
+    var i, res = [];
 
     for (i in _q) if (_q[i]) res.push([i, _q[i]]);
 
@@ -109,18 +107,15 @@ function oQuery(_q) {
 }
 
 function uQuery(q, id) {
-    let i;
-    const res = [];
-    let noId = true;
+    var i, res = [], noId = true;
 
     for (i in q) {
-        let c = q[i][0];
+        var c = q[i][0];
 
         if (q[i][0] == "_id") {
             noId = false;
         } else if (c.split) if ((c = c.split('.')).length > 1) {
-            const jo = {};
-            let j = jo;
+            var jo = {}, j = jo;
 
             q[i][0] = c.shift();
             while (c.length > 1) {
@@ -148,7 +143,7 @@ function sqlWhere(q) {
     if (!Object.keys(q).length) return "TRUE";
 
     function wSearch(item) {
-        let c;
+        var c;
 
         if ((c = item[1]['$not']) !== undefined) return Escape("NOT (%s)", wSearch([item[0], c]));
         if ((c = item[1]['$nand']) !== undefined) return Escape("%K & %V = 0", item[0], c);
@@ -178,7 +173,7 @@ function sqlSet(q, inc) {
         JLog.warn("[sqlSet] Invalid query.");
         return null;
     }
-    const doN = inc ? function (k, v) {
+    var doN = inc ? function (k, v) {
         return Escape("%K=%K+%V", k, k, v);
     } : function (k, v) {
         return Escape("%K=%V", k, v);
@@ -187,9 +182,9 @@ function sqlSet(q, inc) {
         return null; //Escape("%K=jsonb_set(%K,%V,CAST(CAST(%k AS bigint)+%V AS text),true)", k, k, p, ok, Number(v));
     } : function (k, p, ok, v) {
         return Escape("%K=jsonb_set(%K,%V,%V,true)", k, k, p, v);
-    };
+    }
     return q.map(function (item) {
-        const c = item[0].split('.');
+        var c = item[0].split('.');
 
         if (c.length == 1) {
             return doN(item[0], item[1]);
@@ -216,9 +211,9 @@ function sqlIV(q) {
 }
 
 function isDataAvailable(data, chk) {
-    let i, j;
-    let path;
-    let cursor;
+    var i, j;
+    var path;
+    var cursor;
 
     if (data == null) return false;
     for (i in chk) {
@@ -235,13 +230,13 @@ function isDataAvailable(data, chk) {
 }
 
 exports.Agent = function (type, origin) {
-    const my = this;
+    var my = this;
 
     this.RedisTable = function (key) {
-        const my = this;
+        var my = this;
 
         my.putGlobal = function (id, score) {
-            const R = new Lizard.Tail();
+            var R = new Lizard.Tail();
 
             origin.zadd([key, score, id], function (err, res) {
                 R.go(id);
@@ -249,7 +244,7 @@ exports.Agent = function (type, origin) {
             return R;
         };
         my.getGlobal = function (id) {
-            const R = new Lizard.Tail();
+            var R = new Lizard.Tail();
 
             origin.zrevrank([key, id], function (err, res) {
                 R.go(res);
@@ -257,13 +252,12 @@ exports.Agent = function (type, origin) {
             return R;
         };
         my.getPage = function (pg, lpp) {
-            const R = new Lizard.Tail();
+            var R = new Lizard.Tail();
 
             origin.zrevrange([key, pg * lpp, (pg + 1) * lpp - 1, "WITHSCORES"], function (err, res) {
-                const A = [];
-                let rank = pg * lpp;
-                let i;
-                const len = res.length;
+                var A = [];
+                var rank = pg * lpp;
+                var i, len = res.length;
 
                 for (i = 0; i < len; i += 2) {
                     A.push({id: res[i], rank: rank++, score: res[i + 1]});
@@ -273,18 +267,18 @@ exports.Agent = function (type, origin) {
             return R;
         };
         my.getSurround = function (id, rv) {
-            const R = new Lizard.Tail();
-            let i;
+            var R = new Lizard.Tail();
+            var i;
 
             rv = rv || 8;
             origin.zrevrank([key, id], function (err, res) {
-                const range = [Math.max(0, res - Math.round(rv / 2 + 1)), 0];
+                var range = [Math.max(0, res - Math.round(rv / 2 + 1)), 0];
 
                 range[1] = range[0] + rv - 1;
                 origin.zrevrange([key, range[0], range[1], "WITHSCORES"], function (err, res) {
                     if (!res) return R.go({target: id, data: []});
 
-                    const A = [], len = res.length;
+                    var A = [], len = res.length;
 
                     for (i = 0; i < len; i += 2) {
                         A.push({id: res[i], rank: range[0]++, score: res[i + 1]});
@@ -296,9 +290,9 @@ exports.Agent = function (type, origin) {
         };
     };
     this.PostgresTable = function (col) {
-        const my = this;
-        const pointer = function (mode, q, flag) {
-            const _my = this;
+        var my = this;
+        var pointer = function (mode, q, flag) {
+            var _my = this;
             /* on: 입력받은 쿼리를 실행시킨다.
                 @f		콜백 함수
                 @chk	정보가 유효할 조건
@@ -308,9 +302,9 @@ exports.Agent = function (type, origin) {
             _my.sorts = null;
 
             this.on = function (f, chk, onFail) {
-                let sql;
-                let sq = _my.second['$set'];
-                let uq;
+                var sql;
+                var sq = _my.second['$set'];
+                var uq;
 
                 function preCB(err, res) {
                     if (err) {
