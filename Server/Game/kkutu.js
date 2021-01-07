@@ -437,19 +437,40 @@ exports.Client = function (socket, profile, sid) {
         if (my.guest) return my.send('chat', {notice: true, code: 401});
         my.publish('chat', {value: msg, notice: code ? true : false, code: code});
 
+        function getInquireId(caseId) {
+            const date = new Date();
+            return `BLK-CHAT-${caseId}-${date.getMonth() + 1}.${date.getDate()}.${date.getHours()}.${date.getMinutes()}`;
+        }
+
+        function isPardon(pardonTime) {
+            return new Date(pardonTime).getTime() < new Date().getTime();
+        }
+
+        function formatTime(time) {
+            const timezoneOffset = new Date().getTimezoneOffset() * 60000;
+            const timezoneTime = new Date(time - timezoneOffset);
+
+            return timezoneTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+        }
+
         function makeBlockChatMessage(block) {
-            let message = '회원님의 계정은 채팅이 ' + (block.permanency ? '영구적으로' : '일정 기간') + ' 제한되었습니다.<br/>' +
+            if (isPardon(block.pardonTime)) {
+                return '페이지를 새로 고침하면 채팅을 다시 이용하실 수 있습니다.';
+            }
+
+            let message = '채팅 이용이 제한되었습니다!<br/>' +
+                '끄투리오 운영 정책을 위반한 것이 확인되어 채팅 이용이 ' + (block.permanency ? '영구적으로' : '일정 기간') + '제한되었습니다.<br/>' +
                 '<br/>' +
-                '제한 일자: ' + block.time.toISOString().replace(/T/, ' ').replace(/\..+/, '') + '<br/>';
+                '제한 일시: ' + formatTime(block.time) + '<br/>';
 
             if (!block.permanency) {
-                message += '해제 일자: ' + block.pardonTime.toISOString().replace(/T/, ' ').replace(/\..+/, '') + '<br/>';
+                message += '해제 일시: ' + formatTime(block.pardonTime) + '<br/>';
             }
 
             message += '사유: ' + block.reason + '<br/>' +
-                '처리자: ' + block.punisher + '<br/>' +
                 '<br/>' +
-                '본 처리에 이의가 있으신 분은 all@kkutu.io 이메일로 문의해주시기 바랍니다.';
+                '본 제재에 이의가 있으실 경우 support@kkutu.io 이메일로 문의해주시기 바랍니다.<br/>' +
+                '문의 시 사용자 식별을 위하여 이메일에 ' + getInquireId(block.id) + ' 문구와 자세한 내용을 포함해주시기 바랍니다.';
 
             return message;
         }
@@ -491,110 +512,93 @@ exports.Client = function (socket, profile, sid) {
     my.refresh = function () {
         let R = new Lizard.Tail();
 
-        let ip = my.socket.upgradeReq.connection.remoteAddress;
-        DB.UserBlockModule.checkBlockIp(ip, function (result) {
-            if (result.block) {
-                R.go({
-                    result: 551,
-                    black: result
-                });
-            } else {
-                if (my.guest) {
-                    my.equip = {};
-                    my.data = new exports.Data();
-                    my.money = 0;
-                    my.friends = {};
+        if (my.guest) {
+            my.equip = {};
+            my.data = new exports.Data();
+            my.money = 0;
+            my.friends = {};
 
-                    R.go({
-                        result: 200
-                    });
-                } else {
-                    DB.VendorDBMigration.processVendorMigration(my.id, function () {
-                        DB.users.findOne(['_id', my.id]).on(function ($user) {
-                            let first = !$user;
-                            let black = first ? "" : $user.black;
+            R.go({
+                result: 200
+            });
+        } else {
+            DB.VendorDBMigration.processVendorMigration(my.id, function () {
+                DB.users.findOne(['_id', my.id]).on(function ($user) {
+                    let first = !$user;
+                    let black = first ? "" : $user.black;
 
-                            if (first) {
-                                $user = {money: 0};
+                    if (first) {
+                        $user = {money: 0};
+                    }
+                    if (black === "null" || black === "") {
+                        black = false;
+                    }
+                    if (black === "chat") {
+                        black = false;
+                        my.noChat = true;
+                    }
+
+                    /* 망할 셧다운제
+                    if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
+                        my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
+                        if(my.isAjae === null){
+                            if(my._birth) my._checkAjae = setTimeout(function(){
+                                my.sendError(442);
+                                my.socket.close();
+                            }, 300000);
+                            else{
+                                my.sendError(441);
+                                my.socket.close();
+                                return;
                             }
-                            if (black === "null" || black === "") {
-                                black = false;
-                            }
-                            if (black === "chat") {
-                                black = false;
-                                my.noChat = true;
-                            }
+                        }
+                    }*/
 
-                            /* 망할 셧다운제
-                            if(Cluster.isMaster && !my.isAjae){ // null일 수는 없다.
-                                my.isAjae = Ajae.checkAjae(($user.birthday || "").split('-'));
-                                if(my.isAjae === null){
-                                    if(my._birth) my._checkAjae = setTimeout(function(){
-                                        my.sendError(442);
-                                        my.socket.close();
-                                    }, 300000);
-                                    else{
-                                        my.sendError(441);
-                                        my.socket.close();
-                                        return;
-                                    }
-                                }
-                            }*/
+                    my.exordial = $user.exordial || "";
+                    my.equip = $user.equip || {};
+                    my.box = $user.box || {};
+                    my.data = new exports.Data($user.kkutu);
+                    my.money = Number($user.money);
+                    my.friends = $user.friends || {};
 
-                            my.exordial = $user.exordial || "";
-                            my.equip = $user.equip || {};
-                            my.box = $user.box || {};
-                            my.data = new exports.Data($user.kkutu);
-                            my.money = Number($user.money);
-                            my.friends = $user.friends || {};
+                    if (first) {
+                        my.flush();
+                    } else {
+                        my.checkExpire();
+                        my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
+                    }
 
-                            if (first) {
-                                my.flush();
-                            } else {
-                                my.checkExpire();
-                                my.okgCount = Math.floor((my.data.playTime || 0) / PER_OKG);
-                            }
-
-                            if (black) {
-                                R.go({
-                                    result: 444,
-                                    black: black
-                                });
-                            } else {
-                                DB.UserBlockModule.checkBlockUser(my.id, function (result) {
-                                    if (result.block) {
-                                        R.go({
-                                            result: 550,
-                                            black: result
-                                        });
-                                    }/* else if (Cluster.isMaster && $user.server) {
-                                        R.go({
-                                            result: 409,
-                                            black: $user.server
-                                        });
-                                    }*/ else if (exports.NIGHT && my.isAjae === false) {
-                                        R.go({
-                                            result: 440
-                                        });
-                                    } else {
-                                        DB.UserBlockModule.checkBlockChat(my.id, function (result) {
-                                            if (result.block) {
-                                                my.dbBlockedChat = result;
-                                            }
-
-                                            R.go({
-                                                result: 200
-                                            });
-                                        });
-                                    }
-                                });
-                            }
+                    if (black) {
+                        R.go({
+                            result: 444,
+                            black: black
                         });
-                    });
-                }
-            }
-        });
+                    } else {
+                        /* else if (Cluster.isMaster && $user.server) {
+                                R.go({
+                                    result: 409,
+                                    black: $user.server
+                                });
+                            }*/
+                        if (exports.NIGHT && my.isAjae === false) {
+                            R.go({
+                                result: 440
+                            });
+                        } else {
+                            DB.UserBlockModule.checkBlockChat(my.id, function (result) {
+                                if (result.block) {
+                                    my.dbBlockedChat = result;
+                                }
 
+                                R.go({
+                                    result: 200
+                                });
+                            });
+                        }
+                    }
+                });
+            });
+        }
         return R;
     };
     my.flush = function (box, equip, friends) {

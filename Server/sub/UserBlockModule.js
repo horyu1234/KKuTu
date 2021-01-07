@@ -9,109 +9,8 @@ exports.initDatabase = function (_database) {
     database = _database;
 };
 
-function checkBlockUser(id, callback) {
-    let query = "SELECT * " +
-        "FROM block_users " +
-        "WHERE id=$1;";
-
-    database.query(query, [id], (err, result) => {
-        if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
-        }
-
-        if (callback === undefined) {
-            return;
-        }
-
-        let rows = result.rows;
-        if (rows.length !== 1) {
-            callback({
-                block: false
-            });
-            return;
-        }
-
-        let row = rows[0];
-
-        let resultJson = {
-            block: true,
-            time: new Date(row.time),
-            pardonTime: row.pardon_time === null ? null : new Date(row.pardon_time),
-            reason: row.reason,
-            punisher: row.punisher
-        };
-
-        if (resultJson.pardonTime === null) {
-            resultJson.permanency = true;
-        } else {
-            resultJson.permanency = false;
-
-            if (isPardon(resultJson.pardonTime)) {
-                resultJson.block = false;
-                removeBlockUser(id);
-            }
-        }
-
-        callback(resultJson);
-    })
-}
-
-function checkBlockIp(ip, callback) {
-    if (ip.indexOf(':') > -1) {
-        let splitedIp = ip.split(':');
-        ip = splitedIp[splitedIp.length - 1];
-    }
-
-    let query = "SELECT * " +
-        "FROM block_ips " +
-        "WHERE ip=$1;";
-
-    database.query(query, [ip], (err, result) => {
-        if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
-        }
-
-        if (callback === undefined) {
-            return;
-        }
-
-        let rows = result.rows;
-        if (rows.length !== 1) {
-            callback({
-                block: false
-            });
-            return;
-        }
-
-        let row = rows[0];
-
-        let resultJson = {
-            block: true,
-            time: new Date(row.time),
-            pardonTime: row.pardon_time === null ? null : new Date(row.pardon_time),
-            reason: row.reason,
-            punisher: row.punisher
-        };
-
-        if (resultJson.pardonTime === null) {
-            resultJson.permanency = true;
-        } else {
-            resultJson.permanency = false;
-
-            if (isPardon(resultJson.pardonTime)) {
-                resultJson.block = false;
-                removeBlockIp(ip);
-            }
-        }
-
-        callback(resultJson);
-    })
-}
-
 function checkBlockChat(id, callback) {
-    let query = "SELECT * " +
-        "FROM block_chat " +
-        "WHERE id=$1;";
+    let query = "SELECT * FROM block_chat WHERE user_id=$1;";
 
     database.query(query, [id], (err, result) => {
         if (err) {
@@ -123,7 +22,7 @@ function checkBlockChat(id, callback) {
         }
 
         let rows = result.rows;
-        if (rows.length !== 1) {
+        if (rows.length === 0) {
             callback({
                 block: false
             });
@@ -134,10 +33,12 @@ function checkBlockChat(id, callback) {
 
         let resultJson = {
             block: true,
-            time: new Date(row.time),
-            pardonTime: row.pardon_time === null ? null : new Date(row.pardon_time),
+            id: row.id,
+            time: row.time,
+            pardonTime: row.pardon_time,
             reason: row.reason,
-            punisher: row.punisher
+            punishFrom: row.punish_from,
+            admin: row.admin
         };
 
         if (resultJson.pardonTime === null) {
@@ -146,8 +47,12 @@ function checkBlockChat(id, callback) {
             resultJson.permanency = false;
 
             if (isPardon(resultJson.pardonTime)) {
-                resultJson.block = false;
-                removeBlockChat(id);
+                removeBlockChat(resultJson.id);
+                addBlockLog(id, resultJson.id, resultJson.time, resultJson.pardonTime, resultJson.reason, resultJson.punishFrom, resultJson.admin);
+
+                resultJson = {
+                    block: false
+                };
             }
         }
 
@@ -156,44 +61,27 @@ function checkBlockChat(id, callback) {
 }
 
 function isPardon(pardonTime) {
-    let currentTime = new Date();
-
-    return pardonTime.getTime() < currentTime.getTime();
+    return new Date(pardonTime).getTime() < new Date().getTime();
 }
 
-function removeBlockUser(id) {
-    let query = "DELETE FROM block_users " +
-        "WHERE id=$1";
+const removeBlockChat = (caseId) => {
+    let query = "DELETE FROM block_chat WHERE id=$1";
 
-    database.query(query, [id], (err, result) => {
+    database.query(query, [caseId], (err, result) => {
         if (err) {
             return JLog.error(`Error executing query ${err.stack}`);
         }
     })
 }
 
-function removeBlockIp(ip) {
-    let query = "DELETE FROM block_ips " +
-        "WHERE ip=$1";
+const addBlockLog = (userId, caseId, time, pardonTime, reason, punishFrom, admin) => {
+    let query = "INSERT INTO block_log (block_type, log_type, user_id, case_id, ip_address, time, pardon_time, reason, punish_from, admin) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)";
 
-    database.query(query, [ip], (err, result) => {
+    database.query(query, ['CHAT', 'AUTO_REMOVE', userId, caseId, null, time, pardonTime, reason, punishFrom, admin], (err, result) => {
         if (err) {
             return JLog.error(`Error executing query ${err.stack}`);
         }
     })
 }
 
-function removeBlockChat(id) {
-    let query = "DELETE FROM block_chat " +
-        "WHERE id=$1";
-
-    database.query(query, [id], (err, result) => {
-        if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
-        }
-    })
-}
-
-exports.checkBlockUser = checkBlockUser;
-exports.checkBlockIp = checkBlockIp;
 exports.checkBlockChat = checkBlockChat;

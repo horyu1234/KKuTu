@@ -445,12 +445,12 @@ exports.init = function (_SID, CHAN) {
                         if (ref.result === 550) {
                             // 정지된 계정
                             $c.send('error', {
-                                code: ref.result, message: makeBlockMessage('회원님의 계정은', ref.black)
+                                code: ref.result, message: ref.black
                             });
                         } else if (ref.result === 551) {
                             // 정지된 아이피
                             $c.send('error', {
-                                code: ref.result, message: makeBlockMessage('현재 접속한 아이피는', ref.black)
+                                code: ref.result, message: ref.black
                             });
                         } else {
                             $c.send('error', {
@@ -469,23 +469,6 @@ exports.init = function (_SID, CHAN) {
         });
         KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION, CHAN);
     };
-
-    function makeBlockMessage(targetTitle, block) {
-        let message = targetTitle + ' ' + (block.permanency ? '영구적으로' : '일정 기간') + ' 정지되었습니다.\n' +
-            '\n' +
-            '제한 일자: ' + block.time.toISOString().replace(/T/, ' ').replace(/\..+/, '') + '\n';
-
-        if (!block.permanency) {
-            message += '해제 일자: ' + block.pardonTime.toISOString().replace(/T/, ' ').replace(/\..+/, '') + '\n';
-        }
-
-        message += '사유: ' + block.reason + '\n' +
-            '처리자: ' + block.punisher + '\n' +
-            '\n' +
-            '본 처리에 이의가 있으신 분은 all@kkutu.io 이메일로 문의해주시기 바랍니다.';
-
-        return message;
-    }
 };
 
 function joinNewUser($c) {
