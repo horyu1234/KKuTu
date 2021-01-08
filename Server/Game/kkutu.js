@@ -210,6 +210,24 @@ exports.WebServer = function (socket) {
             case 'narrate-friend':
                 exports.narrate(msg.list, 'friend', {id: msg.id, s: msg.s, stat: msg.stat});
                 break;
+            case 'kick':
+                if (msg.hasOwnProperty('userId') && msg.userId.length > 0 && DIC.hasOwnProperty(msg.userId)) {
+                    const player = DIC[msg.userId];
+                    player.sendError(410);
+                    player.socket.close();
+                } else if (msg.hasOwnProperty('ip') && msg.ip.length > 0) {
+                    for (let userId in DIC) {
+                        if (!DIC.hasOwnProperty(userId)) continue;
+                        const player = DIC[userId];
+                        const playerIp = player.socket._socket.remoteAddress.slice(7);
+
+                        if (playerIp === msg.ip) {
+                            player.sendError(410);
+                            player.socket.close();
+                        }
+                    }
+                }
+                break;
             default:
         }
     };
