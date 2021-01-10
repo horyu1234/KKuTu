@@ -52,23 +52,6 @@ exports.OPTIONS = {
     'beg': {name: "OnlyBeginner"},
     'nog': {name: "NoGuest"}
 };
-exports.MOREMI_PART = ['back', 'eye', 'mouth', 'shoes', 'clothes', 'head', 'lhand', 'rhand', 'front'];
-exports.CATEGORIES = ["all", "spec", "skin", "badge", "head", "eye", "mouth", "clothes", "hs", "back"];
-exports.AVAIL_EQUIP = [
-    "NIK", "BDG1", "BDG2", "BDG3", "BDG4",
-    "Mhead", "Meye", "Mmouth", "Mhand", "Mclothes", "Mshoes", "Mback"
-];
-exports.GROUPS = {
-    'spec': ["PIX", "PIY", "PIZ", "CNS"],
-    'skin': ["NIK"],
-    'badge': ["BDG1", "BDG2", "BDG3", "BDG4"],
-    'head': ["Mhead"],
-    'eye': ["Meye"],
-    'mouth': ["Mmouth"],
-    'clothes': ["Mclothes"],
-    'hs': ["Mhand", "Mshoes"],
-    'back': ["Mback", "Mfront"]
-};
 exports.RULE = {
     /*
         유형: { lang: 언어,
