@@ -19,8 +19,8 @@
 const Const = require('../const');
 const File = require('fs');
 
-module.exports = (isWS) => {
-    const SSL_OPTIONS = isWS ? Const.WS_SSL_OPTIONS : Const.HTTP_SSL_OPTIONS;
+module.exports = () => {
+    const SSL_OPTIONS = Const.WS_SSL_OPTIONS
     const options = {};
 
     if (SSL_OPTIONS.isPFX === true) {

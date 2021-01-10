@@ -5,8 +5,6 @@
   "MAIN_PORTS": [
     8080
   ],
-  "KKUTUHOT_PATH": "/kkutu/data/kkutuhot.json",
-  "PASS": "Your password for management Here",
   "PG_USER": "postgres",
   "PG_PASS": "Your PostgreSQL Password Here",
   "PG_PORT": 5432,
@@ -16,22 +14,8 @@
   "GOOGLE_RECAPTCHA_SITE_KEY": "Your Google Recaptcha site key Here",
   "GOOGLE_RECAPTCHA_SECRET_KEY": "Your Google Recaptcha secret key Here",
   "CRYPTO_KEY": "Your Crypto Key Here",
-  "HTTP_PORT": 80,
-  "HTTPS_PORT": 443,
-  "FORCE_USE_HTTPS": false,
-  "IS_HTTP_SECURED": false,
-  "IS_WS_SECURED": false,
   "WEBHOOK_URI": "Your WebHook URI Here",
-  "REDIS_SECRET": "Your Redis Secret Here",
-  "HTTP_SSL_OPTIONS": {
-    "PRIVKEY": "Your SSL Private Key Here",
-    "CERT": "Your SSL Certificate Here",
-    "CA": "Your SSL CA-Bundle Here",
-    "PFX": "Your PFX Bundle Here",
-    "PFXPass": "Your PFX Passphrase here",
-    "isPFX": false,
-    "isCA": false
-  },
+  "IS_WS_SECURED": false,
   "WS_SSL_OPTIONS": {
     "PRIVKEY": "Your SSL Private Key Here",
     "CERT": "Your SSL Certificate Here",
