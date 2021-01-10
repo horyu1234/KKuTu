@@ -36,7 +36,7 @@ exports.MAX_OBSERVER = 4;
 exports.TESTER = GLOBAL.ADMIN.concat([
     "Input tester id here"
 ]);
-exports.WEBHOOK_URI = GLOBAL.WEBHOOK_URI;
+exports.DISCORD_WEBHOOK = GLOBAL.DISCORD_WEBHOOK;
 exports.IS_WS_SECURED = GLOBAL.IS_WS_SECURED;
 exports.WS_SSL_OPTIONS = GLOBAL.WS_SSL_OPTIONS;
 exports.OPTIONS = {

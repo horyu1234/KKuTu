@@ -32,7 +32,8 @@ const Recaptcha = require('../sub/recaptcha');
 
 const geoIp = require('geoip-country');
 const {Webhook, MessageBuilder} = require('discord-webhook-node');
-const reportDiscordWebHook = new Webhook(Const.WEBHOOK_URI);
+const reportDiscordWebHook = new Webhook(Const.DISCORD_WEBHOOK.REPORT);
+const suspicionDiscordWebHook = new Webhook(Const.DISCORD_WEBHOOK.SUSPICION);
 
 var MainDB;
 
@@ -719,9 +720,64 @@ function processClientRequest($c, msg) {
                 $c.sendError(code);
             });
             break;
+        case 'suspicion':
+            const action = msg.action;
+            const isGuest = $c.guest;
+            const name = $c.profile.title || $c.profile.name;
+            const id = $c.id;
+            const ip = $c.socket.upgradeReq.connection.remoteAddress.slice(7);
+            const userAgent = $c.socket.upgradeReq.headers['user-agent'] || '';
+
+            const isGuestText = isGuest ? '네' : '아니요';
+            let actionName = action;
+            let doubt = '';
+
+            if (action === 'HiddenInput') {
+                actionName = '숨겨진 input 영역에 글 입력';
+                doubt = '매우 높음';
+
+                const inputId = msg.hasOwnProperty('inputId') ? msg.inputId : 'BAD_REQ';
+                const inputVal = msg.hasOwnProperty('inputVal') ? msg.inputVal : 'BAD_REQ';
+
+                JLog.alert(`비 인가 프로그램을 감지했습니다! (HIDDEN-INPUT) - 손님: ${isGuestText} / 닉네임: ${name} / UserID: ${id} / 아이피: ${ip} / INPUT-ID: ${inputId} / 입력값: ${inputVal}`)
+
+                const suspicionEmbed = new MessageBuilder()
+                    .setTitle('의심 행동 감지')
+                    .setDescription('의심 행동이 감지되었습니다.')
+                    .setColor(14423100)
+                    .addField('시간', formatTime(new Date()), false)
+                    .addField('행동', actionName, false)
+                    .addField('의심도', doubt, false)
+                    .addField('손님', isGuestText, true)
+                    .addField('닉네임', name, true)
+                    .addField('UserID', id, true)
+                    .addField('아이피', ip, true)
+                    .addField('inputId', inputId, true)
+                    .addField('inputVal', inputVal, true)
+                    .addField('UserAgent', userAgent, true)
+                    .setTimestamp();
+
+                suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
+                    JLog.alert('의심 행동을 디스코드 웹훅으로 전송했습니다.');
+                }).catch(err => {
+                    JLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+                });
+
+                $c.sendError(448);
+                $c.socket.close();
+            }
+
+            break;
         default:
             break;
     }
+}
+
+function formatTime(time) {
+    const timezoneOffset = new Date().getTimezoneOffset() * 60000;
+    const timezoneTime = new Date(time - timezoneOffset);
+
+    return timezoneTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
 }
 
 KKuTu.onClientClosed = function ($c, code) {
