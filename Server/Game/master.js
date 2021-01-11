@@ -346,7 +346,9 @@ exports.init = function (_SID, CHAN) {
                 perMessageDeflate: false
             });
         }
-        Server.on('connection', function (socket) {
+        Server.on('connection', function (socket, req) {
+            socket.upgradeReq = req;
+
             var key;
             // 토큰 복호화
             if (socket.upgradeReq.headers.host.match(/^127\.0\.0\.2:/)) {
