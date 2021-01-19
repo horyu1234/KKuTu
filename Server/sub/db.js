@@ -20,7 +20,7 @@ const LANG = ["ko", "en"];
 
 const PgPool = require("pg").Pool;
 const GLOBAL = require("./global.json");
-const JLog = require("./jjlog");
+const IOLog = require("./jjlog");
 const Collection = require("./collection");
 const Lizard = require("./lizard");
 const ConnectionLog = require("./ConnectionLog");
@@ -51,8 +51,8 @@ Redis.on('connect', function () {
     connectPg();
 });
 Redis.on('error', function (err) {
-    JLog.error("Error from Redis: " + err);
-    JLog.alert("Run with no-redis mode.");
+    IOLog.error("Error from Redis: " + err);
+    IOLog.notice("Run with no-redis mode.");
     Redis.quit();
     connectPg(true);
 });
@@ -60,7 +60,7 @@ Redis.on('error', function (err) {
 function connectPg(noRedis) {
     Pg.connect(function (err, pgMain) {
         if (err) {
-            JLog.error("Error when connect to PostgreSQL server: " + err.toString());
+            IOLog.error("Error when connect to PostgreSQL server: " + err.toString());
             return;
         }
         var redisAgent = noRedis ? null : new Collection.Agent("Redis", Redis);
@@ -95,6 +95,6 @@ function connectPg(noRedis) {
         exports.VendorDBMigration = VendorDBMigration;
 
         if (exports.ready) exports.ready(Redis, Pg);
-        else JLog.warn("DB.onReady was not defined yet.");
+        else IOLog.warn("DB.onReady was not defined yet.");
     });
 }

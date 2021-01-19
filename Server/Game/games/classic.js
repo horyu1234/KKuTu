@@ -18,7 +18,7 @@
 
 const Const = require('../../const');
 const Lizard = require('../../sub/lizard');
-const JLog = require('../../sub/jjlog');
+const IOLog = require('../../sub/jjlog');
 var DB;
 var DIC;
 let SUBMIT_WORD_CACHE = {'ko': {}, 'en': {}};
@@ -38,14 +38,14 @@ exports.init = function (_DB, _DIC) {
     DIC = _DIC;
 
     const identityNum = ++Const.KKUTU_CLASSIC_COUNT;
-    JLog.info(`[${identityNum}] 단어 데이터를 메모리에 저장합니다...`)
+    IOLog.info(`[${identityNum}] 단어 데이터를 메모리에 저장합니다...`)
     DB.kkutu['ko'].find(['type', Const.KOR_GROUP]).on($res => {
         for (let resIndex in $res) {
             const data = $res[resIndex];
             SUBMIT_WORD_CACHE['ko'][data['_id']] = data;
         }
 
-        JLog.info(`[${identityNum}] ${Object.keys(SUBMIT_WORD_CACHE['ko']).length} 개의 한국어 단어 데이터를 메모리에 불러왔습니다.`)
+        IOLog.info(`[${identityNum}] ${Object.keys(SUBMIT_WORD_CACHE['ko']).length} 개의 한국어 단어 데이터를 메모리에 불러왔습니다.`)
     });
 
     DB.kkutu['en'].find(['_id', Const.ENG_ID]).on($res => {
@@ -54,7 +54,7 @@ exports.init = function (_DB, _DIC) {
             SUBMIT_WORD_CACHE['en'][data['_id']] = data;
         }
 
-        JLog.info(`[${identityNum}] ${Object.keys(SUBMIT_WORD_CACHE['en']).length} 개의 영어 단어 데이터를 메모리에 불러왔습니다.`)
+        IOLog.info(`[${identityNum}] ${Object.keys(SUBMIT_WORD_CACHE['en']).length} 개의 영어 단어 데이터를 메모리에 불러왔습니다.`)
     });
 };
 exports.getTitle = function () {
@@ -507,7 +507,7 @@ function getAuto(char, subc, type) {
             break;
     }
     if (!char) {
-        console.log(`Undefined char detected! key=${key} type=${type} adc=${adc}`);
+        IOLog.debug(`Undefined char detected! key=${key} type=${type} adc=${adc}`);
     }
     MAN.findOne(['_id', char || "★"]).on(function ($mn) {
         if ($mn && bool) {

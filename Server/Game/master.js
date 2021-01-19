@@ -26,7 +26,7 @@ const KKuTu = require('./kkutu');
 const Crypto = require("../sub/crypto");
 const GLOBAL = require("../sub/global.json");
 const Const = require("../const");
-const JLog = require('../sub/jjlog');
+const IOLog = require('../sub/jjlog');
 const Secure = require('../sub/secure');
 const Recaptcha = require('../sub/recaptcha');
 
@@ -48,7 +48,7 @@ var T_USER = {};
 var SID;
 var WDIC = {};
 
-var allowGuestLobbyChat = true;
+var allowLobbyChat = true;
 
 const DEVELOP = exports.DEVELOP = global.test || false;
 const GUEST_PERMISSION = exports.GUEST_PERMISSION = {
@@ -72,12 +72,8 @@ const PORT = process.env['KKUTU_PORT'];
 const UserNickChange = require("../sub/UserNickChange");
 
 process.on('uncaughtException', function (err) {
-    var text = `:${PORT} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}\n`;
-
-    File.appendFile("/jjolol/KKUTU_ERROR.log", text, function (res) {
-        JLog.error(`ERROR OCCURRED ON THE MASTER!`);
-        console.log(text);
-    });
+    const text = `:${PORT} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}\n`;
+    IOLog.emerg(`ERROR OCCURRED ON THE MASTER! ${text}`);
 });
 
 function processAdmin(id, value) {
@@ -161,17 +157,25 @@ function processAdmin(id, value) {
             if (DIC[id]) DIC[id].send('yell', {value: "This feature is not supported..."});
             /*Heapdump.writeSnapshot("/home/kkutu_memdump_" + Date.now() + ".heapsnapshot", function(err){
                 if(err){
-                    JLog.error("Error when dumping!");
-                    return JLog.error(err.toString());
+                    IOLog.error("Error when dumping!");
+                    return IOLog.error(err.toString());
                 }
                 if(DIC[id]) DIC[id].send('yell', { value: "DUMP OK" });
-                JLog.success("Dumping success.");
+                IOLog.notice("Dumping success.");
             });*/
             return null;
         case "lobbychat":
-            if (!allowGuestLobbyChat) allowGuestLobbyChat = true;
-            else if (allowGuestLobbyChat) allowGuestLobbyChat = false;
-            JLog.log(`[DEBUG] blockGuestLobbyChat changed to ${allowGuestLobbyChat}`);
+            if (!allowLobbyChat) {
+                allowLobbyChat = true;
+
+                DIC[id].send('chat', {notice: true, message: '로비 채팅을 활성화했습니다.'});
+                IOLog.notice(`${id} 님이 로비 채팅을 활성화했습니다.`);
+            } else if (allowLobbyChat) {
+                allowLobbyChat = false;
+
+                DIC[id].send('chat', {notice: true, message: '로비 채팅을 일시적으로 비활성화했습니다.'});
+                IOLog.notice(`${id} 님이 로비 채팅을 일시적으로 비활성화했습니다.`);
+            }
             return null;
     }
     return value;
@@ -266,14 +270,14 @@ Cluster.on('message', function (worker, msg) {
             if (ROOM[msg.id] && DIC[msg.target]) {
                 ROOM[msg.id].come(DIC[msg.target]);
             } else {
-                JLog.warn(`Wrong room-come id=${msg.id}&target=${msg.target}`);
+                IOLog.warn(`Wrong room-come id=${msg.id}&target=${msg.target}`);
             }
             break;
         case "room-spectate":
             if (ROOM[msg.id] && DIC[msg.target]) {
                 ROOM[msg.id].spectate(DIC[msg.target], msg.pw);
             } else {
-                JLog.warn(`Wrong room-spectate id=${msg.id}&target=${msg.target}`);
+                IOLog.warn(`Wrong room-spectate id=${msg.id}&target=${msg.target}`);
             }
             break;
         case "room-go":
@@ -281,14 +285,14 @@ Cluster.on('message', function (worker, msg) {
                 ROOM[msg.id].go(DIC[msg.target]);
             } else {
                 // 나가기 말고 연결 자체가 끊겼을 때 생기는 듯 하다.
-                JLog.warn(`Wrong room-go id=${msg.id}&target=${msg.target}`);
+                IOLog.warn(`Wrong room-go id=${msg.id}&target=${msg.target}`);
                 if (ROOM[msg.id] && ROOM[msg.id].players) {
                     // 이 때 수동으로 지워준다.
                     var x = ROOM[msg.id].players.indexOf(msg.target);
 
                     if (x != -1) {
                         ROOM[msg.id].players.splice(x, 1);
-                        JLog.warn(`^ OK`);
+                        IOLog.warn(`^ OK`);
                     }
                 }
                 if (msg.removed) delete ROOM[msg.id];
@@ -324,14 +328,14 @@ Cluster.on('message', function (worker, msg) {
             delete ROOM[msg.room.id];
             break;
         default:
-            JLog.warn(`Unhandled IPC message type: ${msg.type}`);
+            IOLog.warn(`Unhandled IPC message type: ${msg.type}`);
     }
 });
 exports.init = function (_SID, CHAN) {
     SID = _SID;
     MainDB = require('../sub/db');
     MainDB.ready = function () {
-        JLog.success("Master DB is ready.");
+        IOLog.notice("마스터 데이터베이스가 준비되었습니다.");
 
         MainDB.users.update(['server', SID]).set(['server', ""]).on();
 
@@ -369,27 +373,33 @@ exports.init = function (_SID, CHAN) {
             var $c;
 
             socket.on('error', function (err) {
-                JLog.warn("Error on #" + key + " on ws: " + err.toString());
+                IOLog.warn("Error on #" + key + " on ws: " + err.toString());
             });
+
             // 웹 서버
             if (socket.upgradeReq.headers.host.match(/^127\.0\.0\.2:/)) {
                 if (WDIC[key]) WDIC[key].socket.close();
                 WDIC[key] = new KKuTu.WebServer(socket);
-                JLog.info(`New web server #${key}`);
+                IOLog.notice(`새로운 웹서버와 연결되었습니다. #${key}`);
                 WDIC[key].socket.on('close', function () {
-                    JLog.alert(`Exit web server #${key}`);
+                    IOLog.notice(`웹서버와 연결이 끊겼습니다. #${key}`);
                     WDIC[key].socket.removeAllListeners();
                     delete WDIC[key];
                 });
                 return;
             }
-            if (Object.keys(DIC).length >= Const.KKUTU_MAX) {
-                socket.send(`{ "type": "error", "code": "full" }`);
-                return;
-            }
+
             MainDB.session.findOne(['_id', key]).limit(['profile', true]).on(function ($body) {
                 $c = new KKuTu.Client(socket, $body ? $body.profile : null, key);
                 $c.admin = GLOBAL.ADMIN.indexOf($c.id) != -1;
+
+                if (!$c.admin && Object.keys(DIC).length >= Const.KKUTU_MAX) {
+                    $c.sendError('full');
+                    $c.socket.close();
+
+                    IOLog.notice(`서버에 남은 자리가 없으므로 ${$c.profile.title}(${$c.id}) 님의 접속을 거부합니다.`);
+                    return;
+                }
 
                 if (DIC[$c.id]) {
                     DIC[$c.id].sendError(408);
@@ -417,7 +427,7 @@ exports.init = function (_SID, CHAN) {
                     var geoCountry = lookuped ? lookuped['country'] : 'NONE'
 
                     if (geoCountry !== 'KR') {
-                        JLog.info(`해외에서 손님으로 접속을 시도하였습니다. 아이피: ${userIp} 국가: ${geoCountry}`)
+                        IOLog.info(`해외에서 손님으로 접속을 시도하였습니다. 아이피: ${userIp} 국가: ${geoCountry}`)
                         $c.sendError(449);
                         $c.socket.close();
                         return;
@@ -468,7 +478,7 @@ exports.init = function (_SID, CHAN) {
             });
         });
         Server.on('error', function (err) {
-            JLog.warn("Error on ws: " + err.toString());
+            IOLog.warn("Error on ws: " + err.toString());
         });
         KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION, CHAN);
     };
@@ -491,7 +501,7 @@ function joinNewUser($c) {
     narrateFriends($c.id, $c.friends, "on");
     KKuTu.publish('conn', {user: $c.getData()});
 
-    JLog.info("New user #" + $c.id);
+    IOLog.notice(`${$c.profile.title}(${$c.id}) 님이 게임에 입장했습니다. 접속 인원: ${Object.keys(DIC).length}명`);
 }
 
 KKuTu.onClientMessage = function ($c, msg) {
@@ -517,7 +527,7 @@ KKuTu.onClientMessage = function ($c, msg) {
 
                     processClientRequest($c, msg);
                 } else {
-                    JLog.warn(`Recaptcha failed from IP ${$c.socket._socket.remoteAddress}`);
+                    IOLog.warn(`${$c.socket._socket.remoteAddress} 아이피에서 Recaptcha 인증에 실패했습니다.`);
 
                     $c.sendError(447);
                     $c.socket.close();
@@ -586,7 +596,7 @@ function processClientRequest($c, msg) {
                     }
                 });
             } else {
-                if (!allowGuestLobbyChat && $c.place == 0) $c.send('yell', {value: "로비 채팅이 일시적으로 비활성화 되었습니다."});
+                if (!allowLobbyChat && $c.place == 0 && !$c.admin) $c.send('yell', {value: "로비 채팅이 일시적으로 비활성화 되었습니다."});
                 else $c.chat(msg.value);
             }
             break;
@@ -628,7 +638,7 @@ function processClientRequest($c, msg) {
             $c.removeFriend(msg.id);
             break;
         case 'report':
-            // JLog.info("[DEBUG] Got Response: REPORT");
+            // IOLog.info("[DEBUG] Got Response: REPORT");
             if (!msg.id || !msg.reason) return;
             if (!GUEST_PERMISSION.report) if ($c.guest) return;
 
@@ -643,9 +653,9 @@ function processClientRequest($c, msg) {
 
             reportDiscordWebHook.send(embed).then(() => {
                 $c.send('yell', {value: "끄투리오에 신고가 정상 접수되었습니다."});
-                JLog.alert(`User #${$c.id} reported ${msg.id} for ${msg.reason}`);
+                IOLog.notice(`${$c.profile.title}(${$c.id}) 님이 ${msg.id} 님을 "${msg.reason}" 사유로 신고했습니다.`);
             }).catch(err => {
-                JLog.error(`신고 내용을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+                IOLog.error(`신고 내용을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
             });
             break;
         case 'enter':
@@ -739,7 +749,7 @@ function processClientRequest($c, msg) {
                 const inputId = msg.hasOwnProperty('inputId') ? msg.inputId : 'BAD_REQ';
                 const inputVal = msg.hasOwnProperty('inputVal') ? msg.inputVal : 'BAD_REQ';
 
-                JLog.alert(`비 인가 프로그램을 감지했습니다! (HIDDEN-INPUT) - 손님: ${isGuestText} / 닉네임: ${name} / UserID: ${id} / 아이피: ${ip} / INPUT-ID: ${inputId} / 입력값: ${inputVal}`)
+                IOLog.notice(`비 인가 프로그램을 감지했습니다! (HIDDEN-INPUT) - 손님: ${isGuestText} / 닉네임: ${name} / UserID: ${id} / 아이피: ${ip} / INPUT-ID: ${inputId} / 입력값: ${inputVal}`)
 
                 const suspicionEmbed = new MessageBuilder()
                     .setTitle('의심 행동 감지')
@@ -758,9 +768,9 @@ function processClientRequest($c, msg) {
                     .setTimestamp();
 
                 suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
-                    JLog.alert('의심 행동을 디스코드 웹훅으로 전송했습니다.');
+                    IOLog.notice('의심 행동을 디스코드 웹훅으로 전송했습니다.');
                 }).catch(err => {
-                    JLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+                    IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
                 });
 
                 $c.sendError(448);
@@ -788,5 +798,5 @@ KKuTu.onClientClosed = function ($c, code) {
     if ($c.friends) narrateFriends($c.id, $c.friends, "off");
     KKuTu.publish('disconn', {id: $c.id});
 
-    JLog.alert("Exit #" + $c.id);
+    IOLog.notice(`${$c.profile.title}(${$c.id}) 님이 게임에서 퇴장했습니다. 접속 인원: ${Object.keys(DIC).length}명`);
 };

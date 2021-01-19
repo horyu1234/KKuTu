@@ -20,7 +20,7 @@ const customLevels = {
         alert: 1,
         crit: 2,
         error: 3,
-        warning: 4,
+        warn: 4,
         notice: 5,
         info: 6,
         debug: 7
@@ -30,7 +30,7 @@ const customLevels = {
         alert: 'redBG white',
         crit: 'red',
         error: 'red bold',
-        warning: 'yellow',
+        warn: 'yellow',
         notice: 'cyan',
         info: 'grey',
         debug: 'magenta'
@@ -84,21 +84,27 @@ const logger = winston.createLogger({
     exitOnError: false
 });
 
-exports.log = function (text) {
-    logger.log({level: 'info', message: text});
-};
-exports.info = function (text) {
-    logger.log({level: 'info', message: text});
-};
-exports.success = function (text) {
-    logger.log({level: 'info', message: text});
+exports.emerg = function (text) {
+    logger.emerg(text);
 };
 exports.alert = function (text) {
-    logger.log({level: 'warn', message: text});
+    logger.alert(text);
 };
-exports.warn = function (text) {
-    logger.log({level: 'warn', message: text});
+exports.crit = function (text) {
+    logger.crit(text);
 };
 exports.error = function (text) {
-    logger.log({level: 'error', message: text});
+    logger.error(text);
+};
+exports.warn = function (text) {
+    logger.warn(text);
+};
+exports.notice = function (text) {
+    logger.notice(text);
+};
+exports.info = function (text) {
+    logger.info(text);
+};
+exports.debug = function (text) {
+    logger.debug(text);
 };

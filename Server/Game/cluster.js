@@ -19,7 +19,7 @@
 const serverNames = require('../sub/serverNames.json');
 const Cluster = require("cluster");
 const Const = require('../const');
-const JLog = require('../sub/jjlog');
+const IOLog = require('../sub/jjlog');
 
 let SID = Number(process.argv[2]);
 let CPU = Number(process.argv[3]); //require("os").cpus().length;
@@ -33,12 +33,12 @@ if (isNaN(SID)) {
         global.test = true;
         CPU = 1;
     } else {
-        console.log(`Invalid Server ID ${process.argv[2]}`);
+        IOLog.emerg(`Invalid Server ID ${process.argv[2]}`);
         process.exit(1);
     }
 }
 if (isNaN(CPU)) {
-    console.log(`Invalid CPU Number ${process.argv[3]}`);
+    IOLog.emerg(`Invalid CPU Number ${process.argv[3]}`);
     process.exit(1);
 }
 if (Cluster.isMaster) {
@@ -62,7 +62,7 @@ if (Cluster.isMaster) {
                 break;
             }
         }
-        JLog.error(`Worker @${chan} ${w.process.pid} died`);
+        IOLog.emerg(`Worker @${chan} ${w.process.pid} died`);
         channels[chan] = Cluster.fork({
             SERVER_NO_FORK: true,
             KKUTU_PORT: Const.MAIN_PORTS[SID] + 416 + (chan - 1),

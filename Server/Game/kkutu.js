@@ -20,7 +20,7 @@ var GUEST_PERMISSION;
 const Cluster = require("cluster");
 const Const = require('../const');
 const Lizard = require('../sub/lizard');
-const JLog = require('../sub/jjlog');
+const IOLog = require('../sub/jjlog');
 // 망할 셧다운제 const Ajae = require("../sub/ajae");
 var DB;
 var SHOP;
@@ -322,7 +322,7 @@ exports.Client = function (socket, profile, sid) {
             data = {error: 400};
         }
 
-        JLog.log(`[` + socket.upgradeReq.connection.remoteAddress.slice(7) + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
+        IOLog.info(`[` + socket.upgradeReq.connection.remoteAddress.slice(7) + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
 
         if (Cluster.isWorker) process.send({
             type: "tail-report",
@@ -635,7 +635,7 @@ exports.Client = function (socket, profile, sid) {
         ).on(function (__res) {
             DB.redis.getGlobal(my.id).then(function (_res) {
                 DB.redis.putGlobal(my.id, my.data.score).then(function (res) {
-                    JLog.log(`FLUSHED [${my.id}] PTS=${my.data.score} MNY=${my.money}`);
+                    IOLog.info(`FLUSHED [${my.id}] PTS=${my.data.score} MNY=${my.money}`);
                     R.go({id: my.id, prev: _res});
                 });
             });
@@ -657,7 +657,7 @@ exports.Client = function (socket, profile, sid) {
 
         if (my.place) {
             my.send('roomStuck');
-            JLog.warn(`Enter the room ${room.id} in the place ${my.place} by ${my.id}!`);
+            IOLog.warn(`Enter the room ${room.id} in the place ${my.place} by ${my.id}!`);
             return;
         } else if (room.id) {
             // 이미 있는 방에 들어가기... 여기서 유효성을 검사한다.
@@ -1521,9 +1521,9 @@ exports.Room = function (room, channel) {
     my.checkRoute = function (func) {
         var c;
 
-        if (!my.rule) return JLog.warn("Unknown mode: " + my.mode), false;
-        if (!(c = Rule[my.rule.rule])) return JLog.warn("Unknown rule: " + my.rule.rule), false;
-        if (!c[func]) return JLog.warn("Unknown function: " + func), false;
+        if (!my.rule) return IOLog.warn("Unknown mode: " + my.mode), false;
+        if (!(c = Rule[my.rule.rule])) return IOLog.warn("Unknown rule: " + my.rule.rule), false;
+        if (!c[func]) return IOLog.warn("Unknown function: " + func), false;
         return c[func];
     };
     my.set(room);

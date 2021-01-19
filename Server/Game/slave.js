@@ -40,7 +40,7 @@ const KKuTu = require('./kkutu');
 const Crypto = require("../sub/crypto");
 const Lizard = require('../sub/lizard');
 const MainDB = require('../sub/db');
-const JLog = require('../sub/jjlog');
+const IOLog = require('../sub/jjlog');
 const GLOBAL = require('../sub/global.json');
 
 var DIC = {};
@@ -55,7 +55,7 @@ const ENABLE_ROUND_TIME = Master.ENABLE_ROUND_TIME;
 const ENABLE_FORM = Master.ENABLE_FORM;
 const MODE_LENGTH = Master.MODE_LENGTH;
 
-JLog.info(`<< KKuTu Server:${Server.options.port} >>`);
+IOLog.notice(`<< 끄투리오 게임서버@${CHAN} >>`);
 
 process.on('uncaughtException', function (err) {
     var text = `:${process.env['KKUTU_PORT']} [${new Date().toLocaleString()}] ERROR: ${err.toString()}\n${err.stack}`;
@@ -63,10 +63,8 @@ process.on('uncaughtException', function (err) {
     for (var i in DIC) {
         DIC[i].send('dying');
     }
-    File.appendFile("../KKUTU_ERROR.log", text, function (res) {
-        JLog.error(`ERROR OCCURRED! This worker will die in 10 seconds.`);
-        console.log(text);
-    });
+
+    IOLog.emerg(`ERROR OCCURRED! This worker will die in 10 seconds. ${text}`);
     setTimeout(function () {
         process.exit();
     }, 10000);
@@ -96,11 +94,11 @@ process.on('message', function (msg) {
             delete ROOM[msg.room.id];
             break;
         default:
-            JLog.warn(`Unhandled IPC message type: ${msg.type}`);
+            IOLog.warn(`Unhandled IPC message type: ${msg.type}`);
     }
 });
 MainDB.ready = function () {
-    JLog.success("DB is ready.");
+    IOLog.notice("데이터베이스가 준비되었습니다.");
     KKuTu.init(MainDB, DIC, ROOM, GUEST_PERMISSION);
 };
 Server.on('connection', function (socket, req) {
@@ -124,10 +122,10 @@ Server.on('connection', function (socket, req) {
     var $c;
 
     socket.on('error', function (err) {
-        JLog.warn("Error on #" + key + " on ws: " + err.toString());
+        IOLog.warn("Error on #" + key + " on ws: " + err.toString());
     });
     if (CHAN != Number(chunk[1])) {
-        JLog.warn(`Wrong channel value ${chunk[1]} on @${CHAN}`);
+        IOLog.warn(`Wrong channel value ${chunk[1]} on @${CHAN}`);
         socket.close();
         return;
     }
@@ -140,7 +138,7 @@ Server.on('connection', function (socket, req) {
         delete reserve._expiration;
         delete RESERVED[key];
     } else {
-        JLog.warn(`Not reserved from ${key} on @${CHAN}`);
+        IOLog.warn(`Not reserved from ${key} on @${CHAN}`);
         socket.close();
         return;
     }
@@ -159,8 +157,10 @@ Server.on('connection', function (socket, req) {
         }
         $c.refresh().then(function (ref) {
             if (ref.result == 200) {
+                const userName = $c.profile.title.replace(/\s/g, "");
+
                 DIC[$c.id] = $c;
-                DNAME[($c.profile.title || $c.profile.name).replace(/\s/g, "")] = $c.id;
+                DNAME[userName] = $c.id;
 
                 $c.enter(room, reserve.spec, reserve.pass);
                 if ($c.place == room.id) {
@@ -168,7 +168,7 @@ Server.on('connection', function (socket, req) {
                 } else { // 입장 실패
                     $c.socket.close();
                 }
-                JLog.info(`Chan @${CHAN} New #${$c.id}`);
+                IOLog.info(`${userName}(${$c.id}) 님이 ${CHAN} 채널에 입장했습니다.`);
             } else {
                 $c.send('error', {
                     code: ref.result, message: ref.black
@@ -180,7 +180,7 @@ Server.on('connection', function (socket, req) {
     });
 });
 Server.on('error', function (err) {
-    JLog.warn("Error on ws: " + err.toString());
+    IOLog.warn("Error on ws: " + err.toString());
 });
 KKuTu.onClientMessage = function ($c, msg) {
     var stable = true;
@@ -413,5 +413,5 @@ KKuTu.onClientClosed = function ($c, code) {
     if ($c.socket) $c.socket.removeAllListeners();
     KKuTu.publish('disconnRoom', {id: $c.id});
 
-    JLog.alert(`Chan @${CHAN} Exit #${$c.id}`);
+    IOLog.info(`${$c.profile.title}(${$c.id}) 님이 ${CHAN} 채널에서 퇴장했습니다.`);
 };

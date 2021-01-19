@@ -20,6 +20,7 @@ const Prompt = require('prompt');
 const DB = require('../../sub/db');
 const Const = require('../../const');
 const Lizard = require('../../sub/lizard');
+const IOLog = require("../../sub/jjlog");
 var LANG = 'ko';
 
 Prompt.start();
@@ -51,7 +52,7 @@ DB.ready = function () {
             var j, o, s, t;
             var res = [];
 
-            console.log(data.map.name, "\n  0 1 2 3 4 5 6 7");
+            IOLog.debug(data.map.name, "\n  0 1 2 3 4 5 6 7");
             for (i = 0; i < 8; i++) {
                 s = i + " ";
                 for (j = 0; j < 8; j++) {
@@ -61,9 +62,9 @@ DB.ready = function () {
                         s += "　";
                     }
                 }
-                console.log(s);
+                IOLog.debug(s);
             }
-            console.log("\007");
+            IOLog.debug("\007");
             for (i in data.map.queue) {
                 s = data.map.queue[i];
                 t = data.board[`${s[0]},${s[1]}`];
@@ -73,7 +74,7 @@ DB.ready = function () {
                 }
                 res.push([s[0], s[1], s[2], s[3], o.word]);
             }
-            console.log(res);
+            IOLog.debug(res);
             Prompt.get(['flush'], function (err, _res) {
                 if (_res.flush == "y") {
                     MC[data.map.name]++;
@@ -260,7 +261,7 @@ function getBoard(lang) {
         var p, k;
         var mapLen = queue.length;
 
-        console.log("[PROCESS] QUEUE: " + mapLen);
+        IOLog.debug("[PROCESS] QUEUE: " + mapLen);
         if (!m) {
             R.go({map: map, board: board});
             return;

@@ -1,5 +1,5 @@
 const CONNECTION_LOG_TABLE_NAME = 'connection_log';
-const JLog = require('./jjlog');
+const IOLog = require('./jjlog');
 
 let database;
 
@@ -18,7 +18,7 @@ function addLog(id, name, ip, channel, useragent, fingerprint2) {
 
     database.query(query, [timeText, id, name, ip, channel, useragent, fingerprint2], (err, result) => {
         if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
+            return IOLog.error(`Error executing query ${err.stack}`);
         }
     })
 }

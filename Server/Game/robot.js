@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+const IOLog = require("../sub/jjlog");
 const DB = require("../sub/db");
 var len = Number(process.argv[2] || 10);
 
@@ -37,7 +38,7 @@ DB.ready = function () {
             }
             res.push(c + "위. " + $o._id + " (" + $o.hit + ")");
         }
-        console.log(res.join('\n'));
+        IOLog.emerg(res.join('\n'));
         process.exit();
     });
 };

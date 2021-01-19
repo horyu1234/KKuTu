@@ -1,4 +1,4 @@
-const JLog = require('./jjlog');
+const IOLog = require('./jjlog');
 
 let database;
 
@@ -13,7 +13,7 @@ function processVendorMigration(userId, callback) {
         if (result) {
             modifyOldUserId(oldUserId, userId, function () {
                 modifyFriendsUserId(oldUserId, userId, function () {
-                    JLog.info(`${oldUserId} 의 식별 번호가 ${userId} 로 마이그레이션 되었습니다.`);
+                    IOLog.info(`${oldUserId} 의 식별 번호가 ${userId} 로 마이그레이션 되었습니다.`);
 
                     if (callback !== undefined) {
                         callback();
@@ -38,7 +38,7 @@ function hasUser(userId, callback) {
 
     database.query(query, (err, result) => {
         if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
+            return IOLog.error(`Error executing query ${err.stack}`);
         }
 
         if (callback !== undefined) {
@@ -54,7 +54,7 @@ function modifyOldUserId(oldUserId, userId, callback) {
 
     database.query(query, (err) => {
         if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
+            return IOLog.error(`Error executing query ${err.stack}`);
         }
 
         if (callback !== undefined) {
@@ -70,7 +70,7 @@ function modifyFriendsUserId(oldUserId, userId, callback) {
 
     database.query(query, (err) => {
         if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
+            return IOLog.error(`Error executing query ${err.stack}`);
         }
 
         if (callback !== undefined) {

@@ -1,4 +1,4 @@
-const JLog = require('./jjlog');
+const IOLog = require('./jjlog');
 const DB = require('./db');
 const KKuTu = require("../Game/kkutu");
 
@@ -72,7 +72,7 @@ const processUserNickChange = ($c, userNick, callback) => {
 
             DB.users.update(['_id', userId]).set(['nickname', userNick], ['meanableNick', meanableNick], ['lastModifiedNickAt', date]).on();
 
-            JLog.info(`[NICK] ${userId}님이 닉네임을 변경하였습니다. 기존: ${currentNick} / 신규: ${userNick}`);
+            IOLog.info(`[NICK] ${userId}님이 닉네임을 변경하였습니다. 기존: ${currentNick} / 신규: ${userNick}`);
 
             callback(630);
 

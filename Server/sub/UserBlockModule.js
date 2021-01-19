@@ -1,4 +1,4 @@
-const JLog = require('./jjlog');
+const IOLog = require('./jjlog');
 
 let database;
 
@@ -11,7 +11,7 @@ function checkBlockChat(id, callback) {
 
     database.query(query, [id], (err, result) => {
         if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
+            return IOLog.error(`Error executing query ${err.stack}`);
         }
 
         if (callback === undefined) {
@@ -66,7 +66,7 @@ const removeBlockChat = (caseId) => {
 
     database.query(query, [caseId], (err, result) => {
         if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
+            return IOLog.error(`Error executing query ${err.stack}`);
         }
     })
 }
@@ -76,7 +76,7 @@ const addBlockLog = (userId, caseId, time, pardonTime, reason, punishFrom, admin
 
     database.query(query, [new Date(), 'AUTO_REMOVE', 'CHAT', userId, caseId, null, time, pardonTime, reason, punishFrom, admin], (err, result) => {
         if (err) {
-            return JLog.error(`Error executing query ${err.stack}`);
+            return IOLog.error(`Error executing query ${err.stack}`);
         }
     })
 }
