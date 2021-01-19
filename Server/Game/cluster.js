@@ -16,12 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+const serverNames = require('../sub/serverNames.json');
 const Cluster = require("cluster");
 const Const = require('../const');
 const JLog = require('../sub/jjlog');
-var SID = Number(process.argv[2]);
-var CPU = Number(process.argv[3]); //require("os").cpus().length;
-process.env['KKT_SV_TYPE'] = 'game';
+
+let SID = Number(process.argv[2]);
+let CPU = Number(process.argv[3]); //require("os").cpus().length;
+
+const serverName = serverNames[SID];
+global.serverName = serverName;
+global.serverIdentity = 'none';
 
 if (isNaN(SID)) {
     if (process.argv[2] == "test") {
@@ -37,6 +42,8 @@ if (isNaN(CPU)) {
     process.exit(1);
 }
 if (Cluster.isMaster) {
+    global.serverIdentity = 'master';
+
     var channels = {}, chan;
     var i;
 
@@ -65,5 +72,8 @@ if (Cluster.isMaster) {
     process.env['KKUTU_PORT'] = Const.MAIN_PORTS[SID];
     require("./master.js").init(SID.toString(), channels);
 } else {
+    const channel = process.env['CHANNEL'];
+    global.serverIdentity = `slave-${channel}`;
+
     require("./slave.js");
 }
