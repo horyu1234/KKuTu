@@ -1,5 +1,3 @@
-// Created by hatty163 (admin@hatty163.kr)
-
 const winston = require('winston');
 const moment = require('moment');
 require('winston-daily-rotate-file');

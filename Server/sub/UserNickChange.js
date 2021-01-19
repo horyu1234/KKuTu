@@ -1,6 +1,3 @@
-/**
- * Created by kdhkr on 2020-12-29.
- */
 const JLog = require('./jjlog');
 const DB = require('./db');
 const KKuTu = require("../Game/kkutu");

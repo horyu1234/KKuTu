@@ -1,6 +1,3 @@
-/**
- * Created by horyu1234 on 2018-02-03.
- */
 const CONNECTION_LOG_TABLE_NAME = 'connection_log';
 const JLog = require('./jjlog');
 

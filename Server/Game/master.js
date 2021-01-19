@@ -627,7 +627,6 @@ function processClientRequest($c, msg) {
             if (!$c.friends[msg.id]) return;
             $c.removeFriend(msg.id);
             break;
-        /*ReportSystem (hatty163) [S]*/
         case 'report':
             // JLog.info("[DEBUG] Got Response: REPORT");
             if (!msg.id || !msg.reason) return;
@@ -649,7 +648,6 @@ function processClientRequest($c, msg) {
                 JLog.error(`신고 내용을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
             });
             break;
-        /*ReportSystem (hatty163) [E]*/
         case 'enter':
         case 'setRoom':
             if (!msg.title) stable = false;
