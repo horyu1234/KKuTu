@@ -637,7 +637,7 @@ exports.Client = function (socket, profile, sid) {
         ).on(function (__res) {
             DB.redis.getGlobal(my.id).then(function (_res) {
                 DB.redis.putGlobal(my.id, my.data.score).then(function (res) {
-                    IOLog.info(`FLUSHED [${my.id}] PTS=${my.data.score} MNY=${my.money}`);
+                    IOLog.notice(`${my.id} 님의 데이터를 저장했습니다. 경험치: ${my.data.score} / 돈: ${my.money}핑`);
                     R.go({id: my.id, prev: _res});
                 });
             });
