@@ -322,7 +322,9 @@ exports.Client = function (socket, profile, sid) {
             data = {error: 400};
         }
 
-        IOLog.info(`[` + socket.upgradeReq.connection.remoteAddress.slice(7) + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
+        if (!data.hasOwnProperty('type') || data.type !== 'suspicion') {
+            IOLog.info(`[` + socket.upgradeReq.connection.remoteAddress.slice(7) + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
+        }
 
         if (Cluster.isWorker) process.send({
             type: "tail-report",

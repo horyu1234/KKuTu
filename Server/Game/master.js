@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 const Cluster = require("cluster");
 const File = require('fs');
 const WebSocket = require('ws');
@@ -29,6 +28,7 @@ const Const = require("../const");
 const IOLog = require('../sub/jjlog');
 const Secure = require('../sub/secure');
 const Recaptcha = require('../sub/recaptcha');
+const moment = require("moment");
 
 const geoIp = require('geoip-country');
 const {Webhook, MessageBuilder} = require('discord-webhook-node');
@@ -737,50 +737,161 @@ function processClientRequest($c, msg) {
             const id = $c.id;
             const ip = $c.socket.upgradeReq.connection.remoteAddress.slice(7);
             const userAgent = $c.socket.upgradeReq.headers['user-agent'] || '';
+            const intervalInputHistory = msg.hasOwnProperty('intervalInputHistory') ? JSON.parse(msg.intervalInputHistory) : [];
+            const onInputHistory = msg.hasOwnProperty('onInputHistory') ? JSON.parse(msg.onInputHistory) : [];
 
             const isGuestText = isGuest ? '네' : '아니요';
             let actionName = action;
             let doubt = '';
 
-            if (action === 'HiddenInput') {
-                actionName = '숨겨진 input 영역에 글 입력';
-                doubt = '매우 높음';
+            IOLog.notice(`의심 행동을 감지했습니다! (${action}) - 손님: ${isGuestText} / 닉네임: ${name} / UserID: ${id} / 아이피: ${ip}`)
 
-                const inputId = msg.hasOwnProperty('inputId') ? msg.inputId : 'BAD_REQ';
-                const inputVal = msg.hasOwnProperty('inputVal') ? msg.inputVal : 'BAD_REQ';
+            writeSuspicionLogToFile(id, intervalInputHistory, onInputHistory, (file) => {
+                if (action === 'HiddenInput') {
+                    actionName = '숨겨진 input 영역에 글 입력';
+                    doubt = '높음';
 
-                IOLog.notice(`비 인가 프로그램을 감지했습니다! (HIDDEN-INPUT) - 손님: ${isGuestText} / 닉네임: ${name} / UserID: ${id} / 아이피: ${ip} / INPUT-ID: ${inputId} / 입력값: ${inputVal}`)
+                    const inputId = msg.hasOwnProperty('inputId') ? msg.inputId : 'BAD_REQ';
+                    const inputVal = msg.hasOwnProperty('inputVal') ? msg.inputVal : 'BAD_REQ';
 
-                const suspicionEmbed = new MessageBuilder()
-                    .setTitle('의심 행동 감지')
-                    .setDescription('의심 행동이 감지되었습니다.')
-                    .setColor(14423100)
-                    .addField('시간', formatTime(new Date()), false)
-                    .addField('행동', actionName, false)
-                    .addField('의심도', doubt, false)
-                    .addField('손님', isGuestText, true)
-                    .addField('닉네임', name, true)
-                    .addField('UserID', id, true)
-                    .addField('아이피', ip, true)
-                    .addField('inputId', inputId, true)
-                    .addField('inputVal', inputVal, true)
-                    .addField('UserAgent', userAgent, true)
-                    .setTimestamp();
+                    const suspicionEmbed = new MessageBuilder()
+                        .setTitle('의심 행동 감지')
+                        .setDescription('의심 행동이 감지되었습니다.')
+                        .setColor(14423100)
+                        .addField('시간', formatTime(new Date()), false)
+                        .addField('행동', actionName, false)
+                        .addField('의심도', doubt, false)
+                        .addField('손님', isGuestText, true)
+                        .addField('닉네임', name, true)
+                        .addField('UserID', id, true)
+                        .addField('아이피', ip, true)
+                        .addField('inputId', inputId, true)
+                        .addField('inputVal', inputVal, true)
+                        .addField('UserAgent', userAgent, true)
+                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setTimestamp();
 
-                suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
-                    IOLog.notice('의심 행동을 디스코드 웹훅으로 전송했습니다.');
-                }).catch(err => {
-                    IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
-                });
+                    suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
+                        IOLog.info('의심 행동을 디스코드 웹훅으로 전송했습니다.');
+                    }).catch(err => {
+                        IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+                    });
 
-                $c.sendError(448);
-                $c.socket.close();
-            }
+                    $c.socket.close();
+                } else if (action === 'ModulationEvent') {
+                    actionName = '이벤트 변조';
+                    doubt = '세부 내용 검토 필요';
+
+                    const type = msg.hasOwnProperty('type') ? msg.modulationType : 'BAD_REQ';
+                    const events = msg.hasOwnProperty('events') ? msg.events : 'BAD_REQ';
+
+                    let typeName = '';
+                    if (type === 1) typeName = '모든 이벤트가 등록되지 않음';
+                    else if (type === 2) typeName = 'paste 이벤트가 등록 해제됨';
+                    else if (type === 3) typeName = 'paste 이벤트가 비어있음';
+                    else if (type === 4) typeName = 'paste 이벤트가 존재하나 무결성이 검증되지 않음';
+
+                    const suspicionEmbed = new MessageBuilder()
+                        .setTitle('의심 행동 감지')
+                        .setDescription('의심 행동이 감지되었습니다.')
+                        .setColor(14423100)
+                        .addField('시간', formatTime(new Date()), false)
+                        .addField('행동', actionName, false)
+                        .addField('의심도', doubt, false)
+                        .addField('손님', isGuestText, true)
+                        .addField('닉네임', name, true)
+                        .addField('UserID', id, true)
+                        .addField('아이피', ip, true)
+                        .addField('유형', typeName, true)
+                        .addField('UserAgent', userAgent, true)
+                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setTimestamp();
+
+                    writeEtcInfoToFile(id, 'event', events ? events : '없음', (etcFile) => {
+                        IOLog.info('document 이벤트 객체 정보 파일을 디스코드로 업로드하는 중입니다...');
+                        suspicionDiscordWebHook.sendFile(etcFile).then(() => {
+                            IOLog.info('document 이벤트 객체 정보 파일 업로드가 완료되었습니다.');
+                        })
+                    })
+
+                    suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
+                        IOLog.info('의심 행동을 디스코드 웹훅으로 전송했습니다.');
+                    }).catch(err => {
+                        IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+                    });
+
+                    $c.socket.close();
+                } else if (action === 'AbnormalSpeed100ms') {
+                    actionName = '0.1초 이내에 2글자 초과로 입력';
+                    doubt = '세부 내용 검토 필요';
+
+                    const suspicionEmbed = new MessageBuilder()
+                        .setTitle('의심 행동 감지')
+                        .setDescription('의심 행동이 감지되었습니다.')
+                        .setColor(14423100)
+                        .addField('시간', formatTime(new Date()), false)
+                        .addField('행동', actionName, false)
+                        .addField('의심도', doubt, false)
+                        .addField('손님', isGuestText, true)
+                        .addField('닉네임', name, true)
+                        .addField('UserID', id, true)
+                        .addField('아이피', ip, true)
+                        .addField('UserAgent', userAgent, true)
+                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setTimestamp();
+
+                    suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
+                        IOLog.info('의심 행동을 디스코드 웹훅으로 전송했습니다.');
+                    }).catch(err => {
+                        IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+                    });
+                }
+
+                IOLog.info('세부 행동 로그 파일을 디스코드로 업로드하는 중입니다...');
+                suspicionDiscordWebHook.sendFile(file).then(() => {
+                    IOLog.info('세부 행동 로그 파일 업로드가 완료되었습니다.');
+                })
+            })
 
             break;
         default:
             break;
     }
+}
+
+function writeSuspicionLogToFile(id, intervalInputHistory, onInputHistory, callback) {
+    const time = moment().format('YYYY-MM-DD HH.mm.ss')
+    const file = `./suspicions/${id}-${time}.txt`;
+
+    let text = id + ' 사용자 의심 행동에 대한 기록입니다.\n' +
+        '아래 데이터는 사용자의 브라우저에서 기록되고, 전송되는 정보입니다.\n' +
+        '가능성은 낮곘지만, 정보를 100% 신뢰해서는 안됩니다.\n' +
+        '\n' +
+        '\n' +
+        '[0.1초 간격 결과값 기록]\n';
+    intervalInputHistory.forEach(history => {
+        text += `${history}\n`;
+    });
+
+    text += '\n\n' +
+        '[실시간 입력 기록]\n' +
+        '사용자 시간 | 입력 유형 | 입력한 값 | 입력 완료 후 결과 값\n';
+    onInputHistory.forEach(history => {
+        text += `${history.time} | ${history.type} | ${history.data} | ${history.result}\n`;
+    });
+
+    File.writeFile(file, text, () => {
+        callback(file);
+    });
+}
+
+function writeEtcInfoToFile(id, suffix, text, callback) {
+    const time = moment().format('YYYY-MM-DD HH.mm.ss')
+    const file = `./suspicions/${id}-${time}-${suffix}.txt`;
+
+    File.writeFile(file, text, () => {
+        callback(file);
+    });
 }
 
 function formatTime(time) {
