@@ -28,17 +28,17 @@ const processUserNickChange = ($c, userNick, callback) => {
         callback(600);
         return
     }
-    if (!userNick.match(pattern)) {
+    if (!userNick.replace(' ', '').match(pattern)) {
         callback(601);
         return
     }
 
-    if (userNick.match(bad)) {
+    if (userNick.replace(' ', '').match(bad)) {
         callback(602);
         return
     }
 
-    if (userNick.match(black)) {
+    if (userNick.replace(' ', '').match(black)) {
         callback(603);
         return
     }
