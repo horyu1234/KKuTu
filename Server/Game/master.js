@@ -353,16 +353,20 @@ exports.init = function (_SID, CHAN) {
         Server.on('connection', function (socket, req) {
             socket.upgradeReq = req;
 
-            var key;
-            // 토큰 복호화
-            if (socket.upgradeReq.headers.host.match(/^127\.0\.0\.2:/)) {
-                key = socket.upgradeReq.url.slice(1);
+            let isWebServer = false;
+            let key = socket.upgradeReq.url.slice(1);
+
+            if (key.startsWith(GLOBAL.WEB_KEY)) {
+                isWebServer = true;
+                key = key.replace(`${GLOBAL.WEB_KEY}:`, '')
             } else {
+                // 토큰 복호화
                 try {
                     key = Crypto.decrypt(socket.upgradeReq.url.slice(1), GLOBAL.CRYPTO_KEY);
                 } catch (exception) {
                     key = ".";
                 }
+
                 // 토큰 값 검사
                 var pattern = /^[0-9a-zA-Z_-]{32}$/;
                 if (!pattern.test(key)) {
@@ -370,14 +374,14 @@ exports.init = function (_SID, CHAN) {
                     return;
                 }
             }
-            var $c;
 
+            var $c;
             socket.on('error', function (err) {
                 IOLog.warn("Error on #" + key + " on ws: " + err.toString());
             });
 
             // 웹 서버
-            if (socket.upgradeReq.headers.host.match(/^127\.0\.0\.2:/)) {
+            if (isWebServer) {
                 if (WDIC[key]) WDIC[key].socket.close();
                 WDIC[key] = new KKuTu.WebServer(socket);
                 IOLog.notice(`새로운 웹서버와 연결되었습니다. #${key}`);
