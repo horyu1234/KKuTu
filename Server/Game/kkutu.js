@@ -323,7 +323,8 @@ exports.Client = function (socket, profile, sid) {
         }
 
         if (!data.hasOwnProperty('type') || data.type !== 'suspicion') {
-            IOLog.info(`[` + socket.upgradeReq.connection.remoteAddress.slice(7) + `] ` + `Chan @${channel} Msg #${my.id}: ${msg}`);
+            const roomText = room ? my.place : '로비';
+            IOLog.info(`[` + socket.upgradeReq.connection.remoteAddress.slice(7) + `] ` + `Room @${roomText} Msg #${my.id}: ${msg}`);
         }
 
         if (Cluster.isWorker) process.send({
