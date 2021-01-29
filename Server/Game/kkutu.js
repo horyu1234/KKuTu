@@ -211,19 +211,31 @@ exports.WebServer = function (socket) {
                 exports.narrate(msg.list, 'friend', {id: msg.id, s: msg.s, stat: msg.stat});
                 break;
             case 'kick':
-                if (msg.hasOwnProperty('userId') && msg.userId.length > 0 && DIC.hasOwnProperty(msg.userId)) {
-                    const player = DIC[msg.userId];
-                    player.sendError(410);
-                    player.socket.close();
-                } else if (msg.hasOwnProperty('ip') && msg.ip.length > 0) {
+                const userId = msg.hasOwnProperty('userId') ? msg.userId : '';
+                const ip = msg.hasOwnProperty('ip') ? msg.ip : '';
+
+                if (userId.length > 0) {
+                    IOLog.notice(`${userId} 아이디의 유저를 추방합니다.`)
+
+                    if (DIC.hasOwnProperty(userId)) {
+                        const player = DIC[userId];
+                        player.sendError(410);
+                        player.socket.close();
+
+                        IOLog.notice(`${player.profile.title}(${player.id}) 유저를 추방했습니다.`)
+                    }
+                } else if (ip.length > 0) {
+                    IOLog.notice(`${ip} 아이피의 유저를 추방합니다.`)
                     for (let userId in DIC) {
                         if (!DIC.hasOwnProperty(userId)) continue;
                         const player = DIC[userId];
                         const playerIp = player.socket._socket.remoteAddress.slice(7);
 
-                        if (playerIp === msg.ip) {
+                        if (playerIp === ip) {
                             player.sendError(410);
                             player.socket.close();
+
+                            IOLog.notice(`${player.profile.title}(${player.id}) 유저를 추방했습니다.`)
                         }
                     }
                 }
