@@ -168,7 +168,9 @@ Server.on('connection', function (socket, req) {
                 } else { // 입장 실패
                     $c.socket.close();
                 }
-                IOLog.info(`${userName}(${$c.id}) 님이 ${CHAN} 채널에 입장했습니다.`);
+
+                $c.roomId = chunk[2];
+                IOLog.info(`${userName}(${$c.id}) 님이 ${$c.roomId}번 방에 입장했습니다.`);
             } else {
                 $c.send('error', {
                     code: ref.result, message: ref.black
@@ -413,5 +415,5 @@ KKuTu.onClientClosed = function ($c, code) {
     if ($c.socket) $c.socket.removeAllListeners();
     KKuTu.publish('disconnRoom', {id: $c.id});
 
-    IOLog.info(`${$c.profile.title}(${$c.id}) 님이 ${CHAN} 채널에서 퇴장했습니다.`);
+    IOLog.info(`${$c.profile.title}(${$c.id}) 님이 ${$c.roomId}번 방에서 퇴장했습니다.`);
 };
