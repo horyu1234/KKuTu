@@ -8,15 +8,9 @@ exports.initDatabase = function (_database) {
 };
 
 function addLog(id, name, ip, channel, useragent, fingerprint2) {
-    let currentTime = new Date();
-    currentTime.setHours(currentTime.getHours() + 9);
-    currentTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    let query = "INSERT INTO " + CONNECTION_LOG_TABLE_NAME + " (time, user_id, user_name, user_ip, channel, user_agent, finger_print_2) VALUES ($1, $2, $3, $4, $5, $6, $7)";
 
-    let timeText = currentTime.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-    let query = "INSERT INTO " + CONNECTION_LOG_TABLE_NAME + " " +
-        "VALUES ($1, $2, $3, $4, $5, $6, $7)";
-
-    database.query(query, [timeText, id, name, ip, channel, useragent, fingerprint2], (err, result) => {
+    database.query(query, [new Date(), id, name, ip, channel, useragent, fingerprint2], (err, result) => {
         if (err) {
             return IOLog.error(`Error executing query ${err.stack}`);
         }
