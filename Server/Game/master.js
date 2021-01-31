@@ -125,7 +125,7 @@ function processAdmin(id, value) {
                     a: "ip",
                     rid: temp.id,
                     id: id,
-                    msg: temp.socket._socket.remoteAddress
+                    msg: temp.socket._socket.remoteAddress.slice(7)
                 });
             }
             return null;
