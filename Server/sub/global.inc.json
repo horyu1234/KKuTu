@@ -17,7 +17,8 @@
   "CRYPTO_KEY": "Your Crypto Key Here",
   "DISCORD_WEBHOOK": {
     "REPORT": "Your WebHook URI Here",
-    "SUSPICION": "Your WebHook URI Here"
+    "SUSPICION_OTHER": "Your WebHook URI Here",
+    "SUSPICION_100MS": "Your WebHook URI Here"
   },
   "IS_WS_SECURED": false,
   "WS_SSL_OPTIONS": {

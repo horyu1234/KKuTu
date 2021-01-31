@@ -33,7 +33,8 @@ const moment = require("moment");
 const geoIp = require('geoip-country');
 const {Webhook, MessageBuilder} = require('discord-webhook-node');
 const reportDiscordWebHook = new Webhook(Const.DISCORD_WEBHOOK.REPORT);
-const suspicionDiscordWebHook = new Webhook(Const.DISCORD_WEBHOOK.SUSPICION);
+const suspicionOtherDiscordWebHook = new Webhook(Const.DISCORD_WEBHOOK.SUSPICION_OTHER);
+const suspicion100MsDiscordWebHook = new Webhook(Const.DISCORD_WEBHOOK.SUSPICION_100MS);
 
 var MainDB;
 
@@ -775,7 +776,7 @@ function processClientRequest($c, msg) {
                         .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
                         .setTimestamp();
 
-                    suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
+                    suspicionOtherDiscordWebHook.send(suspicionEmbed).then(() => {
                         IOLog.info('의심 행동을 디스코드 웹훅으로 전송했습니다.');
                     }).catch(err => {
                         IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
@@ -813,12 +814,12 @@ function processClientRequest($c, msg) {
 
                     writeEtcInfoToFile(id, 'event', events ? events : '없음', (etcFile) => {
                         IOLog.info('document 이벤트 객체 정보 파일을 디스코드로 업로드하는 중입니다...');
-                        suspicionDiscordWebHook.sendFile(etcFile).then(() => {
+                        suspicionOtherDiscordWebHook.sendFile(etcFile).then(() => {
                             IOLog.info('document 이벤트 객체 정보 파일 업로드가 완료되었습니다.');
                         })
                     })
 
-                    suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
+                    suspicionOtherDiscordWebHook.send(suspicionEmbed).then(() => {
                         IOLog.info('의심 행동을 디스코드 웹훅으로 전송했습니다.');
                     }).catch(err => {
                         IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
@@ -844,17 +845,12 @@ function processClientRequest($c, msg) {
                         .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
                         .setTimestamp();
 
-                    suspicionDiscordWebHook.send(suspicionEmbed).then(() => {
+                    suspicion100MsDiscordWebHook.send(suspicionEmbed).then(() => {
                         IOLog.info('의심 행동을 디스코드 웹훅으로 전송했습니다.');
                     }).catch(err => {
                         IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
                     });
                 }
-
-                IOLog.info('세부 행동 로그 파일을 디스코드로 업로드하는 중입니다...');
-                suspicionDiscordWebHook.sendFile(file).then(() => {
-                    IOLog.info('세부 행동 로그 파일 업로드가 완료되었습니다.');
-                })
             })
 
             break;
