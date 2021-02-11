@@ -512,11 +512,11 @@ function joinNewUser($c) {
 KKuTu.onClientMessage = function ($c, msg) {
     if (!msg) return;
 
-    if (!$c.passFingerprint2) {
-        if (msg.type === 'fingerprint2') {
-            $c.passFingerprint2 = true;
+    if (!$c.passIdentity) {
+        if (msg.type === 'identity') {
+            $c.passIdentity = true;
 
-            logConnection($c, msg.value);
+            logConnection($c, msg.fingerPrint2, msg.pcidC, msg.pcidL);
         }
 
         return;
@@ -546,14 +546,14 @@ KKuTu.onClientMessage = function ($c, msg) {
     processClientRequest($c, msg);
 };
 
-function logConnection($c, fingerprint2) {
+function logConnection($c, fingerprint2, pcidC, pcidL) {
     let channel = SID;
     let id = $c.id;
     let name = $c.profile.title;
     let ip = $c.socket.upgradeReq.connection.remoteAddress;
     let userAgent = $c.socket.upgradeReq.headers['user-agent'];
 
-    MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent, fingerprint2);
+    MainDB.ConnectionLog.addLog(id, name, ip, channel, userAgent, fingerprint2, pcidC, pcidL);
 }
 
 function processClientRequest($c, msg) {
