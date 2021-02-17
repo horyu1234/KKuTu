@@ -770,7 +770,7 @@ function processClientRequest($c, msg) {
                         .addField('inputId', inputId, true)
                         .addField('inputVal', inputVal, true)
                         .addField('UserAgent', userAgent, true)
-                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setFooter('세부 정보는 로그 조회 시스템을 이용해주세요.')
                         .setTimestamp();
 
                     suspicionOtherDiscordWebHook.send(suspicionEmbed).then(() => {
@@ -799,7 +799,7 @@ function processClientRequest($c, msg) {
                         .addField('아이피', ip, true)
                         .addField('elementId', elementId, true)
                         .addField('UserAgent', userAgent, true)
-                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setFooter('세부 정보는 로그 조회 시스템을 이용해주세요.')
                         .setTimestamp();
 
                     suspicionOtherDiscordWebHook.send(suspicionEmbed).then(() => {
@@ -835,7 +835,7 @@ function processClientRequest($c, msg) {
                         .addField('아이피', ip, true)
                         .addField('유형', typeName, true)
                         .addField('UserAgent', userAgent, true)
-                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setFooter('세부 정보는 로그 조회 시스템을 이용해주세요.')
                         .setTimestamp();
 
                     writeEtcInfoToFile(id, 'event', events ? events : '없음', (etcFile) => {
@@ -868,7 +868,7 @@ function processClientRequest($c, msg) {
                         .addField('UserID', id, true)
                         .addField('아이피', ip, true)
                         .addField('UserAgent', userAgent, true)
-                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setFooter('세부 정보는 로그 조회 시스템을 이용해주세요.')
                         .setTimestamp();
 
                     suspicion100MsDiscordWebHook.send(suspicionEmbed).then(() => {
