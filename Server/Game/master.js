@@ -780,6 +780,35 @@ function processClientRequest($c, msg) {
                     });
 
                     $c.socket.close();
+                } else if (action === 'CallGetComputedStyleToFakeElement') {
+                    actionName = '보호된 요소의 계산된 스타일 확인 시도';
+                    doubt = '높음';
+
+                    const elementId = msg.hasOwnProperty('elementId') ? msg.elementId : 'BAD_REQ';
+
+                    const suspicionEmbed = new MessageBuilder()
+                        .setTitle('의심 행동 감지')
+                        .setDescription('의심 행동이 감지되었습니다.')
+                        .setColor(14423100)
+                        .addField('시간', formatTime(new Date()), false)
+                        .addField('행동', actionName, false)
+                        .addField('의심도', doubt, false)
+                        .addField('손님', isGuestText, true)
+                        .addField('닉네임', name, true)
+                        .addField('UserID', id, true)
+                        .addField('아이피', ip, true)
+                        .addField('elementId', elementId, true)
+                        .addField('UserAgent', userAgent, true)
+                        .setFooter('세부 정보는 첨부된 파일을 확인해주세요.')
+                        .setTimestamp();
+
+                    suspicionOtherDiscordWebHook.send(suspicionEmbed).then(() => {
+                        IOLog.info('의심 행동을 디스코드 웹훅으로 전송했습니다.');
+                    }).catch(err => {
+                        IOLog.error(`의심 행동을 디스코드 웹훅으로 전송하는 중 오류가 발생했습니다. ${err.message}`);
+                    });
+
+                    $c.socket.close();
                 } else if (action === 'ModulationEvent') {
                     actionName = '이벤트 변조';
                     doubt = '세부 내용 검토 필요';
