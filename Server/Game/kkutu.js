@@ -1427,31 +1427,6 @@ exports.Room = function (room, channel) {
                 o.onOKG(rw.playTime);
             }
 
-            // 설날 이벤트 - 복주머니
-            const currentTime = new Date();
-            const month = currentTime.getMonth();
-            const date = currentTime.getDate();
-
-            const isSeol = month === 1 && date === 12;
-            const isSeolRange = month === 1 && date >= 11 && date <= 17;
-
-            if (isSeolRange && res[i].score >= 1000) {
-                const randomBool = Math.random() < 0.5;
-                if (isSeol || randomBool) {
-                    const box = o.box || {};
-                    const equip = o.equip || {};
-                    const equip_BDG = equip.hasOwnProperty('BDG') ? equip['BDG'] : '';
-                    const itemKeys = [...Object.keys(box), equip_BDG];
-
-                    if (!itemKeys.includes('b2_lucky_bag')) {
-                        o.obtain("b2_lucky_bag", 1);
-                        o.send('yell', {value: "이벤트 아이템 [복주머니] 를 획득했습니다."});
-                        IOLog.info(`${res[i].id} 님이 복주머니 아이템을 획득하셨습니다.`);
-                    }
-                }
-            }
-            // =========================
-
             res[i].reward = rw;
             o.data.score += rw.score || 0;
             o.money += rw.money || 0;
