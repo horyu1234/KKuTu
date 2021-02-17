@@ -658,20 +658,26 @@ exports.Client = function (socket, profile, sid) {
             R.go({id: my.id, prev: 0});
             return R;
         }
-        DB.users.upsert(['_id', my.id]).set(
-            !isNaN(my.money) ? ['money', my.money] : undefined,
-            (my.data && !isNaN(my.data.score)) ? ['kkutu', my.data] : undefined,
-            box ? ['box', my.box] : undefined,
-            equip ? ['equip', my.equip] : undefined,
-            friends ? ['friends', my.friends] : undefined
-        ).on(function (__res) {
-            DB.redis.getGlobal(my.id).then(function (_res) {
-                DB.redis.putGlobal(my.id, my.data.score).then(function (res) {
-                    IOLog.notice(`${my.id} 님의 데이터를 저장했습니다. 경험치: ${my.data.score} / 돈: ${my.money}핑`);
-                    R.go({id: my.id, prev: _res});
+
+        DB.users.findOne(['_id', my.id]).on(function (currentUser) {
+            DB.users.upsert(['_id', my.id]).set(
+                !isNaN(my.money) ? ['money', my.money] : undefined,
+                (my.data && !isNaN(my.data.score)) ? ['kkutu', my.data] : undefined,
+                box ? ['box', my.box] : undefined,
+                equip ? ['equip', my.equip] : undefined,
+                friends ? ['friends', my.friends] : undefined
+            ).on(function (__res) {
+                DB.redis.getGlobal(my.id).then(function (_res) {
+                    DB.redis.putGlobal(my.id, my.data.score).then(function (res) {
+                        DB.users.findOne(['_id', my.id]).on(function (resultUser) {
+                            IOLog.notice(`${resultUser.nickname}(${my.id}) 님의 데이터를 저장했습니다. ${currentUser.kkutu.score} -> ${my.data.score} EXP / ${currentUser.money} -> ${my.money} 핑 (차이| ${my.data.score - currentUser.kkutu.score} EXP / ${my.money - currentUser.money}핑)`);
+                            R.go({id: my.id, prev: _res});
+                        });
+                    });
                 });
             });
         });
+
         return R;
     };
     my.invokeWordPiece = function (text, coef) {
