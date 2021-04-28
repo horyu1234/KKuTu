@@ -20,7 +20,7 @@
     "discord-webhook-node": "^1.1.8",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "geoip-country": "^4.0.64",
+    "geoip-country": "^4.0.66",
     "glob": "^7.1.6",
     "glob-promise": "^4.1.0",
     "moment": "^2.29.1",
