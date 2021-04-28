@@ -14,7 +14,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
-    "connect-redis": "^5.1.0",
+    "connect-redis": "^5.2.0",
     "cors": "^2.8.5",
     "dddos": "^0.1.2",
     "discord-webhook-node": "^1.1.8",
