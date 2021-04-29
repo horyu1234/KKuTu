@@ -1,0 +1,37 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/Server"
+  schedule:
+    interval: daily
+    time: "20:00"
+  open-pull-requests-limit: 10
+  target-branch: production
+  ignore:
+  - dependency-name: geoip-country
+    versions:
+    - 4.0.53
+    - 4.0.54
+    - 4.0.56
+    - 4.0.59
+    - 4.0.60
+    - 4.0.61
+    - 4.0.62
+    - 4.0.63
+    - 4.0.65
+  - dependency-name: redis
+    versions:
+    - 3.1.0
+    - 3.1.1
+  - dependency-name: winston-daily-rotate-file
+    versions:
+    - 4.5.1
+  - dependency-name: pg
+    versions:
+    - 8.5.1
+  - dependency-name: ws
+    versions:
+    - 7.4.4
+  - dependency-name: pug-code-gen
+    versions:
+    - 3.0.2
