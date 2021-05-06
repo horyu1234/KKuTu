@@ -24,7 +24,7 @@
     "glob": "^7.1.6",
     "glob-promise": "^4.1.0",
     "moment": "^2.29.1",
-    "node-cron": "^2.0.3",
+    "node-cron": "^3.0.0",
     "pg": "6.1.6",
     "pg-escape": "^0.2.0",
     "prompt": "^1.1.0",
