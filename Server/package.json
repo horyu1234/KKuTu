@@ -19,7 +19,7 @@
     "dddos": "^0.1.2",
     "discord-webhook-node": "^1.1.8",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
+    "express-session": "^1.17.2",
     "geoip-country": "^4.0.67",
     "glob": "^7.1.6",
     "glob-promise": "^4.1.0",
