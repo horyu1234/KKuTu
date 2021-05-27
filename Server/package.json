@@ -22,7 +22,7 @@
     "express-session": "^1.17.1",
     "geoip-country": "^4.0.67",
     "glob": "^7.1.6",
-    "glob-promise": "^4.1.0",
+    "glob-promise": "^4.2.0",
     "moment": "^2.29.1",
     "node-cron": "^3.0.0",
     "pg": "8.6.0",
