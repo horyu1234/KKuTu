@@ -35,6 +35,6 @@
     "webhook-discord": "^3.7.7",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0",
-    "ws": "^7.4.5"
+    "ws": "^7.4.6"
   }
 }
